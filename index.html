@@ -1,0 +1,86 @@
+<!-- index.html -->
+<html>
+  <head>
+    <link rel="stylesheet" href="./node_modules/nes.css/css/nes.min.css">
+    <style>
+        @charset "utf-8";
+        @import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
+
+        body {
+        padding: 0 2rem;
+        margin: 0 2rem;
+        }
+
+        /* Main */
+        .main-content {
+        margin-bottom: 4rem;
+        }
+
+        h2 > a {
+        margin-right: 1rem;
+        }
+
+        .topic {
+        margin-bottom: 3rem;
+        }
+
+        /* github link */
+        .github-link {
+        position: fixed;
+        top: 150px;
+        z-index: 999;
+        display: flex;
+        height: 100px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        }
+        .github-link.active {
+        right: 100px;
+        }
+        .github-link:hover {
+        text-decoration: none;
+        }
+        .github-link > p.nes-balloon {
+        align-self: flex-start;
+        padding: 0.2rem 0.5rem;
+        font-size: 0.8rem;
+        color: #333;
+        }
+        .github-link > i.nes-octocat {
+        align-self: flex-end;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <main class="main-conten nes-container with-titlet">
+            <a class="github-link active" href="https://www.github.com/era">
+                <p class="nes-balloon from-right">Check my<br />GitHub</p>
+                <i class="nes-octocat animate"></i>
+            </a>
+            <section class="topic">
+                <h2 id="about"><a href="#about">#</a>About</h2>
+                <p>Hi, my name is Elias. Nice to meet you.
+                    I create stuff for living.</p>
+                <p>You can check what I do on the links bellow. 
+                    For more info, check my personal wiki.</p>
+              </section>
+            <section class="links">
+                <a href="https://wiki.anarchist.work" class="nes-badge">
+                    <span class="is-dark">My wiki</span>
+                </a>
+                <a href="https://www.twitter.com/elias_era" class="nes-badge">
+                    <span class="is-primary">Twitter</span>
+                </a>
+                <a href="https://www.linkedin.com/in/elias-j-23a19020/" class="nes-badge">
+                    <span class="is-primary">Linkedin</span>
+                </a>
+                <a href="https://www.masterless.io" class="nes-badge">
+                    <span class="is-error">Blog</span>
+                </a>
+            </section>
+        </main>
+    </div>
+  </body>
+</html>
