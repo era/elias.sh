@@ -1,55 +1,38 @@
 <!-- index.html -->
 <html>
   <head>
-    <link rel="stylesheet" href="./node_modules/nes.css/css/nes.min.css">
-    <style>
-        @charset "utf-8";
-        @import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
-
-        body {
-        padding: 0 2rem;
-        margin: 0 2rem;
-        }
-
-        /* Main */
-        .main-content {
-        margin-bottom: 4rem;
-        }
-
-        h2 > a {
-        margin-right: 1rem;
-        }
-
-        .topic {
-        margin-bottom: 3rem;
-        }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.1/dist/terminal.min.css" />
   </head>
-  <body>
+  <body class="terminal">
     <div class="container">
-        <main class="main-conten nes-container with-titlet">
+        <main>
             <section class="topic">
-                <h2 id="about"><a href="#about">#</a>About</h2>
+                <h2 id="about" class="logo terminal-prompt">About</h2>
                 <p>Hi, my name is Elias. Nice to meet you.
                     I create stuff for living.</p>
                 <p>You can check what I do on the links bellow. 
                     For more info, check my personal wiki.</p>
+                <p>You can contact me by sending an email to the@communist.dev</p>
               </section>
             <section class="links">
-                <a href="https://wiki.anarchist.work" class="nes-badge">
-                    <span class="is-dark">My wiki</span>
+                <a href="https://wiki.anarchist.work">
+                    My wiki
                 </a>
-                <a href="https://www.twitter.com/elias_era" class="nes-badge">
-                    <span class="is-primary">Twitter</span>
+                |
+                <a href="https://www.twitter.com/elias_era">
+                    Twitter
                 </a>
-                <a href="https://www.linkedin.com/in/elias-j-23a19020/" class="nes-badge">
-                    <span class="is-primary">Linkedin</span>
+                |
+                <a href="https://www.linkedin.com/in/elias-j-23a19020/">
+                    Linkedin
                 </a>
-                <a href="https://www.masterless.io" class="nes-badge">
-                    <span class="is-error">Blog</span>
+                |
+                <a href="https://www.masterless.io">
+                    Blog
                 </a>
+                |
                 <a class="" href="https://www.github.com/era">
-                    <i class="nes-octocat animate"></i>
+                    Github
                 </a>
             </section>
         </main>
