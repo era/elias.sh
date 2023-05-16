@@ -5,7 +5,7 @@ date: May 16 18:12
 
 For the first post here, nothing better than writing a bit about the tool I wrote to build this static website.
 
-During the end of the pandemic, I had the opportunity to take the “[Building a Programming Language](https://lms.classpert.com/classpertx/courses/building-a-programming-language/cohort)” by Roberto Ierusalimschy (created of the Lua programming language). He mainly talked about PEGs, more specifically about LPEG (a Lua library he created). Since then I wanted to play with PEG using Rust and the TinyLang (LINK HERE) is the result of it.
+During the end of the pandemic, I had the opportunity to take the “[Building a Programming Language](http://lms.classpert.com/classpertx/courses/building-a-programming-language/cohort)” by Roberto Ierusalimschy (creator of the Lua programming language). He mainly talked about PEGs, more specifically about LPEG (a Lua library he created). Since then I wanted to play with PEG using Rust and the TinyLang (LINK HERE) is the result of it.
 
 First things first, before I talk about PEG in Rust (and my [TinyLang](https://github.com/era/tinylang)), let’s go through the basics.
 
