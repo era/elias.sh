@@ -129,7 +129,7 @@ pub fn parse(input: &str) -> Result<Pairs<Rule>, ParseError> {
 
 Thanks to Rust enums and the PEST library we could write something this simple to make everything work. Each of the `visit_*` methods would also need to have a `match` against the rules they are supposed to handle and thanks to the power of abstraction we would have our language done.
 
-But TinyLang has one design detail that complicates our life. If our grammar would output something like:
+But TinyLang has one implementation detail that complicates our life. If our grammar would output something like:
 
 ![](/peg_and_rust/tinylang-ideal.png)
 
@@ -140,6 +140,7 @@ But for our grammar will really output the following:
 ![](/peg_and_rust/tinylang-real-world.png)
 
 This complicates a bit more things, as we walk through the main iterable structure, we also need to keep track of things like: `if`, `for` and so on. Which “uglifies” the code a bit, but the concept is still the same.
+And of course, I could modify the grammar to output the previous solution (and probably I will at some point in the future). 
 
 ## State and function calls
 

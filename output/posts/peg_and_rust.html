@@ -119,12 +119,13 @@ pub fn parse(input: &amp;str) -&gt; Result&lt;Pairs&lt;Rule&gt;, ParseError&gt; 
 }
 </code></pre>
 <p>Thanks to Rust enums and the PEST library we could write something this simple to make everything work. Each of the <code>visit_*</code> methods would also need to have a <code>match</code> against the rules they are supposed to handle and thanks to the power of abstraction we would have our language done.</p>
-<p>But TinyLang has one design detail that complicates our life. If our grammar would output something like:</p>
+<p>But TinyLang has one implementation detail that complicates our life. If our grammar would output something like:</p>
 <p><img src="/peg_and_rust/tinylang-ideal.png" alt="" /></p>
 <p>That initial design would work almost out of the box. When processing a dynamic node we would match against the possible rules (<code>if</code>, <code>for</code> and so on). For the <code>if</code> node, we evaluate its first child, if it’s <code>true</code>, we execute/output the second child, if not we execute/output the third (if exists).</p>
 <p>But for our grammar will really output the following:</p>
 <p><img src="/peg_and_rust/tinylang-real-world.png" alt="" /></p>
-<p>This complicates a bit more things, as we walk through the main iterable structure, we also need to keep track of things like: <code>if</code>, <code>for</code> and so on. Which “uglifies” the code a bit, but the concept is still the same.</p>
+<p>This complicates a bit more things, as we walk through the main iterable structure, we also need to keep track of things like: <code>if</code>, <code>for</code> and so on. Which “uglifies” the code a bit, but the concept is still the same.
+And of course, I could modify the grammar to output the previous solution (and probably I will at some point in the future).</p>
 <h2>State and function calls</h2>
 <p>The template language also needs a state. Because we want to setup common variables and collections to use it inside the templates. One common example is looping through all the posts collections in order to show their titles on index.</p>
 <p>To make it more simple, users are not allowed to assign new values to variables. Well, not explicitly anyway, because the for loop will create a variable to allow things like:</p>
