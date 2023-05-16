@@ -4,6 +4,9 @@
     <link rel="stylesheet" href="/typesafe.css">
     <link rel="webmention" href="https://webmention.io/www.masterless.io/webmention" />
     <link rel="pingback" href="https://webmention.io/www.masterless.io/xmlrpc" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
     <style>
      /* roboto-regular - latin */
     @font-face {
@@ -21,6 +24,7 @@
      </style>
   </head>
   <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
 	<main>
 	<h1>PEG and Rust</h1>
 	</br>
@@ -96,8 +100,8 @@ pub fn eval(input: &amp;str) -&gt; Result&lt;String, ParseError&gt; {
         let current_output = match pair.as_rule() {
             Rule::html =&gt; visit_html(pair)?,
             Rule::print =&gt; visit_print(pair.into_inner())?,
-						Rule::dynamic =&gt; visit_dynamic(pair.into_inner())?,
-						Rule::invalid =&gt; visit_invalid(pair.into_inner())?,
+            Rule::dynamic =&gt; visit_dynamic(pair.into_inner())?,
+            Rule::invalid =&gt; visit_invalid(pair.into_inner())?,
             _ =&gt; unreachable!(),
         };
         output.push_str(&amp;current_output);
@@ -170,8 +174,8 @@ pub enum TinyLangType {
 <h2>That is it</h2>
 <p>I hope you enjoyed this trip around my pet project. At the moment I’m really enthusiastic about Rust programming language and I’m looking for projects to collaborate with. If you want help with your side/pet project, let me know on Twitter, and feel free to DM me :), or just email me rust@{{this_domain}}.</p>
 <p>Also, if you found any error on the post, let me know using Twitter as well.</p>
-<p>If you are interested on TinyLang, you can check it on Github: https://github.com/era/tinylang</p>
-<p>Also, the code for this website is at https://github.com/era/elias.sh</p>
+<p>If you are interested on TinyLang, you can check it on <a href="https://github.com/era/tinylang">Github</a></p>
+<p>Also, the code for this website is at <a href="https://github.com/era/elias.sh">Github</a> as well.</p>
 <p>Thank you for reading,</p>
 	</main>
   </body>

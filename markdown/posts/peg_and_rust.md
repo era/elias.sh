@@ -108,8 +108,8 @@ pub fn eval(input: &str) -> Result<String, ParseError> {
         let current_output = match pair.as_rule() {
             Rule::html => visit_html(pair)?,
             Rule::print => visit_print(pair.into_inner())?,
-						Rule::dynamic => visit_dynamic(pair.into_inner())?,
-						Rule::invalid => visit_invalid(pair.into_inner())?,
+            Rule::dynamic => visit_dynamic(pair.into_inner())?,
+            Rule::invalid => visit_invalid(pair.into_inner())?,
             _ => unreachable!(),
         };
         output.push_str(&current_output);
@@ -211,8 +211,8 @@ I hope you enjoyed this trip around my pet project. At the moment I’m really e
 
 Also, if you found any error on the post, let me know using Twitter as well.
 
-If you are interested on TinyLang, you can check it on Github: https://github.com/era/tinylang
+If you are interested on TinyLang, you can check it on [Github](https://github.com/era/tinylang)
 
-Also, the code for this website is at https://github.com/era/elias.sh
+Also, the code for this website is at [Github](https://github.com/era/elias.sh) as well.
 
 Thank you for reading,
