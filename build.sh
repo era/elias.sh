@@ -1,0 +1,1 @@
+squid -s static -t template -m markdown -o output -v config.toml
