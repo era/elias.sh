@@ -172,6 +172,7 @@ pub enum TinyLangType {
 <p>TinyLang also supports function calls such as <code>{% my_func_call('abc') %}</code>. I won't enter into much details here, but this works by packing all parameters as an array of <code>TinyLangType</code> and calling a function declared on the Rust side.</p>
 <h2>Code</h2>
 <p>With all this information, I think is possible to navigate the code and understand what is going on, even if you never used PEST or PEGs before. I chose PEST because it seemed the simplest library out there and the documentation was good enough. I hope this post contributes somehow to people that want to use PEST, but wants a bigger example than the one in their book.</p>
+<p>The code is available at <a href="https://github.com/era/tinylang">https://github.com/era/tinylang</a>. And since it's so easy to compile to WebAssembly, I also made a website where you can try it out <a href="https://tinylang.elias.tools/">https://tinylang.elias.tools/</a>.</p>
 <h2>That is it</h2>
 <p>I hope you enjoyed this trip around my pet project.
 At the moment I’m really enthusiastic about Rust programming language and

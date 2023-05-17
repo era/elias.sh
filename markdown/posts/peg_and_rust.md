@@ -206,6 +206,9 @@ TinyLang also supports function calls such as `{% my_func_call('abc') %}`. I won
 
 With all this information, I think is possible to navigate the code and understand what is going on, even if you never used PEST or PEGs before. I chose PEST because it seemed the simplest library out there and the documentation was good enough. I hope this post contributes somehow to people that want to use PEST, but wants a bigger example than the one in their book.
 
+The code is available at [https://github.com/era/tinylang](https://github.com/era/tinylang). And since it's so easy to compile to WebAssembly, I also made a website where you can try it out [https://tinylang.elias.tools/](https://tinylang.elias.tools/).
+
+
 ## That is it
 
 I hope you enjoyed this trip around my pet project. 
