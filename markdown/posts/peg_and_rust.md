@@ -31,7 +31,7 @@ The Wikipedia description of it does not seem easy to parse (pun intended), it b
 
 Both PEG and CFG can be used to create parsers for programming languages. The main difference is that PEG cannot be ambiguous and “PEG's choice operator is ordered. If the first alternative succeeds, the second alternative is ignored. Thus ordered choice is not commutative, unlike unordered choice as in context-free grammars” (Wikipedia).
 
-Let’s take a look at PEST a PEG Rust Library with an example from their documentation ([https://pest.rs/book/grammars/peg.html](https://pest.rs/book/grammars/peg.html)).  Quoting their website: “The following is an example of a grammar for a list of alpha-numeric identifiers where the first identifier does not start with a digit”:
+Let’s take a look at [PEST](https://pest.rs/) a PEG Rust Library with an example from their documentation.  Quoting their website: “The following is an example of a grammar for a list of alpha-numeric identifiers where the first identifier does not start with a digit”:
 
 ```
 alpha = { 'a'..'z' | 'A'..'Z' }
@@ -44,7 +44,7 @@ ident_list = _{ !digit ~ ident ~ (" " ~ ident)+ }
 
  
 
-Forget about the `_` for now. The first rule defines alpha characters and will match with anything between a and z and A and Z. The second match digits follow the same approach.
+Forget about the `_` for now. The first rule defines alpha characters and will match with anything between a and z and A and Z. The second match digits following the same approach.
 
 The third rule is more interesting it matches `alpha` or `digit` ONE or more times (the `+`) If we wanted to match ZERO or more we could replace it with `*`. The rule `ident_list` matches something that is not (`!`) a digit followed (`~`) by an `ident` followed by a “space and ident” one or more times.
 
@@ -56,7 +56,7 @@ If we try to match against `a 1 b`, it will generate the following:
 - ident > alpha: "b" 
 ```
 
-Before talking about the output, you may notice that we do not have any `ident_list` and the reason is that the `_` is a modifier to make it a “silence rule”, basically a rule that will not be in our final AST.
+Before talking about the output, you may notice that we do not have any `ident_list` and the reason is that the `_` is a modifier to make it a “silent rule”, basically a rule that will not be in our final AST.
 
 The output generated looks like the following image where all the idents are on the same iterable data structure:
 
@@ -208,11 +208,14 @@ With all this information, I think is possible to navigate the code and understa
 
 ## That is it
 
-I hope you enjoyed this trip around my pet project. At the moment I’m really enthusiastic about Rust programming language and I’m looking for projects to collaborate with. If you want help with your side/pet project, let me know on Twitter, and feel free to DM me :), or just email me rust@{{this_domain}}.
+I hope you enjoyed this trip around my pet project. 
+At the moment I’m really enthusiastic about Rust programming language and 
+I’m looking for projects to collaborate with. 
+If you want help with your side/pet project, let me know on [Twitter](https://www.twitter.com/elias_era), and feel free to DM me :), or just email me rust@{{this_domain}}.
 
 Also, if you found any error on the post, let me know using Twitter as well.
 
-If you are interested on TinyLang, you can check it on [Github](https://github.com/era/tinylang)
+If you are interested on TinyLang, you can check it on [Github](https://github.com/era/tinylang).
 
 Also, the code for this website is at [Github](https://github.com/era/elias.sh) as well.
 

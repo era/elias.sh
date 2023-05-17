@@ -49,7 +49,7 @@
 </blockquote>
 <p>The Wikipedia description of it does not seem easy to parse (pun intended), it basically defines PEGs in contrast with CFGs.</p>
 <p>Both PEG and CFG can be used to create parsers for programming languages. The main difference is that PEG cannot be ambiguous and “PEG's choice operator is ordered. If the first alternative succeeds, the second alternative is ignored. Thus ordered choice is not commutative, unlike unordered choice as in context-free grammars” (Wikipedia).</p>
-<p>Let’s take a look at PEST a PEG Rust Library with an example from their documentation (<a href="https://pest.rs/book/grammars/peg.html">https://pest.rs/book/grammars/peg.html</a>).  Quoting their website: “The following is an example of a grammar for a list of alpha-numeric identifiers where the first identifier does not start with a digit”:</p>
+<p>Let’s take a look at <a href="https://pest.rs/">PEST</a> a PEG Rust Library with an example from their documentation.  Quoting their website: “The following is an example of a grammar for a list of alpha-numeric identifiers where the first identifier does not start with a digit”:</p>
 <pre><code>alpha = { 'a'..'z' | 'A'..'Z' }
 digit = { '0'..'9' }
 
@@ -57,14 +57,14 @@ ident = { (alpha | digit)+ }
 
 ident_list = _{ !digit ~ ident ~ (&quot; &quot; ~ ident)+ }
 </code></pre>
-<p>Forget about the <code>_</code> for now. The first rule defines alpha characters and will match with anything between a and z and A and Z. The second match digits follow the same approach.</p>
+<p>Forget about the <code>_</code> for now. The first rule defines alpha characters and will match with anything between a and z and A and Z. The second match digits following the same approach.</p>
 <p>The third rule is more interesting it matches <code>alpha</code> or <code>digit</code> ONE or more times (the <code>+</code>) If we wanted to match ZERO or more we could replace it with <code>*</code>. The rule <code>ident_list</code> matches something that is not (<code>!</code>) a digit followed (<code>~</code>) by an <code>ident</code> followed by a “space and ident” one or more times.</p>
 <p>If we try to match against <code>a 1 b</code>, it will generate the following:</p>
 <pre><code class="language-jsx">- ident &gt; alpha: &quot;a&quot;
 - ident &gt; digit: &quot;1&quot;
 - ident &gt; alpha: &quot;b&quot;
 </code></pre>
-<p>Before talking about the output, you may notice that we do not have any <code>ident_list</code> and the reason is that the <code>_</code> is a modifier to make it a “silence rule”, basically a rule that will not be in our final AST.</p>
+<p>Before talking about the output, you may notice that we do not have any <code>ident_list</code> and the reason is that the <code>_</code> is a modifier to make it a “silent rule”, basically a rule that will not be in our final AST.</p>
 <p>The output generated looks like the following image where all the idents are on the same iterable data structure:</p>
 <p><img src="/peg_and_rust/Untitled-2023-05-16-0903(1).png" alt="" /></p>
 <h2>TinyLang</h2>
@@ -173,11 +173,18 @@ pub enum TinyLangType {
 <h2>Code</h2>
 <p>With all this information, I think is possible to navigate the code and understand what is going on, even if you never used PEST or PEGs before. I chose PEST because it seemed the simplest library out there and the documentation was good enough. I hope this post contributes somehow to people that want to use PEST, but wants a bigger example than the one in their book.</p>
 <h2>That is it</h2>
-<p>I hope you enjoyed this trip around my pet project. At the moment I’m really enthusiastic about Rust programming language and I’m looking for projects to collaborate with. If you want help with your side/pet project, let me know on Twitter, and feel free to DM me :), or just email me rust@{{this_domain}}.</p>
+<p>I hope you enjoyed this trip around my pet project.
+At the moment I’m really enthusiastic about Rust programming language and
+I’m looking for projects to collaborate with.
+If you want help with your side/pet project, let me know on <a href="https://www.twitter.com/elias_era">Twitter</a>, and feel free to DM me :), or just email me rust@{{this_domain}}.</p>
 <p>Also, if you found any error on the post, let me know using Twitter as well.</p>
-<p>If you are interested on TinyLang, you can check it on <a href="https://github.com/era/tinylang">Github</a></p>
+<p>If you are interested on TinyLang, you can check it on <a href="https://github.com/era/tinylang">Github</a>.</p>
 <p>Also, the code for this website is at <a href="https://github.com/era/elias.sh">Github</a> as well.</p>
 <p>Thank you for reading,</p>
 	</main>
+        <div class="main container" style="margin-top: 300px">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
   </body>
 </html>

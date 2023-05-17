@@ -30,5 +30,6 @@
 	</br>
 	{{ content.content }}
 	</main>
+    {{ render('template/_footer.template')}}
   </body>
 </html>
