@@ -265,7 +265,7 @@ docker run  \
     otel/opentelemetry-collector:latest
 ```
 
-We should now have a collector running on our machine. And if you `tail -F the metrics.json` [file](https://github.com/era/rust_opentelemetry_with_optl_example) that we mapped through docker you should see our metrics:
+We should now have a collector running on our machine. And if you `tail -F the metrics.json` file that we mapped through docker you should see our metrics:
 
 ```bash
 {

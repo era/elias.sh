@@ -231,7 +231,7 @@ service:
     -v $(pwd)/metrics.json:/etc/otelcol/metrics.json \
     otel/opentelemetry-collector:latest
 </code></pre>
-<p>We should now have a collector running on our machine. And if you <code>tail -F the metrics.json</code> <a href="https://github.com/era/rust_opentelemetry_with_optl_example">file</a> that we mapped through docker you should see our metrics:</p>
+<p>We should now have a collector running on our machine. And if you <code>tail -F the metrics.json</code> file that we mapped through docker you should see our metrics:</p>
 <pre><code class="language-bash">{
   &quot;resourceMetrics&quot;: [
     {
