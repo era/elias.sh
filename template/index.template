@@ -35,7 +35,7 @@
             
       <h1>Blog Posts</h1>
       <ul>
-        {% for post in sort_by_key(posts.items, 'date') %}   
+        {% for post in sort_by_key(posts.items, 'date', 'reversed') %}   
             <li><a href="{{post.partial_uri}}">{{ post.title }}</a></li>
         {% end %}
       </ul>
