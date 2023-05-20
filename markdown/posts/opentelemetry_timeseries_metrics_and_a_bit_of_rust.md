@@ -308,7 +308,7 @@ We should now have a collector running on our machine. And if you `tail -F the m
              ......
 ```
 
-The full example is available at: https://github.com/era/rust_opentelemetry_with_otlp_example.
+The full example is available at: [github/era/rust_opentelemetry_with_otlp_example](https://github.com/era/rust_opentelemetry_with_otlp_example).
 
 The advantage of using OpenTelemetry instead of something like Prometheus or even more proprietary software (HoneyComb, CloudWatch, …) directly is that if we ever change our telemetry backend, we don’t have to worry about changing all of our services with new SDKs. Another point is that maybe for production you want to use some paid service, but for dev you just want to use Prometheus since it’s super quick and cheap to setup.
 
