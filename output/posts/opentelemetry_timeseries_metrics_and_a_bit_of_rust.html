@@ -78,7 +78,7 @@ utilization, request rate for a given service. - <a href="https://opentelemetry.
 <blockquote>
 <p>Distributed traces are simply an interrelated series of events - Honeycomb’s O’Reilly Book Observability Engineering</p>
 </blockquote>
-<p>Let’s build on top of the structured events. What if a user request to your system would mean that a couple of internal services would be called before the response is sent to the user? So, let’s say that we have something like:</p>
+<p>Let’s build on top of the structured events. What if a user request to your system would mean that a couple of internal services would be called before the response is sent back to them? So, let’s say that we have something like:</p>
 <p><img src="/opentelemetry_timeseries_metrics_and_a_bit_of_rust/service-req.png" alt="service-req.png" /></p>
 <p>From our previous definition, each service would store its own structured event and it would not be possible to connect the three together. In the image, we could share the same request id, but imagine that service 1 sends 3 or 4 requests to service 2. Service 2 would have 3 or 4 structured events (one for each request) and it would be very confusing to connect everything together.</p>
 <p>OpenTelemetry <a href="https://opentelemetry.io/docs/concepts/signals/traces/">has a nice set of standards for us to follow</a> in order to create well-structured traces. The first concept is the “Span”, you know what I just called in the previous paragraph “each service structured event”? We are now going to call it Span. A span represents a unit of work or operation.</p>

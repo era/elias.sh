@@ -75,7 +75,7 @@ You can pick one of those dimensions and try to aggregate it to create a time se
 
 > Distributed traces are simply an interrelated series of events - Honeycomb’s O’Reilly Book Observability Engineering
 
-Let’s build on top of the structured events. What if a user request to your system would mean that a couple of internal services would be called before the response is sent to the user? So, let’s say that we have something like:
+Let’s build on top of the structured events. What if a user request to your system would mean that a couple of internal services would be called before the response is sent back to them? So, let’s say that we have something like:
 
 ![service-req.png](/opentelemetry_timeseries_metrics_and_a_bit_of_rust/service-req.png)
 
