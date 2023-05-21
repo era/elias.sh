@@ -37,7 +37,7 @@ Let’s pause a bit, and define another term. Time-series. A time series refers 
 
 ![two-ts.png](/opentelemetry_timeseries_metrics_and_a_bit_of_rust/two-ts.png)
 
-Ok, let’s continue. So as we were talking, tags are very important for our time series. It helps us to group by different points of view. So it’s very important to make them right! If you use a tool like [HoneyComb you are probably not worried about high cardinality](https://docs.honeycomb.io/concepts/high-cardinality/), otherwise, you should! 
+Ok, let’s continue. So as we were talking, tags are very important for our time series. It helps us to group by different points of view. So we should to make them right! If you use a tool like [HoneyComb you are probably not worried about high cardinality](https://docs.honeycomb.io/concepts/high-cardinality/), otherwise, you should! 
 
 But wait, we haven’t talked about cardinality yet! Honeycomb’s doc says: “The dimensionality of a dataset is the number of different attributes that it has. A high-dimensionality dataset, then, has many different attributes.”. Let’s go back to our tags. Let’s say we have: host_ip, availability_zone (az) and region tags for all of our metrics. Even if the number of hosts is big, we are not concerned with high dimensionality for this dataset. We should not expect a huge number of availability zone (e.g. AWS have very few per region), or even region. So our cardinality is bound to be low.
 
@@ -101,7 +101,7 @@ The theory was nice, but how can we use OpenTelemetry?
 
 > **Note**: As I write this, the status of the `Metric` support for Rust on OpenTelemetry is Alpha, so you can expect it to change fast. As I researched to write this examples I found many posts/examples that were just not working anymore. Now they do have a working example on the official repo, so I would expect it to always work with the latest crate version: [https://github.com/open-telemetry/opentelemetry-rust/blob/main/examples/metrics-basic/src/main.rs](https://github.com/open-telemetry/opentelemetry-rust/blob/main/examples/metrics-basic/src/main.rs)
 
-I’m using OpenTelemetry new [SDK API](https://github.com/open-telemetry/opentelemetry-rust/commit/e4ef2a9f23becf057f4ea9963fe17a4be274eeeb). As I write it’s not released it at crates.io, but since the example they have used it, I decided to point directly to their git repository. So the dependencies are:
+I’m using OpenTelemetry new [SDK API](https://github.com/open-telemetry/opentelemetry-rust/commit/e4ef2a9f23becf057f4ea9963fe17a4be274eeeb). As I write it’s not released it at crates.io, so we need to fetch directly from Github:
 
 ```rust
 opentelemetry_api = { git = "https://github.com/open-telemetry/opentelemetry-rust.git", features = ["metrics"] }
