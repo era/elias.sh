@@ -150,7 +150,7 @@ fn init_meter_provider() -> metrics::Result<MeterProvider> {
 }
 ```
 
-That code uses the `opentelemetry_otlp` crate to define our new pipeline and the export config is pushing metrics to a OpenTelemetry Collector I have running on that port. More about it on the next section.
+That code uses the `opentelemetry_otlp` crate to define our new pipeline.
 
 Now we need to call that method on our main:
 
@@ -215,7 +215,7 @@ And yeah, that is it! Emitting metrics should always be super simple, the main p
 
 So how you expose your data now that we have instrumented our code? Well, you could push your data directly to whatever backend you are using for your telemetry, but as OpenTelemetry [tells](https://opentelemetry.io/docs/collector/#when-to-use-a-collector) “In general we recommend using a collector alongside your service, since it allows your service to offload data quickly and the collector can take care of additional handling like retries, batching, encryption or even sensitive data filtering.” That is the “agent” mode, we could also have a gateway where multiple machines push to it. Another option would be to let something pull your metrics. For example, you could expose a `/metrics` endpoint where a Prometheus instance would pull the metrics from your service.
 
-The  “[agent](https://opentelemetry.io/docs/collector/deployment/agent/)” mode. Which looks like this:
+The  “[agent](https://opentelemetry.io/docs/collector/deployment/agent/)” mode looks like this:
 
 ![Untitled](/opentelemetry_timeseries_metrics_and_a_bit_of_rust/Untitled%201.png)
 
