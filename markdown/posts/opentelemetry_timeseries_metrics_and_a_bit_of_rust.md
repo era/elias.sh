@@ -219,6 +219,8 @@ The  “[agent](https://opentelemetry.io/docs/collector/deployment/agent/)” mo
 
 ![Untitled](/opentelemetry_timeseries_metrics_and_a_bit_of_rust/Untitled%201.png)
 
+Where your application and the collector are on the same machine.
+
 If you want to try another mode check out the “[Getting Started](https://opentelemetry.io/docs/collector/getting-started/)” and “[Deployment](https://opentelemetry.io/docs/collector/deployment/)” sections of their documentation.
 
 Our service pushes the metrics using gRPC and the collector handles whatever backend we are using (e.g. Prometheus). This works fine because the Collector, as the [documentation](https://opentelemetry.io/docs/concepts/data-collection/#components) says, is made of four components:
