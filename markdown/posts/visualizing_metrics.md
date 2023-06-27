@@ -47,6 +47,8 @@ For example, we are mapping the duration_ms over time and the frequency of those
 
 ![Untitled](/visualizing_metrics/Untitled%202.png)
 
+### Beyond Heatmaps
+
 Honeycomb offers a feature called “[BubbleUp](https://docs.honeycomb.io/working-with-your-data/bubbleup/)” that I find really useful. This feature enables you to select a portion of your heatmap in order to obtain more details about it.
 
 ![Untitled](/visualizing_metrics/Untitled%203.png)
