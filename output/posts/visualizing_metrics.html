@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <title>Elias' homepage</title>
+    <link rel="stylesheet" href="/typesafe.css">
+    <link rel="webmention" href="https://webmention.io/www.masterless.io/webmention" />
+    <link rel="pingback" href="https://webmention.io/www.masterless.io/xmlrpc" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+    <style>
+     /* roboto-regular - latin */
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      src: local(''),
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+    body { font-size: 1.3em; font-family: Roboto, sans-serif; }
+    a {border-bottom: 3px double;}
+    img.big {width: 165px; margin: 2px auto; display: block;}
+    img.git {width: 20px; height: 20px;}
+     </style>
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Visualizing Metrics</h1>
+	<h6>2023-06-27</h6>
+	</br>
+	<p>The last project I worked on at my job was a data visualization system, specifically a metrics dashboard. Although my role was primarily on the back-end, I still provided input on the user experience for SREs (Front-End development of the system) and also to guide SREs on how to better use the new system. I didn't want to rely solely on my personal experiences, so I sought a more theoretical foundation. In this post, I will share some of my notes. Most of these notes were taken from &quot;Better Data Visualizations&quot; by Jonathan Schwabish, or from my own notes during the <a href="https://ic.unicamp.br/en/~mdc/">Complex Data Mining</a> course.</p>
+<h2>What do we need to avoid?</h2>
+<p>When building a dashboard to display the health of a system, it's important to avoid spaghetti charts. These charts are difficult to read and should be avoided, especially since the dashboard may be used by people during late hours. Do you really want a tired person to try and make sense of a chart like this bellow?</p>
+<p><img src="/visualizing_metrics/Untitled.png" alt="Untitled" /></p>
+<p>Following any of those timeseries can be challenging. One approach, suggested by Jonathan Schwabish, is to break the chart into multiple smaller versions. For instance, if you're displaying CPU usage on machines, you could break it down by AZ or region. Alternatively, you might want to filter the timeseries to focus only on those with big changes in the last few minutes.</p>
+<p>Pie charts are generally not recommended. Schwabish explains that humans struggle to compare slices of different sizes easily (refer to the chart below to see which one clearly shows the proportion of each company's revenue). Although there are cases where it’s acceptable to use pie charts, such as when the slices are of known proportions (e.g. 50%-50%; 25%-25%-25%-25%), we are specifically discussing metrics and creating a useful dashboard for SREs. Since the data will be dynamic, you want your engineers to be able to quickly scan the dashboard and get a sense of what is wrong. Parsing a pie chart takes time and may lead to the wrong conclusion. Therefore, it is best to avoid using them.</p>
+<p><img src="/visualizing_metrics/Untitled%201.png" alt="Untitled" /></p>
+<p>(Image from <a href="https://towardsdatascience.com/the-case-against-the-pie-chart-43f4c3fccc6">https://towardsdatascience.com/the-case-against-the-pie-chart-43f4c3fccc6</a> )</p>
+<p>Another point to avoid is relying solely on the average. Depending on the distribution of your data, it may mislead you. A great article on this topic can be found at <a href="https://towardsdatascience.com/avoid-troubles-with-average-923012d1cd3e">Towards Data Science</a>.</p>
+<p>For metrics, you are probably not interested in averages, but rather in values such as p90, p99, or max/min.</p>
+<h2>Accessible dashboards</h2>
+<p>In our industry, many people assume that certain things are &quot;obvious&quot; and don't bother explaining them. As a result, engineers who are unfamiliar with the subject may be too hesitant to ask questions. This can lead to chaos and confusion.</p>
+<p>All charts on a dashboard should include explanations, so that anyone, even someone from another team, can understand what is happening. This is especially important because during an outage at 3 AM, other teams may check your dashboard to determine whether your service is the cause of the issue, or if it has also been affected.</p>
+<p>It's also useful to include a link to a runbook that explains what to do if the metrics are abnormal and how to debug the issue. This is helpful not only for other teams, but also for your own SREs.</p>
+<p>Be cautious of the colors you use on your dashboard, as some colorblind individuals may be misled by certain colors.</p>
+<p>While this document focuses on the people creating the dashboards, it's worth noting that the dashboard system should also be accessible to screen-readers. Whatever system you use, it should support screen-readers.</p>
+<h2>Line Charts</h2>
+<p>Line charts are the most common type of chart used for metric visualization. They are great because they allow you to quickly see the behavior of a time series within a specified time window. Additionally, you can add threshold lines to indicate what normal behavior should look like.</p>
+<h2>Beyond your line chart</h2>
+<p>Line charts are a great way to visually represent data and are my go-to choice almost all of the time. However, there are instances when they may not be sufficient for quickly grasping an overview of a system. In such cases, heatmaps are an excellent alternative. Heatmaps use colors and color saturations to represent data values, creating a 3D chart that is particularly useful for high-frequency data or when understanding general patterns is more important than exact values.</p>
+<p>For example, we are mapping the duration_ms over time and the frequency of those values below:</p>
+<p><img src="/visualizing_metrics/Untitled%202.png" alt="Untitled" /></p>
+<p>Honeycomb offers a feature called “<a href="https://docs.honeycomb.io/working-with-your-data/bubbleup/">BubbleUp</a>” that I find really useful. This feature enables you to select a portion of your heatmap in order to obtain more details about it.</p>
+<p><img src="/visualizing_metrics/Untitled%203.png" alt="Untitled" /></p>
+<p>Furthermore, it shows the difference between the selected data and the rest.</p>
+<p><img src="/visualizing_metrics/Untitled%204.png" alt="Untitled" /></p>
+<h2>Group your data with meaningful tags</h2>
+<p>When creating your dashboard, consider using tags such as region, service, and http_status. This makes it easy to filter results and identify issues. Additionally, using tags instead of hardcoding IPs allows you to change your fleet without worrying about updating dashboards. This makes maintaining your dashboard up-to-date effortless.</p>
+<h2>The end</h2>
+<p>In conclusion, building a metrics dashboard system requires careful consideration of the UX for SREs. Avoiding confusing chart types such as spaghetti charts and pie charts, making explanations and playbooks accessible, and using meaningful tags are all important steps to creating a useful and effective dashboard. Line charts are a common chart type, but heatmaps can also be useful for high-frequency data or when seeing general patterns are more important than exact values. Ultimately, a well-designed dashboard can help teams quickly identify and respond to issues in their systems.</p>
+	</main>
+        <div class="main container" style="margin-top: 300px">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>

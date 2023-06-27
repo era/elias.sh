@@ -1,6 +1,6 @@
 ---
 title: OpenTelemetry, time series, metrics and a bit of Rust
-date: May 20 2023 11:20
+date: 2023-05-20
 ---
 
 > OpenTelemetry is a collection of tools, APIs, and SDKs. Use it to instrument, generate, collect, and export telemetry data (metrics, logs, and traces) to help you analyze your software’s performance and behavior.

@@ -1,6 +1,6 @@
 ---
 title: PEG and Rust
-date: May 16 2023 18:12 
+date: 2023-05-16
 ---
 
 For the first post here, nothing better than writing a bit about the tool I wrote to build this static website.
