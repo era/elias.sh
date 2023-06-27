@@ -47,16 +47,6 @@ For example, we are mapping the duration_ms over time and the frequency of those
 
 ![Untitled](/visualizing_metrics/Untitled%202.png)
 
-### Beyond Heatmaps
-
-Honeycomb offers a feature called “[BubbleUp](https://docs.honeycomb.io/working-with-your-data/bubbleup/)” that I find really useful. This feature enables you to select a portion of your heatmap in order to obtain more details about it.
-
-![Untitled](/visualizing_metrics/Untitled%203.png)
-
-Furthermore, it shows the difference between the selected data and the rest.
-
-![Untitled](/visualizing_metrics/Untitled%204.png)
-
 ## Group your data with meaningful tags
 
 When creating your dashboard, consider using tags such as region, service, and http_status. This makes it easy to filter results and identify issues. Additionally, using tags instead of hardcoding IPs allows you to change your fleet without worrying about updating dashboards. This makes maintaining your dashboard up-to-date effortless.
