@@ -29,7 +29,6 @@
 	<main>
 	<h1>{{ content.title }}</h1>
 	<h6>{{ content.date }}</h6>
-	</br>
 	{{ content.content }}
 	</main>
     {{ render('template/_footer.template')}}
