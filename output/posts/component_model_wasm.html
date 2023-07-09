@@ -1,0 +1,286 @@
+<html>
+  <head>
+    <title>Elias' homepage</title>
+    <link rel="stylesheet" href="/typesafe.css">
+    <link rel="webmention" href="https://webmention.io/www.masterless.io/webmention" />
+    <link rel="pingback" href="https://webmention.io/www.masterless.io/xmlrpc" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+    <style>
+     /* roboto-regular - latin */
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      src: local(''),
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+    body { font-size: 1.3em; font-family: Roboto, sans-serif; }
+    a {border-bottom: 3px double;}
+    img.big {width: 165px; margin: 2px auto; display: block;}
+    img.git {width: 20px; height: 20px;}
+     </style>
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Why do I like WebAssembly? And a Rust example!</h1>
+	<h6>2023-07-09</h6>
+	<blockquote>
+<p>WebAssembly (abbreviated <em>Wasm</em>) is a binary instruction format for
+a stack-based virtual machine. Wasm is designed as a portable
+compilation target for programming languages, enabling deployment on the
+web for client and server applications. - <a href="https://webassembly.org/">https://webassembly.org/</a></p>
+</blockquote>
+<p>WebAssembly and Rust are currently my favorite topics. As with many other engineers I work with, I don't usually spend much time doing web development. Therefore, when I talk about WebAssembly, many of them are not really sure why I am interested in it. The main reason is that the name is misleading. Although WebAssembly can be used to run fast applications on browsers, it can also be used to run applications on the server side. You can use WebAssembly almost like you would use Docker, and deploy your sandboxed application at the edge. I won’t talk about it in this text, but you can check out this <a href="https://wasmlabs.dev/articles/docker-without-containers/">article</a> to learn more.</p>
+<p>For me, the most interesting aspect of WebAssembly is the low overhead between host and guest applications when embedding a runtime. This opens up the possibility of extending software using plugin systems. However, before delving into the details of this, let's first review the basics.</p>
+<h2>The web</h2>
+<p>Let's take a moment to understand how WebAssembly works on the front-end. Normally, when you're on the web, you're executing untrusted code. You don't want a website making random I/O syscalls to your operating system. Therefore, by default, you want to block almost everything.</p>
+<p>WebAssembly is built with this idea in mind. The wasm module runs in a sandbox and only has access to whatever the host application allows it to access.</p>
+<p>In the browser, this means that you can import functions that are exposed from the JavaScript world.</p>
+<p><img src="/component_model_wasm/firefox-webassembly.png" alt="firefox-webassembly.png" /></p>
+<p>In the previous image, our WebAssembly Module has access to the console.log function. It exposes MyModuleFunction to be called in our JavaScript application.</p>
+<p>However, it's not that simple. Some boilerplate code is necessary to correctly manage types and memory communication between WebAssembly and JavaScript. WebAssembly memory is simply an <code>ArrayBuffer</code> (or a <code>SharedArrayBuffer</code>). When passing arguments or receiving the return of a function, some work is required to properly represent those bytes as a JavaScript or WebAssembly type.</p>
+<p>Writing the code by hand for WebAssembly can be tedious and error-prone. Fortunately, there are libraries available to generate the code for you. One such library is <a href="https://rustwasm.github.io/wasm-bindgen/">wasm-bindgen</a>, although it is specific to Rust. However, generating the code is only a small part of the problem. Ideally, you want to easily describe what you expect to be available for the WebAssembly Module and what the WebAssembly Module must contain. For this purpose, you can use the <a href="https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md">WIT</a> file from the <a href="https://github.com/WebAssembly/component-model">component model</a>. Then, use <a href="https://github.com/bytecodealliance/wit-bindgen">wit-bindgen</a> to generate the glue code. The wit-bindgen is also more generic and should support more languages. Note that WIT, component model, and the wit-bindgen are not yet stable, so expect many changes in the coming months.</p>
+<h2>Embedding the Runtime</h2>
+<blockquote>
+<p>A WebAssembly implementation will typically be <em>embedded</em> into a <em>host</em> environment.
+An <em>embedder</em> implements the connection between such a host
+environment and the WebAssembly semantics as defined in the main body of
+this specification.
+An embedder is expected to interact with the semantics in well-defined
+ways. - <a href="https://webassembly.github.io/spec/core/appendix/embedding.html">Source</a></p>
+</blockquote>
+<p>We can embed WebAssembly in our regular applications to run WebAssembly modules. From now on, I will refer to our regular applications as the &quot;host&quot; and the WebAssembly modules as the &quot;guest.&quot;</p>
+<p><img src="/component_model_wasm/host-app.png" alt="host-app.png" /></p>
+<p>There are several runtimes available, each with a different focus or set of features. Some are designed for minimal footprint, while others aim to simplify integration with host applications. Personally, my go-to runtime is <a href="https://wasmtime.dev/">Wasmtime</a>, which is well-maintained and has a large community.</p>
+<h2>Creating an application with WebAssembly Modules in Rust</h2>
+<p>Let’s use the WebAssembly runtime to allow users to extend an application with the Component Model. The source code is at <a href="https://github.com/era/example-of-plugins-with-webassembly/tree/master">github</a>. I will be explaining the most important parts of it, but make sure to take a quick look at the source code before reading the rest of this post.</p>
+<p>Before starting we need a couple of tools. First let’s add the wasm target for our rustc: <code>rustup target add wasm32-wasi</code>. Great, so now we can compile to wasm32. The wasi in the end has a special meaning. “WASI is a modular system interface for WebAssembly. As described in <a href="https://hacks.mozilla.org/2019/03/standardizing-wasi-a-webassembly-system-interface/">the initial announcement</a>, it’s focused on security and portability.” (<a href="https://wasi.dev/">wasi.dev</a>).</p>
+<p>We also need wasm-tools, so let’s install it using cargo: <code>cargo install wasm-tools</code>.</p>
+<p>Now let’s create our application: <code>cargo new host-application</code> and our plugin: <code>cargo new --lib hello-world-plugin</code>.</p>
+<p>Let’s create our wit file as well. I have been using wit almost since July 2022. There were several changes during that period. There is a good chance that there will be small differences in the format in the future as well, so <a href="https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md">I suggest checking out the documentation if something does</a> not work for you.</p>
+<pre><code class="language-wasm">package plugin:demo
+
+world plugin {
+  import host: interface {
+    log: func(param: string)
+  }
+
+  export run: func(param: string) -&gt; string
+}
+</code></pre>
+<p>So let’s start with our plugin because it’s the most simple code 😛. Our <code>Cargo.toml</code> looks like this:</p>
+<pre><code class="language-wasm">[package]
+name = &quot;hello-world-plugin&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2021&quot;
+
+# In order to compile a wasi dynamic library
+[lib]
+crate-type = [&quot;cdylib&quot;]
+
+[dependencies]
+wit-bindgen = { git = &quot;https://github.com/bytecodealliance/wit-bindgen&quot;, version = &quot;0.8.0&quot; }
+</code></pre>
+<p>Our <code>lib.rs</code> looks like this:</p>
+<pre><code class="language-rust">// src/lib.rs
+
+// Use a procedural macro to generate bindings for the world we specified in
+// our wit file
+wit_bindgen::generate!(&quot;plugin&quot;);
+
+// Define a custom type and implement the generated `Plugin` trait for it which
+// represents implementing all the necessary exported interfaces for this
+// component.
+struct HelloWorld;
+
+impl Plugin for HelloWorld {
+    fn run(name: String) -&gt; String {
+        format!(&quot;Hello, {name}&quot;)
+    }
+}
+
+// The following macro is generated by wit-bindgen and is always named `export_{world_name}`
+export_plugin!(HelloWorld);
+</code></pre>
+<p>Remember that I told you that things are breaking and everything is not smooth yet for this, right? So a quick break to read a little bit of the documentation:</p>
+<ul>
+<li>
+<p>An important consideration when creating a component today is WASI. All current
+native toolchains for languages which have WASI support are using the
+<code>wasi_snapshot_preview1</code> version of WASI. This definition of WASI was made
+with historical <code>*.witx</code> files and is not compatible with the component model.
+There is, however, a means by which to still create components from modules
+that are using <code>wasi_snapshot_preview1</code> APIs.</p>
+</li>
+<li>
+<p>The <code>wasm-tools component new</code> subcommand takes an <code>--adapt</code> argument which acts
+as a way to polyfill non-component-model APIs, like <code>wasi_snapshot_preview1</code>,
+with component model APIs. The <a href="https://github.com/bytecodealliance/preview2-prototyping">preview2-prototyping</a> project is the current
+go-to location to acquire a polyfill from <code>wasi_snapshot_preview1</code> to an
+in-development version of &quot;wasi preview2&quot; which is specified with <a href="https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md">WIT</a>
+and the component model.</p>
+</li>
+<li>
+<p>Notably you'll want to download <a href="https://github.com/bytecodealliance/preview2-prototyping/releases/tag/latest">one of the adapter modules</a>
+and name it <code>wasi_snapshot_preview1.wasm</code> locally to pass as an <code>--adapt</code>
+argument to <code>wasm-tools component new</code>. Note that there are two modules
+provided on the downloads page, <a href="https://github.com/bytecodealliance/wasmtime/releases/latest/download/wasi_snapshot_preview1.reactor.wasm">one is for non-commands</a> which
+don't have a <code>_start</code> entrypoint in the generated core wasm module (e.g. the
+<code>cdylib</code> crate type in Rust) and <a href="https://github.com/bytecodealliance/wasmtime/releases/latest/download/wasi_snapshot_preview1.command.wasm">one that is for command modules</a>
+which has a <code>_start</code> entrypoint (e.g. a <code>src/main.rs</code> in Rust).</p>
+<p>(<a href="https://github.com/bytecodealliance/wit-bindgen">source</a>)</p>
+</li>
+</ul>
+<p>Ok, so we will be downloading the reactor adapter from <a href="https://github.com/bytecodealliance/wasmtime/releases/tag/dev">Wasmtime</a> since it will be the runtime used.</p>
+<pre><code class="language-bash">wget https://github.com/bytecodealliance/wasmtime/releases/download/dev/wasi_snapshot_preview1.reactor.wasm
+</code></pre>
+<p>To compile we will run two commands:</p>
+<pre><code class="language-bash">cargo build --release --target wasm32-wasi
+wasm-tools component new ./target/wasm32-wasi/debug/hello_world_plugin.wasm \
+    -o hello-world.wasm --adapt wasi_snapshot_preview1=./wasi_snapshot_preview1.reactor.wasm
+</code></pre>
+<p>Now we should have a <code>hello-world.wasm</code> file. Let’s move it to <code>host-application/plugins</code>.</p>
+<p>Our host is a bit more complicated. Our <code>Cargo.toml</code> looks like this:</p>
+<pre><code class="language-bash">[package]
+name = &quot;host-application&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2021&quot;
+
+[dependencies]
+thiserror = &quot;1.0.43&quot;
+wasmtime-wasi = { git= &quot;https://github.com/bytecodealliance/wasmtime&quot;, branch=&quot;main&quot;, features=[&quot;preview2&quot;]}
+wasmtime = { git= &quot;https://github.com/bytecodealliance/wasmtime&quot;, branch=&quot;main&quot;, features = [&quot;component-model&quot;, &quot;async&quot;]}
+tokio = { version = &quot;1.29.1&quot;, features = [&quot;full&quot;] }
+</code></pre>
+<p>Tokio is there because I was not able to use the current component model without activating the async mode as well. thiserror makes life a bit easier to handle errors. Wasmtime is our runtime and wasmtime-wasi offers some helpers that are needed to make sure we expose the wasi default methods to our module.</p>
+<p>So how do we get a WebAssembly Module and use it on our application? First of all, we need to expose the functions we promised to our module so we can properly instantiate it. From our wit the only function we are allowing them to use is the log function, so let’s do that:</p>
+<pre><code class="language-rust">// first let's generate all the glue code we need
+wasmtime::component::bindgen!({world: &quot;plugin&quot;});
+
+struct PluginRuntime{}
+// Implements the Trait which represents the functions
+// the module imported
+impl crate::plugin::host::Host for PluginRuntime {
+    fn log(&amp;mut self, txt: String) -&gt; wasmtime::Result&lt;()&gt; {
+        println!(&quot;{txt}&quot;);
+        Ok(())
+    }
+}
+</code></pre>
+<p>Ok, I was not been precise, we also promised to expose the wasi functions, so we need to somehow do it. We actually just need to expose <code>WasiCtx</code>. So let’s change our struct a little bit:</p>
+<pre><code class="language-rust">use wasmtime_wasi::preview2::WasiCtx;
+use wasmtime_wasi::preview2::WasiCtxBuilder;
+
+struct PluginRuntime {
+    wasi_ctx: WasiCtx,
+    table: wasi_preview2::Table,
+}
+
+impl PluginRuntime {
+    pub fn new() -&gt; Self {
+        let mut table = wasmtime_wasi::preview2::Table::new();
+        Self {
+            wasi_ctx: WasiCtxBuilder::new().build(&amp;mut table).unwrap(),
+            table,
+        }
+    }
+}
+</code></pre>
+<p>Let’s also create a <code>WasmModule</code> struct to represent any plugin we want to instantiate. The code is a bit complex, so read the comments to understand what is going on:</p>
+<pre><code class="language-rust">pub struct WasmModule {
+    module: Component,
+    linker: Linker&lt;PluginRuntime&gt;,
+    engine: Engine,
+}
+
+impl WasmModule {
+    pub fn new(path: &amp;str) -&gt; Result&lt;Self, WasmError&gt; {
+        // An engine stores and configures global compilation settings like
+        // optimization level, enabled wasm features, etc.
+        let mut config = Config::new();
+        config.wasm_component_model(true);
+        config.async_support(true);
+        let engine = Engine::new(&amp;config)
+            .map_err(|e| WasmError::GenericError(format!(&quot;{} {}&quot;, e, path)))?;
+
+        // We start off by creating a `Module` which represents a compiled form
+        // of our input wasm module. In this case it'll be JIT-compiled after
+        // we parse the text format.
+        //could use from_binary as well
+        let module = Component::from_file(&amp;engine, path)
+            .map_err(|e| WasmError::GenericError(format!(&quot;{} {}&quot;, e, path)))?;
+
+        let mut linker = Linker::new(&amp;engine);
+
+        // Links our Runtime exposing the methods to our module
+        Plugin::add_to_linker(&amp;mut linker, |state: &amp;mut PluginRuntime| state)
+            .map_err(|e| WasmError::GenericError(e.to_string()))?;
+
+        // since we are using wasi, we need to add the functions related with it
+        // wasi_preview2 is a helper that will do that for us
+        wasi_preview2::wasi::command::add_to_linker(&amp;mut linker)
+            .map_err(|e| WasmError::GenericError(e.to_string()))?;
+
+        Ok(Self {
+            module,
+            linker,
+            engine,
+        })
+    }
+
+    // invoke our plugin (the `run` function)
+    pub async fn invoke(&amp;mut self, arg: &amp;str) -&gt; Result&lt;String, WasmError&gt; {
+        // A `Store` is what will own instances, functions, globals, etc. All wasm
+        // items are stored within a `Store`, and it's what we'll always be using to
+        // interact with the wasm world. Custom data can be stored in stores but for
+        // now we just use `()`.
+        let mut store = Store::new(&amp;self.engine, PluginRuntime::new());
+
+        // With a compiled `Module` we can then instantiate it, creating
+        // an `Instance` which we can actually poke at functions on.
+        let instance = self
+            .linker
+            .instantiate_async(&amp;mut store, &amp;self.module)
+            .await
+            .map_err(|e| WasmError::GenericError(e.to_string()))?;
+
+        // our result will be here
+        let mut result = [Val::S32(0)];
+        // let's get the function we are interested and call it
+        instance
+            .get_func(&amp;mut store, &quot;run&quot;)
+            .unwrap()
+            .call_async(&amp;mut store, &amp;[Val::String(arg.into())], &amp;mut result)
+            .await
+            .map_err(|e| WasmError::GenericError(e.to_string()))?;
+
+        Ok(format!(&quot;{:?}&quot;, result))
+    }
+</code></pre>
+<p>With all of that, we can call the module from our main function:</p>
+<pre><code class="language-rust">mod plugin;
+
+#[tokio::main]
+async fn main() {
+    let result = plugin::WasmModule::new(&quot;plugins/hello-world.wasm&quot;)
+        .unwrap()
+        .invoke(&quot;world!&quot;)
+        .await
+        .unwrap();
+    println!(&quot;{result}&quot;);
+}
+</code></pre>
+<p>Now we can modify our main function to dynamically load any wasm file at the <code>plugins</code> folder and call the <code>run</code> function. Which I won’t do in this post.</p>
+<p>The code for the WasmModule is a bit more complex than what I showed here, make sure to checkout the <a href="https://github.com/era/example-of-plugins-with-webassembly/blob/master/host-application/src/plugin.rs">plugin.rs</a> file to check out every needed step.</p>
+	</main>
+        <div class="main container" style="margin-top: 300px">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
