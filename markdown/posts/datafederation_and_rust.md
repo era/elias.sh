@@ -23,7 +23,7 @@ If we open the black-box and assume we are talking about Presto, the overall sys
 
 ![](/datafederation_and_rust/Untitled%202.png)
 
-The coordinator does a lot of hard things, such as the optimizations of the query plan. The optimizer/planner is responsible for transforming the SQL (SQL is a declarative language, so it does not tell HOW things should be executed, but WHAT the user wants) into a executable plan. It will also break the request into smaller tasks and split it between the workers so it can be run in parallel. The interesting part about Presto is that it can return the results as they are ready, instead of waiting for everything before responding to the client.
+The coordinator is responsible for complex tasks, such as the optimizations of the query plan. The optimizer/planner is responsible for transforming the SQL (SQL is a declarative language, so it does not tell HOW things should be executed, but WHAT the user wants) into a executable plan. It will also break the request into smaller tasks and split it between the workers so it can be run in parallel. The interesting part about Presto is that it can return the results as they are ready, instead of waiting for everything before responding to the client.
 
 But we were talking about taking a user request and translating it into the commands of different data sources, so let’s jump into the worker. In order to connect Presto to the rest of the world, you need to implement the [Connector](https://prestodb.io/docs/current/develop/connectors.html) interface. Is the Connector which will help Presto to translate its internal representation to where the data is stored.
 
