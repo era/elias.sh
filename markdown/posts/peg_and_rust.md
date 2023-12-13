@@ -3,7 +3,7 @@ title: PEG and Rust
 date: 2023-05-16
 ---
 
-For the first post here, nothing better than writing a bit about the tool I wrote to build this static website.
+For the first post here, nothing better than writing a bit about the tool I created to build this static website.
 
 During the end of the pandemic, I had the opportunity to take the “[Building a Programming Language](http://lms.classpert.com/classpertx/courses/building-a-programming-language/cohort)” by Roberto Ierusalimschy (creator of the Lua programming language). He mainly talked about PEGs, more specifically about LPEG (a Lua library he created). Since then I wanted to play with PEG using Rust and the TinyLang is the result of it.
 
@@ -20,7 +20,6 @@ Take a look at the main components of an Interpreted Programming Language:
 ## Parsing expression grammar (PEG)
 
 > In computer science, a parsing expression grammar (PEG) is a type of analytic formal grammar, i.e. it describes a formal language in terms of a set of rules for recognizing strings in the language.
-
 > Syntactically, PEGs also look similar to context-free grammars (CFGs), but they have a different interpretation: the choice operator selects the first match in PEG, while it is ambiguous in CFG. This is closer to how string recognition tends to be done in practice, e.g. by a recursive descent parser.
 > 
 > Unlike CFGs, PEGs cannot be ambiguous; a string has exactly one valid parse tree or none. PEGs are well-suited to parsing computer languages.
@@ -29,9 +28,9 @@ Take a look at the main components of an Interpreted Programming Language:
 
 The Wikipedia description of it does not seem easy to parse (pun intended), it basically defines PEGs in contrast with CFGs. 
 
-Both PEG and CFG can be used to create parsers for programming languages. The main difference is that PEG cannot be ambiguous and “PEG's choice operator is ordered. If the first alternative succeeds, the second alternative is ignored. Thus ordered choice is not commutative, unlike unordered choice as in context-free grammars” (Wikipedia).
+Both PEG and CFG can be used to create parsers for programming languages. The main difference is that PEG cannot be ambiguous, so in theory you can easily read the PEG file and understand the grammar.
 
-Let’s take a look at [PEST](https://pest.rs/) a PEG Rust Library with an example from their documentation.  Quoting their website: “The following is an example of a grammar for a list of alpha-numeric identifiers where the first identifier does not start with a digit”:
+Let’s take a look at [PEST](https://pest.rs/) a PEG Rust Library with an example from their documentation.  The following is an example of a grammar for a list of alpha-numeric identifiers where the first identifier does not start with a digit:
 
 ```
 alpha = { 'a'..'z' | 'A'..'Z' }
@@ -56,7 +55,7 @@ If we try to match against `a 1 b`, it will generate the following:
 - ident > alpha: "b" 
 ```
 
-Before talking about the output, you may notice that we do not have any `ident_list` and the reason is that the `_` is a modifier to make it a “silent rule”, basically a rule that will not be in our final AST.
+You may notice that we do not have any `ident_list` and the reason is that the `_` is a modifier to make it a “silent rule”, basically a rule that will not be in our final AST.
 
 The output generated looks like the following image where all the idents are on the same iterable data structure:
 
@@ -64,7 +63,7 @@ The output generated looks like the following image where all the idents are on 
 
 ## TinyLang
 
-Ok, so let’s head back to my side project. TinyLang is not really a general-purpose language, but a template language. The main goal is to define based on templates how a final static website will look like. My main needs are:
+Ok, so let’s head back to my side project. TinyLang is not really a general-purpose language, but a template language. The main goal is to define based on templates how a static website will look like. My main needs are:
 
 1. Anything that is pure HTML should just be copied over
 2. I need a way to “print” variable values
