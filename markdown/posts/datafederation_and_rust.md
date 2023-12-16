@@ -1,54 +1,39 @@
 ---
-title: Data Federation and Rust
+title: Data Federation and Trustfall
 date: 2023-08-29
 ---
 
-Data federation is an approach that consolidates data from multiple sources into a single virtual view. This method enables organizations to enhance their data utilization by eliminating data duplication and avoiding data silos. It’s a hot topic at the moment with companies like Databricks, Starburst, and Cloud Providers (AWS Athena, Redshift Spectrum) trying to sell the solution. But why? 
+Data federation is an approach that consolidates data from multiple sources into a single virtual view. This method eradicates data duplication and the formation of data silos, currently drawing significant attention from industry players like Databricks, Starburst, and major cloud providers such as AWS (Athena and Redshift Spectrum). But why is this trend gaining momentum?
 
-[Daniel Abadi says in his post about the subject](https://www.starburst.io/blog/data-federation-and-data-virtualization-never-worked-in-the-past-but-now-its-different/) “Thirty years ago it was already commonplace for large businesses to have hundreds — even thousands of different database instances managing data from the variety of different applications running at that business”. This leads to several data silos, making it hard to find answers that need to join different data sources.
+[Daniel Abadi says in his post about the subject](https://www.starburst.io/blog/data-federation-and-data-virtualization-never-worked-in-the-past-but-now-its-different/) “Thirty years ago it was already commonplace for large businesses to have hundreds — even thousands of different database instances managing data from the variety of different applications running at that business”. This situation resulted in the proliferation of data silos, complicating the retrieval of answers that required combining information from various sources.
 
-One common solution was to build ETL (extract transform load) pipelines to centralize all the data into a single data warehouse, such as AWS Redshift (the team I worked with when I was an Amazon employee :P). This works but adds friction, someone has to maintain and write those pipelines and worst: you normally don’t want those jobs running 
-all the time, because they may affect the performance of your applications, 
-so people normally have batch jobs running at night synchronizing the data from the previous day. In that case, your centralized view is always at least 1 day delayed.
+Traditionally, organizations addressed this challenge by building ETL (extract, transform, load) pipelines to centralize data into a single warehouse, such as AWS Redshift (where I had the opportunity to work during my time at Amazon :P). However, this approach introduces friction, requiring ongoing pipeline maintenance. Moreover, running these jobs continuously may impact application performance, leading many to schedule batch jobs at night, resulting in a centralized view that is at least one day delayed.
 
 ![](/datafederation_and_rust/Untitled.png)
 
-A different approach is to have a data federation system, able to translate user requests into the different data sources. This type of system normally gets very interesting when you need to join data that is siloed into different databases.
+A contrasting approach involves employing a data federation system capable of translating user requests across different data sources. This becomes especially valuable when merging data from siloed databases.
 
 ![](/datafederation_and_rust/Untitled%201.png)
 
-This approach allows us to fetch more “fresh” data since it can be queried where they are stored.
+This methodology enables the retrieval of more "fresh" data, querying directly from where it resides. A practical example involves using Presto to query diverse data sources.
 
-One real example is to use Presto to query other data sources.
-
-If we open Presto black box, the overall system looks like this (according to the [Presto paper](https://trino.io/Presto_SQL_on_Everything.pdf)):
+Digging into the Presto architecture, outlined in the [Presto white paper](https://trino.io/Presto_SQL_on_Everything.pdf), the coordinator manages complex tasks like optimizing query plans, while the optimizer/planner transforms SQL queries (SQL is a declarative language, so it does not tell HOW things should be executed, but WHAT the user wants) into executable plans. It will also break the request into smaller tasks and split it between the workers so it can be run in parallel. Presto's ability to return results incrementally, rather than waiting for completion, adds to its appeal.
 
 ![](/datafederation_and_rust/Untitled%202.png)
 
-The coordinator is responsible for complex tasks, such as the optimizations of the query plan. The optimizer/planner is responsible for transforming the SQL (SQL is a declarative language, so it does not tell HOW things should be executed, but WHAT the user wants) into an executable plan. It will also break the request into smaller tasks and split it between the workers so it can be run in parallel. The interesting part about Presto is that it can return the results as they are ready, instead of waiting for everything before responding to the client.
-
 But we were talking about taking a user request and translating it into the commands of different data sources, so let’s jump into the worker which is responsible for fetching the data from a diverse set of data sources. To connect Presto to the rest of the world, you need to implement the [Connector](https://prestodb.io/docs/current/develop/connectors.html) interface. It is the Connector which will help Presto translate its internal representation to where the data is stored.
 
-Presto is nice because it allows us to feel like we have a single database to answer all of our questions, even if we are storing data in different places. But wouldn’t be nicer to also query different APIs just as we query different data storage with Presto?
+Presto provides a unified database feel for answering queries, but what if we could query different APIs as seamlessly as we do with Presto?
 
 ## Querying (almost) everything
 
-There is a very interesting project written in Rust called “[Trustfall](https://github.com/obi1kenobi/trustfall)” which allows users to query (almost) everything. Quoting the GitHub repo:
- "Trustfall is a query engine for querying any kind of data source, from APIs and databases to any kind of files on disk — and even AI models.”.
 
-To allow Trustfall to connect to very different data sources, you just need to define the Schema and write an Adapter that will know how to talk with the data source. When the user sends a query, the front end compiles it down to an intermediate representation that is lazily evaluated. As the query is interpreted, the adapter is called to fetch the needed data. [There is a great short talk about it](https://www.hytradboi.com/2022/how-to-query-almost-everything).
+Enter [Trustfall](https://github.com/obi1kenobi/trustfall), a Rust-based project enabling users to query almost any data source, from APIs and databases to various files on disk — and even AI models.
+
+To connect Trustfall to diverse data sources, users need to define the schema and craft an adapter capable of communicating with the data source. As the user sends a query, the frontend compiles it into a lazily evaluated intermediate representation. During interpretation, the adapter is invoked to fetch the required data. For more insights, check out [this informative talk](https://www.hytradboi.com/2022/how-to-query-almost-everything).
 
 ![](/datafederation_and_rust/Untitled%203.png)
 
 This approach allows you to do very cool things such as cross-API queries. We can see a demo of a query responding “*Which GitHub Actions are used in projects on the front page of HackerNews with >=10 points?” (which is available on the repo readme)*
 
 ![](/datafederation_and_rust/query-demo.gif)
-
-## Rust
-
-I feel like Rust is going to enable many more projects like Trustfall to appear, not only because the safety of the language allows companies to build efficient applications in an easier way than before, but a lot of software engineers that would not look into C/C++ code are now interested on handling this type of problem thanks to the Rust community.
-
-Also, we are living in a world full of interesting data. The size of the data is getting bigger and bigger. 
-We cannot afford to keep moving all the data into one place to find answers. 
-We must optimize our workflow and start 
-separating the query engines from the data storage so we can create new workflows.
