@@ -11,7 +11,7 @@ Traditionally, organizations addressed this challenge by building ETL (extract, 
 
 ![](/datafederation_and_rust/Untitled.png)
 
-A contrasting approach involves employing a data federation system capable of translating user requests across different data sources. This becomes especially valuable when merging data from siloed databases.
+A contrasting approach involves employing a data federation system capable of translating user requests across different data sources. This becomes especially valuable when merging data from different sources.
 
 ![](/datafederation_and_rust/Untitled%201.png)
 
