@@ -21,7 +21,7 @@ Digging into the Presto architecture, outlined in the [Presto white paper](https
 
 ![](/datafederation_and_rust/Untitled%202.png)
 
-But we were talking about taking a user request and translating it into the commands of different data sources, so let’s jump into the worker which is responsible for fetching the data from a diverse set of data sources. To connect Presto to the rest of the world, you need to implement the [Connector](https://prestodb.io/docs/current/develop/connectors.html) interface. It is the Connector which will help Presto translate its internal representation to where the data is stored.
+But we were talking about taking a user request and translating it into the commands of different data sources, so let’s jump into the worker which is responsible for fetching the data from a diverse set of data sources. To connect Presto to the rest of the world, you need to implement the [Connector](https://prestodb.io/docs/current/develop/connectors.html) interface. It is the Connector which will helps Presto translate its internal representation to where the data is stored.
 
 Presto provides a unified database feel for answering queries, but what if we could query different APIs as seamlessly as we do with Presto?
 
