@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Elias' homepage</title>
+    <link rel="stylesheet" href="/typesafe.css">
+    <link rel="webmention" href="https://webmention.io/www.masterless.io/webmention" />
+    <link rel="pingback" href="https://webmention.io/www.masterless.io/xmlrpc" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+    <style>
+     /* roboto-regular - latin */
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      src: local(''),
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+    body { font-size: 1.3em; font-family: Roboto, sans-serif; }
+    a {border-bottom: 3px double;}
+    img.big {width: 165px; margin: 2px auto; display: block;}
+    img.git {width: 20px; height: 20px;}
+     </style>
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>How can we divide the Cloud</h1>
+	<h6>2024-04-27</h6>
+	<p>Web applications are normally divided into front-end and back-end. But for Software as a Service that division is not useful. The “back-end” is made of different software that has specific roles. From my experience working at AWS (on the Redshift team) and at Huawei Cloud, the most common division is:</p>
+<ol>
+<li><strong>Management Plane</strong>: Management Plane is normally written by SREs, and it is the software responsible for enabling interventions on production (manual or automated operations). Upgrading the system, rollbacks, failover and so on. It does not need to be up 99.9999% of the time, no user should be impacted if the whole plane is down, but every action should be extremely safe to do. One SRE during oncall should not be able to take down a whole service by using the Management Plane. I would also add the monitoring system: metrics ingestion, alarms and dashboards.</li>
+<li><strong>Control Plane</strong>: The Control Plane allow <strong>users</strong> to manage their service, we can include here: the public API, workflow systems (to execute user's commands, and background workflows to maintain the service) and auto-recovery actions (scaling up, removing bad hosts, restarting the service). Kubernetes can be the Control Plane of your service. If the Control Plane is down, the Data Plane should still work, but users are affected in the sense they cannot use the public API (e.g. EC2 instances should keep running, but it would be impossible to create new instances). We should aim for nine nines of availability.</li>
+<li><strong>Data Plane</strong>: The Data Plane is what your software as a service is. So if we are talking about AWS Redshift it would be the Database itself. If we are using Kubernetes, this would be the worker nodes.</li>
+</ol>
+<p>Note: Some teams may merge the Management Plane and the Control Plane, for example, the Redshift Team had a team owning the Control Plane and another the Data Plane. Management Plane was mostly inside the Control Plane.</p>
+	</main>
+        <div class="main container" style="margin-top: 300px">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
