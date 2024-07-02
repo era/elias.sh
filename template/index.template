@@ -19,7 +19,7 @@
     a {border-bottom: 3px double;}
     img.big {width: 165px; margin: 2px auto; display: block;}
     img.git {width: 20px; height: 20px;}
-img.icon {width: 25px; height: 25px;}
+    img.icon {width: 25px; height: 25px;}
      </style>
   </head>
   <body class="hack main container">
@@ -27,7 +27,7 @@ img.icon {width: 25px; height: 25px;}
     <main>
       <p>Hi, my name is Elias. Nice to meet you.
           I create stuff for living. And well... I am also a Software Engineer, I was previously working at Huawei Ireland Research Center. 
-          I'm working at the Cloud Reliability R&D lab, building the foundations of Huawei Cloud. I was mainly focused on observability infrastructure.</p>
+          More specifically at the Cloud Reliability R&D lab, building the foundations of Huawei Cloud. I was mainly focused on observability infrastructure.</p>
 
       <p>I also worked on projects like Redshift (Amazon AWS) and financial systems (Stripe, Cielo, Banco Original, Banco Votorantim). </p>
       <p>I really love to work with Rust. My favourite domains are: Databases and Distributed Systems.</p> 
