@@ -19,6 +19,7 @@
     a {border-bottom: 3px double;}
     img.big {width: 165px; margin: 2px auto; display: block;}
     img.git {width: 20px; height: 20px;}
+img.icon {width: 25px; height: 25px;}
      </style>
   </head>
   <body class="hack main container">
@@ -31,8 +32,8 @@
       <p>I also worked on projects like Redshift (Amazon AWS) and financial systems (Stripe, Cielo, Banco Original, Banco Votorantim). </p>
       <p>I really love to work with Rust. My favourite domains are: Databases and Distributed Systems.</p> 
       <p>You can check some of the things I build on <a href="https://github.com/era">Github</a>.
-      <p>Before I forget! I do live coding sessions in Portuguese at <a href="https://twitch.tv/code_elias_code">twitch <img src="https://elias.sh/twitch.png" /></a>
-      and I keep an <a href="https://instagram.com/code_elias_code">Instagram page <img src="https://elias.sh/inst.png" /></a>
+      <p>Before I forget! I do live coding sessions in Portuguese at <a href="https://twitch.tv/code_elias_code">twitch</a> <img class="icon" src="https://elias.sh/twitch.png" />
+      and I keep an <a href="https://instagram.com/code_elias_code">Instagram page</a> <img src="https://elias.sh/inst.png" class="icon" />
       about Computer Science and lifestyle in Portuguese as well.</p>
 
       <p>If you are curious about my current location, I am living in Japan.</p>
