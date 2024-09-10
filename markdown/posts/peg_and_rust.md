@@ -215,10 +215,8 @@ At the moment I’m really enthusiastic about Rust programming language and
 I’m looking for projects to collaborate with. 
 If you want help with your side/pet project, let me know on [Twitter](https://www.twitter.com/elias_era), and feel free to DM me :), or just email me rust@{{this_domain}}.
 
-Also, if you found any error on the post, let me know using Twitter as well.
-
 If you are interested on TinyLang, you can check it on [Github](https://github.com/era/tinylang).
 
-Also, the code for this website is at [Github](https://github.com/era/elias.sh) as well.
+The code for this website is at [Github](https://github.com/era/elias.sh) as well.
 
 Thank you for reading,
