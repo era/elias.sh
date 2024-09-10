@@ -38,7 +38,7 @@ with observability at Huawei Cloud. On previous roles at Stripe and AWS I looked
 <li><a href="https://www.elias.sh/posts/visualizing_metrics">Visualizing Metrics</a></li>
 <li><a href="https://www.elias.sh/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust">OpenTelemetry, time series, metrics and a bit of Rust</a></li>
 </ol>
-<p>Anyway, I am not here to talk about things I have written in the past. On the last couple of days I have been looking at observability from the perspective of service owner again. This gave me a wish to write it down things I encountered in the past, before memory fades it away.</p>
+<p>Anyway, I am not here to talk about things I have written in the past. On the last couple of days I have been looking at observability from the perspective of service owner again. This gave me a wish to write down things I encountered in the past, before memory fades it away.</p>
 <ol>
 <li>
 <p>Business metrics are important, the <a href="https://sre.google/sre-book/monitoring-distributed-systems/">4 golden signals</a> are nice but they do not allow you to prove correctness nor easily find out about behaviour changes. Example, if one client always send up to 10 items batched in a request, and now is sending 100, something changed. It may be that the logic changed and that is fine, but it could also be a bug. Without having a quick way of visualizing the change you may never find out before it causes bigger damages.</p>
