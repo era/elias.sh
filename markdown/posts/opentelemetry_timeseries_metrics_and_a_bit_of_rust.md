@@ -31,7 +31,7 @@ Metrics normally don’t make sense on their own. If you have a single metric fo
 
 There is something missing in my explanation, in a world where software is deployed on different machines, different regions and different setups, having raw data of “memory usage” is useless if we cannot categorize this data per the different dimensions our software stack has.
 
-People call those dimensions different things, such as tags and labels. To simplify things I will only use tags. Tags help us to answer questions like: “Which Availability Zone has the higher rate of errors?”, “Which server has the higher CPU usage rate?”, “Which version of the software has the lower response time?”. All of that is by grouping the metrics by different tags.
+People call those dimensions different things, such as tags and labels. To simplify things I will only use tags. Tags help us to answer questions like: “Which Availability Zone has the higher rate of errors?”, “Which server has the higher CPU usage rate?”, “Which version of the software has the lower response time?”. All of that by grouping the metrics by different tags.
 
 Let’s pause a bit, and define another term. Time-series. A time series refers to a sequence of data points collected or recorded in chronological order. It represents the measurement or observation of a variable or multiple variables over time. So from now on, instead of saying “metric x over the last y minutes”, I will just say the metric x time series.
 
@@ -39,7 +39,7 @@ Let’s pause a bit, and define another term. Time-series. A time series refers 
 
 Ok, let’s continue. So as we were talking, tags are very important for our time series. It helps us to group by different points of view. So we should to make them right! If you use a tool like [HoneyComb you are probably not worried about high cardinality](https://docs.honeycomb.io/concepts/high-cardinality/), otherwise, you should! 
 
-But wait, we haven’t talked about cardinality yet! Honeycomb’s doc says: “The dimensionality of a dataset is the number of different attributes that it has. A high-dimensionality dataset, then, has many different attributes.”. Let’s go back to our tags. Let’s say we have: host_ip, availability_zone (az) and region tags for all of our metrics. Even if the number of hosts is big, we are not concerned with high dimensionality for this dataset. We should not expect a huge number of availability zone (e.g. AWS have very few per region), or even region. So our cardinality is bound to be low.
+But wait, we haven’t talked about cardinality yet! Honeycomb documentation says: “The dimensionality of a dataset is the number of different attributes that it has. A high-dimensionality dataset, then, has many different attributes.”. Let’s go back to our tags. Let’s say we have: host_ip, availability_zone (az) and region tags for all of our metrics. Even if the number of hosts is big, we are not concerned with high dimensionality for this dataset. We should not expect a huge number of availability zone (e.g. AWS have very few per region), or even region. So our cardinality is bound to be low.
 
 Well, let’s imagine that we add a request id tag to our metrics, and request_id is a uuid. We can bet it will have high cardinality. But, why this is bad?
 

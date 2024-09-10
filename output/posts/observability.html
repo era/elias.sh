@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <title>Elias' homepage</title>
+    <link rel="stylesheet" href="/typesafe.css">
+    <link rel="webmention" href="https://webmention.io/www.masterless.io/webmention" />
+    <link rel="pingback" href="https://webmention.io/www.masterless.io/xmlrpc" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+    <style>
+     /* roboto-regular - latin */
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      src: local(''),
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+    body { font-size: 1.3em; font-family: Roboto, sans-serif; }
+    a {border-bottom: 3px double;}
+    img.big {width: 165px; margin: 2px auto; display: block;}
+    img.git {width: 20px; height: 20px;}
+     </style>
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>2 years working with observability</h1>
+	<h6>2024-09-10</h6>
+	<p>As you get old, you start looking at your past and reflecting on what you learnt. I notice today that I worked more than 2 years
+with observability at Huawei Cloud. On previous roles at Stripe and AWS I looked at observability from the user point of view: how to prove my new feature is working? I was just paged, what is going on with my service? I will be oncall next week, what is the state of our dashboards and alarms?</p>
+<p>That is all great, but not the same as working on the platform team focused on observability.</p>
+<p>When you are responsible for designing the tools to enable other engineers to properly observe their software, you pay more attention to certain details.</p>
+<p>That lead me to write a little bit about my thoughts around observability:</p>
+<ol>
+<li><a href="https://www.elias.sh/posts/visualizing_metrics">Visualizing Metrics</a></li>
+<li><a href="https://www.elias.sh/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust">OpenTelemetry, time series, metrics and a bit of Rust</a></li>
+</ol>
+<p>Anyway, I am not here to talk about things I have written in the past. On the last couple of days I have been looking at observability from the perspective of service owner again. This gave me a wish to write it down things I encountered in the past, before memory fades it away.</p>
+<ol>
+<li>
+<p>Business metrics are important, the <a href="https://sre.google/sre-book/monitoring-distributed-systems/">4 golden signals</a> are nice but they do not allow you to prove correctness nor easily find out about behaviour changes. Example, if one client always send up to 10 items batched in a request, and now is sending 100, something changed. It may be that the logic changed and that is fine, but it could also be a bug. Without having a quick way of visualizing the change you may never find out before it causes bigger damages.</p>
+</li>
+<li>
+<p>Distributed Tracing is amazing, they give us a view similar to logs in a summarised way. Instead of looking for the end-to-end &quot;life of a request&quot; divided into multiple log lines, you have the <a href="https://www.elastic.co/guide/en/observability/current/apm-spans.html">waterfall view</a> with all the spans. Instrumenting your code and enriching the spans are much more useful than adding logs into random places without any standard.</p>
+</li>
+<li>
+<p>Create alarms for edge cases, do not expect people to &quot;notice when something is wrong&quot;.</p>
+</li>
+<li>
+<p>High Cardinality is a big issue, either because of price, or because of indexing. Either way, avoid them when emitting metrics.</p>
+</li>
+<li>
+<p>Logs are still useful. You want macro-views with metrics, detailed summarised views with distributed tracing and logs as a way of diving into more details.</p>
+</li>
+<li>
+<p><a href="https://opentelemetry.io">OpenTelemetry</a> is a great idea and it's perfect for avoiding vendor lock-in.</p>
+</li>
+</ol>
+
+	</main>
+        <div class="main container" style="margin-top: 300px">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
