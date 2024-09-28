@@ -37,3 +37,7 @@ To connect Trustfall to diverse data sources, users need to define the schema an
 This approach allows you to do very cool things such as cross-API queries. We can see a demo of a query responding “*Which GitHub Actions are used in projects on the front page of HackerNews with >=10 points?” (which is available on the repo readme)*
 
 ![](/datafederation_and_rust/query-demo.gif)
+
+## Why am I talking about Trustfall?
+
+Well, it's an interesting project :). But I also got the chance to [collaborate with it a little bit](https://github.com/obi1kenobi/trustfall/commits/main/?author=era).
