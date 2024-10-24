@@ -67,8 +67,8 @@ utilization, request rate for a given service. - <a href="https://opentelemetry.
 <p>I will follow Honeycomb’s book definition: “An event is a record of everything that occurred while one particular request interacted with your service”.</p>
 <p>So let’s imagine you have a map for each request made for your service where the key is the name of a dimension or metric name and the values, well, are the metric or dimension value. If you store them in a database and later retrieve them by (only an example) request id. It would be possible to know all the details of that particular request: how long it took, which user initiated it and so on.</p>
 <pre><code class="language-json">{
-	&quot;request_id&quot;: 123,
-	&quot;user_id&quot;: 456,
+  &quot;request_id&quot;: 123,
+  &quot;user_id&quot;: 456,
   &quot;response_time&quot;: 300,
   &quot;params&quot;: [&quot;something=else&quot;],
   &quot;database_response_time&quot;: 200,

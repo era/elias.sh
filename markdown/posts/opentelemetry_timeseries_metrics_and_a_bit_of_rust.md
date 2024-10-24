@@ -61,8 +61,8 @@ So let’s imagine you have a map for each request made for your service where t
 
 ```json
 {
-	"request_id": 123,
-	"user_id": 456,
+  "request_id": 123,
+  "user_id": 456,
   "response_time": 300,
   "params": ["something=else"],
   "database_response_time": 200,
