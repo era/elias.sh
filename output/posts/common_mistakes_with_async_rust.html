@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Elias' homepage</title>
+    <link rel="stylesheet" href="/typesafe.css">
+    <link rel="webmention" href="https://webmention.io/www.masterless.io/webmention" />
+    <link rel="pingback" href="https://webmention.io/www.masterless.io/xmlrpc" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+    <style>
+     /* roboto-regular - latin */
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      src: local(''),
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+    body { font-size: 1.3em; font-family: Roboto, sans-serif; }
+    a {border-bottom: 3px double;}
+    img.big {width: 165px; margin: 2px auto; display: block;}
+    img.git {width: 20px; height: 20px;}
+     </style>
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Common mistakes with Async Rust</h1>
+	<h6>2025-01-26</h6>
+	<p>Rust prevents a lot of problems, but in order to work with Async Rust you must keep in mind how green threads work and its difference with OS threads.</p>
+<p>If you come from JavaScript or Go, it's easy to forget certain thinks.</p>
+<h2>1. Do not block inside a Rust Async Runtime</h2>
+<p>If you perform I/O blocking operations inside a runtime like Tokio, you will be blocking one of the working threads, if you do that on all your working threads you could make your whole program stuck. I wrote a small example of <a href="https://github.com/era/do-not-block-inside-rust-async">this.</a></p>
+<p>Instead you should use async I/O or use something like <a href="https://docs.rs/tokio/latest/tokio/task/fn.spawn_blocking.html">spawn_blocking</a> which will run the closure on a thread which blocking won't cause issues.</p>
+<h2>2. Drop implementations which may block</h2>
+<p>This is really a variation of the first item. Some structs may try to clean up resources (like deleting a file or closing a socket) when they are dropped. Some of those operations are blocking, such as dropping <a href="https://doc.rust-lang.org/std/net/struct.TcpListener.html">std::net::TcpListener</a>: &quot;The socket will be closed when the value is dropped.&quot;</p>
+<h2>3. Creating futures too big for the stack</h2>
+<p>Async / Await generates a state machine which is by default stored on the Stack (<a href="https://eventhelix.com/rust/rust-to-assembly-async-await/">ref1</a>, <a href="https://www.youtube.com/watch?v=ThjvMReOXYM">ref2</a>, <a href="https://www.youtube.com/watch?v=bnmln9HtqEI">ref3</a>). In certain cases, you may end up with a state machine so big that it cannot be stored on the Stack. For those cases you may need to Box the future so it's allocated in the heap and not on the stack.</p>
+<p>There is a clippy lint for that, <a href="https://users.rust-lang.org/t/stack-overflow-in-async-main-function-due-to-excessive-stack-allocation-not-from-recursion/109571">more details here</a>.</p>
+<h2>4. Mutexes</h2>
+<p>Mutexes are a hard topic. First, you can use the standard library Mutex in async context. The Tokio documentation is pretty clear <a href="https://docs.rs/tokio/latest/tokio/sync/struct.Mutex.html#which-kind-of-mutex-should-you-use">about it</a>. Basically, <a href="https://github.com/tokio-rs/tokio/discussions/6785#discussioncomment-10365146">you are fine if lock taks a short time to unblock</a>. The <a href="https://tokio.rs/tokio/tutorial/shared-state">Tokio book also states the same</a>.</p>
+<p>But when you are using Tokio Mutex, you must be careful because &quot;in contrast to std::sync::Mutex, this implementation does not poison the mutex when a thread holding the MutexGuard panics. In such a case, the mutex will be unlocked. If the panic is caught, this might leave the data protected by the mutex in an inconsistent state.&quot;.</p>
+<p>That is true not only for threads that panic'ed but also for futures that were in the middle of an operation and were dropped, <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=b68c55f773aaaace2d805c3c656b21a9">for example this</a>. You should keep the invariants true at every await point.</p>
+<hr />
+<p>Post based on <a href="https://bsky.app/profile/alilleybrinker.com/post/3lggs4l5y3k27">a thread on bsky.app</a> and a <a href="https://github.com/era/do-not-block-inside-rust-async/tree/master">PoC</a> at work to exemplify the problem with blocking inside an async runtime in Rust.</p>
+	</main>
+        <div class="main container" style="margin-top: 300px">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
