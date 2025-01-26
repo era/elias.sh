@@ -3,9 +3,7 @@ title: Common mistakes with Async Rust
 date: 2025-01-26
 ---
 
-Rust prevents a lot of problems, but in order to work with Async Rust you must keep in mind how green threads work and its difference with OS threads.
-
-If you come from JavaScript or Go, it's easy to forget certain thinks.
+Rust prevents a lot of problems, but in order to work with Async Rust you must keep in mind how green threads work.
 
 ## 1. Do not block inside a Rust Async Runtime
 

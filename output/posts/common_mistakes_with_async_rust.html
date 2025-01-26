@@ -29,8 +29,7 @@
 	<main>
 	<h1>Common mistakes with Async Rust</h1>
 	<h6>2025-01-26</h6>
-	<p>Rust prevents a lot of problems, but in order to work with Async Rust you must keep in mind how green threads work and its difference with OS threads.</p>
-<p>If you come from JavaScript or Go, it's easy to forget certain thinks.</p>
+	<p>Rust prevents a lot of problems, but in order to work with Async Rust you must keep in mind how green threads work.</p>
 <h2>1. Do not block inside a Rust Async Runtime</h2>
 <p>If you perform I/O blocking operations inside a runtime like Tokio, you will be blocking one of the working threads, if you do that on all your working threads you could make your whole program stuck. I wrote a small example of <a href="https://github.com/era/do-not-block-inside-rust-async">this.</a></p>
 <p>Instead you should use async I/O or use something like <a href="https://docs.rs/tokio/latest/tokio/task/fn.spawn_blocking.html">spawn_blocking</a> which will run the closure on a thread which blocking won't cause issues.</p>
