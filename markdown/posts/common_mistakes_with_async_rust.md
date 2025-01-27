@@ -33,3 +33,6 @@ That is true not only for threads that panic'ed but also for futures that were i
 ----
 
 Post based on [a thread on bsky.app](https://bsky.app/profile/alilleybrinker.com/post/3lggs4l5y3k27) and a [PoC](https://github.com/era/do-not-block-inside-rust-async/tree/master) I did at work to exemplify the problem with blocking inside an async runtime in Rust.
+
+
+Code for the mutex problem from: https://bsky.app/profile/mattkeeter.com/post/3lgguzn3vec2u
