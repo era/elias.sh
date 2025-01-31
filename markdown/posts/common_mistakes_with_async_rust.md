@@ -23,7 +23,7 @@ There is a clippy lint for that, [more details here](https://users.rust-lang.org
 
 ## 4. Mutexes 
 
-Mutexes are a hard topic. First, you can use the standard library Mutex in async context. The Tokio documentation is pretty clear [about it](https://docs.rs/tokio/latest/tokio/sync/struct.Mutex.html#which-kind-of-mutex-should-you-use). Basically, [you are fine if lock taks a short time to unblock](https://github.com/tokio-rs/tokio/discussions/6785#discussioncomment-10365146). The [Tokio book also states the same](https://tokio.rs/tokio/tutorial/shared-state).
+Mutexes are a hard topic. First, you can use the standard library Mutex in async context. The Tokio documentation is pretty clear [about it](https://docs.rs/tokio/latest/tokio/sync/struct.Mutex.html#which-kind-of-mutex-should-you-use). Basically, [you are fine if lock takes a short time to unblock](https://github.com/tokio-rs/tokio/discussions/6785#discussioncomment-10365146). The [Tokio book also states the same](https://tokio.rs/tokio/tutorial/shared-state).
 
 But when you are using Tokio Mutex, you must be careful because "in contrast to std::sync::Mutex, this implementation does not poison the mutex when a thread holding the MutexGuard panics. In such a case, the mutex will be unlocked. If the panic is caught, this might leave the data protected by the mutex in an inconsistent state.".
 
