@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>Elias' homepage</title>
+    <link rel="stylesheet" href="/typesafe.css">
+    <link rel="webmention" href="https://webmention.io/www.masterless.io/webmention" />
+    <link rel="pingback" href="https://webmention.io/www.masterless.io/xmlrpc" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+    <style>
+     /* roboto-regular - latin */
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      src: local(''),
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url('https://www.elias.sh/roboto/roboto-v27-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+    body { font-size: 1.3em; font-family: Roboto, sans-serif; }
+    a {border-bottom: 3px double;}
+    img.big {width: 165px; margin: 2px auto; display: block;}
+    img.git {width: 20px; height: 20px;}
+     </style>
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Rust conventions</h1>
+	<h6>2025-02-24</h6>
+	<p>(this is not really a blog post, but rather a note that I will keep updating)</p>
+<p>A list of Rust conventions that may not be that obvious for newcomers:</p>
+<h2>Functions that transforms data</h2>
+<ol>
+<li><code>as_$type</code>: Cheap (low-cost) conversions (e.g. <code>as_bytes()</code>)</li>
+<li><code>to_$type</code>: Expensive conversions (e.g. <code>to_string</code>)</li>
+<li><code>into()</code> (<code>impl trait From</code>): Expensive conversions that may need to allocate memory.</li>
+</ol>
+	</main>
+        <div class="main container" style="margin-top: 300px">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
