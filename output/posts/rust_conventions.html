@@ -34,8 +34,8 @@
 <h2>Functions that transforms data</h2>
 <ol>
 <li><code>as_$type</code>: Cheap (low-cost) conversions (e.g. <code>as_bytes()</code>)</li>
-<li><code>to_$type</code>: Expensive conversions (e.g. <code>to_string</code>)</li>
-<li><code>into()</code> (<code>impl trait From</code>): Expensive conversions that may need to allocate memory.</li>
+<li><code>to_$type</code>: Higher-cost conversions that needs some &quot;work&quot; to be done, may need to allocate (e.g. <code>to_string</code>)</li>
+<li><code>into()</code> (<code>impl trait From</code>): Similar to <code>to_$type</code>.</li>
 </ol>
 	</main>
         <div class="main container" style="margin-top: 300px">

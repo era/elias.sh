@@ -10,5 +10,5 @@ A list of Rust conventions that may not be that obvious for newcomers:
 ## Functions that transforms data
 
 1. `as_$type`: Cheap (low-cost) conversions (e.g. `as_bytes()`)
-2. `to_$type`: Expensive conversions (e.g. `to_string`)
-3. `into()` (`impl trait From`): Expensive conversions that may need to allocate memory.
+2. `to_$type`: Higher-cost conversions that needs some "work" to be done, may need to allocate (e.g. `to_string`)
+3. `into()` (`impl trait From`): Similar to `to_$type`.
