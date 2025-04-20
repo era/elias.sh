@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Elias' homepage</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/base16/black-metal-bathory.min.css">
 	<meta charset="utf-8">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 	<script>hljs.highlightAll();</script>
@@ -331,6 +331,18 @@ blockquote:hover {
     80% { transform: translate(-1px, -1px); }
     100% { transform: translate(0); }
 }
+
+
+img {
+    filter: brightness(0.7) contrast(1.1);
+    transition: filter 0.4s ease;
+}
+
+/* Hover effect to slightly reveal original */
+img:hover {
+    filter: brightness(0.85) contrast(1.1);
+}
+
 
      </style>
   </head>
