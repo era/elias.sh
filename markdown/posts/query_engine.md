@@ -81,4 +81,4 @@ This part is so big, that is hard to even show a small useful code here, but I a
 
 ----
 1. Both images from InfluxDB and ScopeDB are from their websites.
-2. There is a great blog post about Iceberg [here](https://relentless-leader.com/apache-iceberg-performance-dive-deep.html).
+2. There is a great blog post about Iceberg [here](https://relentless-leader.com/apache-iceberg-performance-dive-deep.html) and [here](https://relentless-leader.com/apache-iceberg-internals-dive-deep.html).
