@@ -80,4 +80,4 @@ Ah, you may be wondering, why you need to scan the whole file? Well, we don't ha
 This part is so big, that is hard to even show a small useful code here, but I am currently playing with this idea in [a public repo](https://github.com/era/frieren/tree/master) which you can check it out. I'm far from done (as I write this text), so bare with me as I improve that code :).
 
 ----
-Both images from InfluxDB and ScopeDB from their websites, from the linked articles.
+Both images from InfluxDB and ScopeDB are from their websites.
