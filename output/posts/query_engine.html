@@ -420,7 +420,10 @@ async fn write(&amp;self, name: TableIdent, batch: RecordBatch) -&gt; Result&lt;
 <p>Ah, you may be wondering, why you need to scan the whole file? Well, we don't have indexes here. So you end up doing full table scan for any query. This is not so unmcommon, Redshift sorts and partition the datablocks based on columns, so if users are using that column to filter data, they know they can &quot;skip&quot; (prune) certain datablocks.</p>
 <p>This part is so big, that is hard to even show a small useful code here, but I am currently playing with this idea in <a href="https://github.com/era/frieren/tree/master">a public repo</a> which you can check it out. I'm far from done (as I write this text), so bare with me as I improve that code :).</p>
 <hr />
-<p>Both images from InfluxDB and ScopeDB are from their websites.</p>
+<ol>
+<li>Both images from InfluxDB and ScopeDB are from their websites.</li>
+<li>There is a great blog post about Iceberg <a href="https://relentless-leader.com/apache-iceberg-performance-dive-deep.html">here</a>.</li>
+</ol>
 	</main>
         <div class="footer">
       Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.

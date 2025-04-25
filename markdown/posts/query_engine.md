@@ -80,4 +80,5 @@ Ah, you may be wondering, why you need to scan the whole file? Well, we don't ha
 This part is so big, that is hard to even show a small useful code here, but I am currently playing with this idea in [a public repo](https://github.com/era/frieren/tree/master) which you can check it out. I'm far from done (as I write this text), so bare with me as I improve that code :).
 
 ----
-Both images from InfluxDB and ScopeDB are from their websites.
+1. Both images from InfluxDB and ScopeDB are from their websites.
+2. There is a great blog post about Iceberg [here](https://relentless-leader.com/apache-iceberg-performance-dive-deep.html).
