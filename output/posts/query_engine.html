@@ -1,0 +1,430 @@
+<html>
+  <head>
+    <title>Elias' homepage</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/base16/black-metal-bathory.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+<style>
+
+:root {
+
+    --base-font-size: 18px; /* Increased from typical 16px */
+    --heading-multiplier: 1.5;
+    
+    --main-font: 'Courier New', 'Lucida Console', monospace;
+    --alt-font: 'Share Tech Mono', 'Consolas', monospace;
+
+    --accent: #b388ff;  /* Light purple */
+    --accent-hover: #d1b3ff;  /* Very light purple */
+    --accent-visited: #c7a3ff;  /* Light visited color */
+    --accent-glow: rgba(179, 136, 255, 0.4);  /* Stronger glow */
+    --terminal-link: #66ff99;  /* Bright terminal green */
+    
+    /* Original colors */
+    --main-bg: #000000;
+    --secondary-bg: #0a0a12;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0c0;
+    --glitch-color1: #00ffff;
+    --glitch-color2: #ff00ff;
+}
+
+img {
+  max-width: 900px;
+  width: auto;
+  height: auto;
+}
+
+body {
+    background-color: var(--main-bg);
+    color: var(--text-primary);
+    font-family: var(--main-font);
+    line-height: 1.7;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    background-image: 
+        radial-gradient(circle at 10% 20%, var(--accent-glow) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, var(--accent-glow) 0%, transparent 20%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+
+h1, h2, h3 {
+    color: var(--text-primary);
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+h1::after {
+    content: '_';
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    from, to { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+nav {
+    background-color: rgba(10, 10, 18, 0.8);
+    backdrop-filter: blur(5px);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+}
+
+main {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--accent);
+}
+
+/* Glitch effect (use sparingly) */
+.glitch {
+    position: relative;
+}
+
+.glitch:hover::before, .glitch:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch:hover::before {
+    color: var(--glitch-color1);
+    animation: glitch-effect 3s infinite linear;
+    z-index: -1;
+}
+
+.glitch:hover::after {
+    color: var(--glitch-color2);
+    animation: glitch-effect 2s infinite linear reverse;
+    z-index: -2;
+}
+
+@keyframes glitch-effect {
+    0% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); }
+    40% { transform: translate(-3px, -3px); }
+    60% { transform: translate(3px, 3px); }
+    80% { transform: translate(3px, -3px); }
+    100% { transform: translate(0); }
+}
+
+/* Terminal-like elements */
+.terminal {
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--accent);
+    padding: 1rem;
+    font-family: monospace;
+    position: relative;
+    margin: 2rem 0;
+}
+
+.terminal::before {
+    content: '>';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    color: var(--terminal-green);
+}
+
+.terminal p {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    padding: 0 2px;
+}
+
+a:hover {
+    color: var(--accent-hover);
+    text-shadow: 0 0 8px var(--accent-glow);
+    background-color: rgba(138, 92, 255, 0.1);
+}
+
+/* Underline animation */
+a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.4s ease;
+}
+
+a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+    background: linear-gradient(90deg, var(--accent-hover), transparent);
+}
+
+/* Visited links */
+a:visited {
+    color: #c792ff; /* Slightly different shade for visited links */
+}
+
+/* Active/focused links */
+a:active, a:focus {
+    color: var(--text-primary);
+    outline: 1px dotted var(--accent);
+    background-color: rgba(138, 92, 255, 0.2);
+}
+
+/* Special link styles for navigation */
+nav a {
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+}
+
+nav a:hover {
+    border: 1px solid var(--accent);
+    background-color: rgba(138, 92, 255, 0.15);
+}
+
+nav a::after {
+    display: none; /* Remove underline effect from nav links */
+}
+
+/* Terminal-style links */
+.terminal a {
+    color: var(--terminal-green);
+}
+
+.terminal a:hover {
+    color: #00ff88;
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+}
+
+.terminal a::after {
+    background: linear-gradient(90deg, var(--terminal-green), transparent);
+}
+.center-image {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.center-image img {
+    width: 150px;
+    transition: all 0.3s ease;
+}
+
+
+
+blockquote {
+    font-family: var(--alt-font);
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--accent);
+    background: rgba(10, 10, 30, 0.3);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    position: relative;
+    line-height: 1.8;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 15px rgba(102, 0, 204, 0.1);
+    overflow: hidden;
+}
+
+blockquote::before {
+    content: '"';
+    font-family: serif;
+    font-size: 4rem;
+    color: var(--accent-glow);
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    line-height: 1;
+    opacity: 0.3;
+}
+
+blockquote::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 30%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+blockquote p {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+blockquote footer {
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 1rem;
+    color: var(--accent);
+    font-style: normal;
+}
+
+blockquote footer::before {
+    content: '— ';
+}
+
+/* Glitch effect on hover */
+blockquote:hover {
+    animation: glitch-text 0.5s linear infinite;
+    text-shadow: 0 0 5px var(--accent-glow);
+}
+
+@keyframes glitch-text {
+    0% { transform: translate(0); }
+    20% { transform: translate(-1px, 1px); }
+    40% { transform: translate(1px, -1px); }
+    60% { transform: translate(1px, 1px); }
+    80% { transform: translate(-1px, -1px); }
+    100% { transform: translate(0); }
+}
+
+
+img {
+    filter: brightness(0.7) contrast(1.1);
+    transition: filter 0.4s ease;
+}
+
+/* Hover effect to slightly reveal original */
+img:hover {
+    filter: brightness(0.85) contrast(1.1);
+}
+
+
+     </style>
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Iceberg, Parquet and query engines</h1>
+	<h6>2025-04-25</h6>
+	<p>During my time at Huawei, one of the biggest problem we had was &quot;how to store our observability data&quot;. Our initial database was based on <a href="https://github.com/openGemini/openGemini">OpenGemini</a>, but we were always looking for places to improve.</p>
+<p>A common design for this type of database is to split the compute nodes from the storage, a very recent example of this is the new InfluxDB written in Rust (<a href="https://www.influxdata.com/blog/influxdb-engine/">ref</a>). The data is stored in a Object Store (such as S3), while the other nodes handle the ingestion and querying (query execution plan, physical and logical).</p>
+<p><img src="https://elias.sh/iceberg/InfluxDB-powered-by-IOx.png" alt="InfluxDB arch" /></p>
+<p>Another example is ScopeDB (<a href="https://www.scopedb.io/blog/manage-observability-data-in-petabytes">ref</a>), which is very similar:</p>
+<p><img src="https://elias.sh/iceberg/scopedb.png" alt="ScopeDB arch" /></p>
+<p>Since I took both images from the blogs of both companies, their terms are not normalized. InfludDB has no &quot;Metadata Service&quot;, while ScopeDB has no &quot;Catalog&quot;. Why? They seem so similar, they sure need similar components, right?</p>
+<p>Well, a catalog is the Metadata Service, it works as a &quot;structural blueprint&quot;, storing metadata and organizing schemas.</p>
+<p>Anyway, going back to those databases. Within the Big Data scene, we have a bunch of new products build on top of the same standards:</p>
+<ul>
+<li><a href="https://parquet.apache.org/">Parquet</a>: Parquet is a columnar storage format. It's a self describing format, if you read the file from disk, you can find out the schema of the data by reading its metadata. Another very cool thing, is that Parquet keeps a summary of each column of the file, such as min, max and distinct_count.</li>
+<li><a href="https://arrow.apache.org/">Arrow</a>: While Parquet describes the format stored in disk, Arrow describes how the data should be kept in memory. It's a columnar format, perfect for data interchange and in-memory analytics.</li>
+<li><a href="https://iceberg.apache.org/">Iceberg</a>: Iceberg is a table format. The idea is to manage a large, slow-changing collection of files in a distributed file system or key-value store as a table. Basically, you can save different Parquet files in S3 and use Iceberg to manage them (insert, delete, select, ...).</li>
+</ul>
+<p>If you add your compute nodes on top of those three standards, you can create a toy-database. You basically need a node to handle ingestion. Those nodes should write to the Object Storage and update the Iceberg metadata with information about it. Using icerberg-rs and arrow-rs, this seems more or less like:</p>
+<pre><code class="language-rust">/// In this example, let's assume we will receive the data somehow as Arrow RecordBatch.
+async fn write(&amp;self, name: TableIdent, batch: RecordBatch) -&gt; Result&lt;(), Error&gt; {
+    // iceberg transaction
+    let table = self.catalog.load_table(&amp;name).await?;
+    let transaction = Transaction::new(&amp;table);
+    let mut fast_append = transaction.fast_append(None, vec![])?;
+
+    // metadata for parquet writer
+    let file_io = table.file_io();
+    let location = DefaultLocationGenerator::new(table.metadata().clone())?;
+
+    // writing files to parquet first
+    let prefix = format!(&quot;{}-{}&quot;, name.name, Uuid::new_v4());
+    let file_name_generator = DefaultFileNameGenerator::new(
+        prefix,
+        None,                                   //suffix
+        iceberg::spec::DataFileFormat::Parquet, //format
+    );
+    let parquet_props = parquet::file::properties::WriterProperties::builder().build();
+    let parquet_writer_builder = ParquetWriterBuilder::new(
+        parquet_props,
+        table.metadata().current_schema().clone(),
+        file_io.clone(),
+        location,
+        file_name_generator,
+    );
+
+    // just one partition `0` for now
+    let data_file_writer_builder = DataFileWriterBuilder::new(parquet_writer_builder, None, 0);
+    let mut writer = data_file_writer_builder.build().await?;
+
+    writer.write(batch).await?;
+
+    let data_files = writer.close().await?;
+
+    // now write to the metadata of our table
+    fast_append.add_data_files(data_files)?;
+    let transaction = fast_append.apply().await?;
+
+    transaction.commit(&amp;*self.catalog).await?;
+
+    Ok(())
+}
+
+</code></pre>
+<p>The query engine is the hardest part here, let's assume you are going to use something like like <a href="https://docs.rs/sqlparser/latest/sqlparser/">sqlparser</a> to handle the parsing of SQL. You need to create a plan for how to fetch the data the user wants and how to execute it. For a toy project, you can push down most predicates and projections down to Iceberg. Remember that Parquet keeps some summary data about the columns? You can use it to decide if you need to open that file and do a scan there or you can avoid it. Once you have your Parquet files, you can load them into memory using Arrow format and handle everything else you haven't pushdown to Iceberg.</p>
+<p>Ah, you may be wondering, why you need to scan the whole file? Well, we don't have indexes here. So you end up doing full table scan for any query. This is not so unmcommon, Redshift sorts and partition the datablocks based on columns, so if users are using that column to filter data, they know they can &quot;skip&quot; (prune) certain datablocks.</p>
+<p>This part is so big, that is hard to even show a small useful code here, but I am currently playing with this idea in <a href="https://github.com/era/frieren/tree/master">a public repo</a> which you can check it out. I'm far from done (as I write this text), so bare with me as I improve that code :).</p>
+<hr />
+<p>Both images from InfluxDB and ScopeDB from their websites, from the linked articles.</p>
+	</main>
+        <div class="footer">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
