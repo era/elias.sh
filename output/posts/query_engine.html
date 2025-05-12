@@ -417,7 +417,6 @@ async fn write(&amp;self, name: TableIdent, batch: RecordBatch) -&gt; Result&lt;
 
 </code></pre>
 <p>The query engine is the hardest part here, let's assume you are going to use something like like <a href="https://docs.rs/sqlparser/latest/sqlparser/">sqlparser</a> to handle the parsing of SQL. You need to create a plan for how to fetch the data the user wants and how to execute it. For a toy project, you can push down most predicates and projections down to Iceberg. Remember that Parquet keeps some summary data about the columns? Iceberg does the same with its metadata, so it can decide if you need to open that file and do a scan there or skip it. Once you have your Parquet files, you can load them into memory using Arrow format and handle everything else you haven't pushdown to Iceberg.</p>
-<p>Ah, you may be wondering, why you need to scan the whole file? Well, we don't have indexes here. So you end up doing full table scan for any query. This is not so unmcommon, Redshift sorts and partition the datablocks based on columns, so if users are using that column to filter data, they know they can &quot;skip&quot; (prune) certain datablocks.</p>
 <p>This part is so big, that is hard to even show a small useful code here, but I am currently playing with this idea in <a href="https://github.com/era/frieren/tree/master">a public repo</a> which you can check it out. I'm far from done (as I write this text), so bare with me as I improve that code :).</p>
 <hr />
 <ol>
