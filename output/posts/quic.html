@@ -1,0 +1,484 @@
+<html>
+  <head>
+    <title>Elias' homepage</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/base16/black-metal-bathory.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+<style>
+
+:root {
+
+    --base-font-size: 18px; /* Increased from typical 16px */
+    --heading-multiplier: 1.5;
+    
+    --main-font: 'Courier New', 'Lucida Console', monospace;
+    --alt-font: 'Share Tech Mono', 'Consolas', monospace;
+
+    --accent: #b388ff;  /* Light purple */
+    --accent-hover: #d1b3ff;  /* Very light purple */
+    --accent-visited: #c7a3ff;  /* Light visited color */
+    --accent-glow: rgba(179, 136, 255, 0.4);  /* Stronger glow */
+    --terminal-link: #66ff99;  /* Bright terminal green */
+    
+    /* Original colors */
+    --main-bg: #000000;
+    --secondary-bg: #0a0a12;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0c0;
+    --glitch-color1: #00ffff;
+    --glitch-color2: #ff00ff;
+}
+
+img {
+  max-width: 900px;
+  width: auto;
+  height: auto;
+}
+
+body {
+    background-color: var(--main-bg);
+    color: var(--text-primary);
+    font-family: var(--main-font);
+    line-height: 1.7;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    background-image: 
+        radial-gradient(circle at 10% 20%, var(--accent-glow) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, var(--accent-glow) 0%, transparent 20%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+
+h1, h2, h3 {
+    color: var(--text-primary);
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+h1::after {
+    content: '_';
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    from, to { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+nav {
+    background-color: rgba(10, 10, 18, 0.8);
+    backdrop-filter: blur(5px);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+}
+
+main {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--accent);
+}
+
+/* Glitch effect (use sparingly) */
+.glitch {
+    position: relative;
+}
+
+.glitch:hover::before, .glitch:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch:hover::before {
+    color: var(--glitch-color1);
+    animation: glitch-effect 3s infinite linear;
+    z-index: -1;
+}
+
+.glitch:hover::after {
+    color: var(--glitch-color2);
+    animation: glitch-effect 2s infinite linear reverse;
+    z-index: -2;
+}
+
+@keyframes glitch-effect {
+    0% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); }
+    40% { transform: translate(-3px, -3px); }
+    60% { transform: translate(3px, 3px); }
+    80% { transform: translate(3px, -3px); }
+    100% { transform: translate(0); }
+}
+
+/* Terminal-like elements */
+.terminal {
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--accent);
+    padding: 1rem;
+    font-family: monospace;
+    position: relative;
+    margin: 2rem 0;
+}
+
+.terminal::before {
+    content: '>';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    color: var(--terminal-green);
+}
+
+.terminal p {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    padding: 0 2px;
+}
+
+a:hover {
+    color: var(--accent-hover);
+    text-shadow: 0 0 8px var(--accent-glow);
+    background-color: rgba(138, 92, 255, 0.1);
+}
+
+/* Underline animation */
+a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.4s ease;
+}
+
+a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+    background: linear-gradient(90deg, var(--accent-hover), transparent);
+}
+
+/* Visited links */
+a:visited {
+    color: #c792ff; /* Slightly different shade for visited links */
+}
+
+/* Active/focused links */
+a:active, a:focus {
+    color: var(--text-primary);
+    outline: 1px dotted var(--accent);
+    background-color: rgba(138, 92, 255, 0.2);
+}
+
+/* Special link styles for navigation */
+nav a {
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+}
+
+nav a:hover {
+    border: 1px solid var(--accent);
+    background-color: rgba(138, 92, 255, 0.15);
+}
+
+nav a::after {
+    display: none; /* Remove underline effect from nav links */
+}
+
+/* Terminal-style links */
+.terminal a {
+    color: var(--terminal-green);
+}
+
+.terminal a:hover {
+    color: #00ff88;
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+}
+
+.terminal a::after {
+    background: linear-gradient(90deg, var(--terminal-green), transparent);
+}
+.center-image {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.center-image img {
+    width: 150px;
+    transition: all 0.3s ease;
+}
+
+
+
+blockquote {
+    font-family: var(--alt-font);
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--accent);
+    background: rgba(10, 10, 30, 0.3);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    position: relative;
+    line-height: 1.8;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 15px rgba(102, 0, 204, 0.1);
+    overflow: hidden;
+}
+
+blockquote::before {
+    content: '"';
+    font-family: serif;
+    font-size: 4rem;
+    color: var(--accent-glow);
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    line-height: 1;
+    opacity: 0.3;
+}
+
+blockquote::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 30%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+blockquote p {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+blockquote footer {
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 1rem;
+    color: var(--accent);
+    font-style: normal;
+}
+
+blockquote footer::before {
+    content: '— ';
+}
+
+/* Glitch effect on hover */
+blockquote:hover {
+    animation: glitch-text 0.5s linear infinite;
+    text-shadow: 0 0 5px var(--accent-glow);
+}
+
+@keyframes glitch-text {
+    0% { transform: translate(0); }
+    20% { transform: translate(-1px, 1px); }
+    40% { transform: translate(1px, -1px); }
+    60% { transform: translate(1px, 1px); }
+    80% { transform: translate(-1px, -1px); }
+    100% { transform: translate(0); }
+}
+
+
+img {
+    filter: brightness(0.7) contrast(1.1);
+    transition: filter 0.4s ease;
+}
+
+/* Hover effect to slightly reveal original */
+img:hover {
+    filter: brightness(0.85) contrast(1.1);
+}
+
+
+     </style>
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Quic server in Rust</h1>
+	<h6>2025-08-27</h6>
+	<p>Last year, I was working in a server that would &quot;bridge&quot; notebooks with a custom backend service. One of the decisions was to use QUIC instead of your
+old TCP or UDP friends.</p>
+<p>I like to describe <a href="https://quicwg.org/">QUIC</a> as &quot;TCP implemented on User Space on top of UDP&quot;. It establishes a bunch of multiplexed connections on top of UDP and it's
+suppose to be an improvement over TCP.</p>
+<p>This was my first time working with QUIC, so I wanted a playground where I could learn all the details of the protocol without the deadlines. And that is why I put
+together <a href="https://github.com/era/debra">debra</a>. <code>debra</code> is basically a chat application, where computers can connect to a single backend that handles the routing of
+the messages.
+Since QUIC allows us to have bi-directional streams, everything works out of the box. Computer A sends a message to the server to be routed to Computer B.
+Server finds which stream belongs to the Computer B and sends the message. Since this is a toy, we drop the message if Computer B is not online.</p>
+<p>I wanted to play with the protocol, but not implement it from scratch, I decided to use <a href="https://docs.rs/quinn/latest/quinn/">quinn</a> to abstract it away for
+me (it was the same crate used at work as well).</p>
+<p>The code is simple, every time a new connection comes, we get the bidirectional stream. For the receiver, we put it in a tokio task to handle all the new messages.
+For the sender, we put it in our map, so we later can find it when we need to send a message. We also assume the first message the client will send is its id.</p>
+<pre><code class="language-rust">
+pub async fn new_connection(&amp;self, conn: quinn::Incoming) -&gt; Result&lt;()&gt; {
+    let connection = conn.await?;
+
+    let stream = connection.accept_bi().await;
+    let (sender, mut receiver) = match stream {
+        Err(quinn::ConnectionError::ApplicationClosed { .. }) =&gt; {
+            info!(&quot;connection closed&quot;);
+            return Ok(());
+        }
+        Err(e) =&gt; {
+            return Err(e.into());
+        }
+        Ok(s) =&gt; s,
+    };
+
+
+    let bytes = read_bytes(&amp;mut receiver).await?;
+
+    let message =
+        root_as_message(&amp;bytes).map_err(|e| anyhow!(&quot;failed parsing message: {:?}&quot;, e))?;
+
+    if message.message_type() != MessageType::ClientRegistration {
+        error!(&quot;not expecting message type: {:?}&quot;, message.message_type());
+        return Err(anyhow!(&quot;First Message should be client registration&quot;));
+    }
+
+    let id = message.client_id();
+
+    // we just assume something else is setting the ids for the clients
+    // and we can trust the clients
+    self.clients
+        .insert(message.client_id(), Arc::new(Mutex::new(sender)));
+
+    let sender = self.tx.clone();
+
+    tokio::spawn(async move {
+        // this will keep reading messages from the stream
+        // until an error happens.
+        loop {
+            match read_bytes(&amp;mut receiver).await {
+                Ok(bytes) =&gt; {
+                    info!(&quot;new message from client: {id}&quot;);
+                    let letter_to = root_as_message(&amp;bytes)
+                        .map_err(|e| error!(&quot;failed parsing message: {:?}&quot;, e))
+                        .ok()
+                        .map(|m| m.for_client());
+
+                    if let Some(letter_to) = letter_to {
+                        // ignore the error for now
+                        let _ = sender.send(Letter::Forward(letter_to, bytes)).await;
+                    } else {
+                        info!(&quot;message for nobody&quot;);
+                    }
+                }
+                Err(e) =&gt; {
+                    error!(&quot;error while reading message: {:?}&quot;, e);
+                    // ignore the error for now
+                    let _ = sender.send(Letter::Remove(id)).await;
+                    break;
+                }
+            }
+        }
+    });
+
+    Ok(())
+}
+</code></pre>
+<p>In order to send messages we just need to find the right stream:</p>
+<pre><code class="language-rust">
+async fn handle_letters(&amp;self, letter: Letter) -&gt; Option&lt;()&gt; {
+    match letter {
+        Letter::Remove(id) =&gt; {
+            self.clients.remove(&amp;id);
+        }
+        Letter::Forward(letter_to, bytes) =&gt; {
+            // clones to avoid deadlock due to clashmap
+            let stream = self.clients.get(&amp;letter_to)?.clone();
+            // spawns a new task to avoid blocking our main loop
+            tokio::spawn(async move {
+                let mut stream = stream.lock().await;
+                // first bytes are always the size
+                let _ = stream
+                    .write_all(&amp;bytes.len().to_be_bytes())
+                    .await
+                    .map_err(|e| error!(&quot;error while sending message {:?}&quot;, e));
+
+                let _ = stream
+                    .write_all(&amp;bytes)
+                    .await
+                    .map_err(|e| error!(&quot;error while sending message {:?}&quot;, e));
+
+                info!(&quot;finished forwarding message&quot;);
+            });
+        }
+    }
+
+    Some(())
+}
+
+</code></pre>
+<p>I also built a <a href="https://github.com/era/debra/blob/master/src/bin/client.rs">client</a>
+for it. The client code is a bit more hacky, since I needed something quick and dirty
+to test. And as you can imagine, it follows more or less the same steps as the server.</p>
+
+	</main>
+        <div class="footer">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
