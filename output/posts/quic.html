@@ -369,7 +369,7 @@ Server finds which stream belongs to the Computer B and sends the message. Since
 <p>I wanted to play with the protocol, but not implement it from scratch, I decided to use <a href="https://docs.rs/quinn/latest/quinn/">quinn</a> to abstract it away for
 me (it was the same crate used at work as well).</p>
 <p>The code is simple, every time a new connection comes, we get the bidirectional stream. For the receiver, we put it in a tokio task to handle all the new messages.
-For the sender, we put it in our map, so we later can find it when we need to send a message. We also assume the first message the client will send is its id.</p>
+For the sender, we put it in our map, so we later can find it when we need to send a message. We assume the first message the client will send is its id.</p>
 <pre><code class="language-rust">
 pub async fn new_connection(&amp;self, conn: quinn::Incoming) -&gt; Result&lt;()&gt; {
     let connection = conn.await?;

@@ -19,7 +19,7 @@ I wanted to play with the protocol, but not implement it from scratch, I decided
  me (it was the same crate used at work as well).
 
 The code is simple, every time a new connection comes, we get the bidirectional stream. For the receiver, we put it in a tokio task to handle all the new messages.
-For the sender, we put it in our map, so we later can find it when we need to send a message. We also assume the first message the client will send is its id.
+For the sender, we put it in our map, so we later can find it when we need to send a message. We assume the first message the client will send is its id.
 
 ```rust
 
