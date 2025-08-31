@@ -1,8 +1,11 @@
-<!-- index.html -->
 <html>
   <head>
     <title>Elias' homepage</title>
-    <style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/base16/black-metal-bathory.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+<style>
 
 :root {
 
@@ -25,6 +28,12 @@
     --text-secondary: #a0a0c0;
     --glitch-color1: #00ffff;
     --glitch-color2: #ff00ff;
+}
+
+img {
+  max-width: 900px;
+  width: auto;
+  height: auto;
 }
 
 body {
@@ -257,52 +266,119 @@ nav a::after {
     transition: all 0.3s ease;
 }
 
+
+
+blockquote {
+    font-family: var(--alt-font);
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--accent);
+    background: rgba(10, 10, 30, 0.3);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    position: relative;
+    line-height: 1.8;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 15px rgba(102, 0, 204, 0.1);
+    overflow: hidden;
+}
+
+blockquote::before {
+    content: '"';
+    font-family: serif;
+    font-size: 4rem;
+    color: var(--accent-glow);
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    line-height: 1;
+    opacity: 0.3;
+}
+
+blockquote::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 30%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+blockquote p {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+blockquote footer {
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 1rem;
+    color: var(--accent);
+    font-style: normal;
+}
+
+blockquote footer::before {
+    content: '— ';
+}
+
+/* Glitch effect on hover */
+blockquote:hover {
+    animation: glitch-text 0.5s linear infinite;
+    text-shadow: 0 0 5px var(--accent-glow);
+}
+
+@keyframes glitch-text {
+    0% { transform: translate(0); }
+    20% { transform: translate(-1px, 1px); }
+    40% { transform: translate(1px, -1px); }
+    60% { transform: translate(1px, 1px); }
+    80% { transform: translate(-1px, -1px); }
+    100% { transform: translate(0); }
+}
+
+
+img {
+    filter: brightness(0.7) contrast(1.1);
+    transition: filter 0.4s ease;
+}
+
+/* Hover effect to slightly reveal original */
+img:hover {
+    filter: brightness(0.85) contrast(1.1);
+}
+
+
      </style>
   </head>
   <body class="hack main container">
-  <div class="center-image">
-  <img src="https://www.elias.sh/wired.gif" width="150px" />
-  </div>
-  </center>
-    <main>
-    <p>Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
-    Nice to meet you. I create stuff for a living. And well... I am a Software Engineer, 
-    I previously worked at Huawei Ireland Research Center and more specifically at the Cloud Reliability R&D lab, building the foundations of Huawei Cloud. I was mainly focused on observability infrastructure.</p>
-
-      <p>I also worked on projects like Redshift (AWS) and financial systems (Stripe, Cielo, Banco Original, Banco Votorantim). </p>
-      <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems. I'm also a big fan of Platform Engineering and DX, I love to build software that writes software.</p> 
-      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a>.
-
-      <p>Btw, I moved to Tokyo recently, so if you are in the area, I would love to meet!</p>
-
-      <h2>Social Networks</h2>
-      <ul>
-        <li><a href="https://www.linkedin.com/in/elias-d-23a19020/">Linkedin</a>: do I need to explain it? :)</li>
-        <li><a href="https://bsky.app/profile/elias.sh">Bsky</a>: Where I post about coding and personal stuff</li>
-      </ul>  
-      <h1>Blog Posts</h1>
-      <ul>
-           
-            <li><a href="/posts/rust-forge-2025.html">Rust Forge 2025</a></li>
-           
-            <li><a href="/posts/quic.html">Quic server in Rust</a></li>
-           
-            <li><a href="/posts/query_engine.html">Iceberg, Parquet and query engines</a></li>
-           
-            <li><a href="/posts/common_mistakes_with_async_rust.html">Common mistakes with Async Rust</a></li>
-           
-            <li><a href="/posts/datafederation_and_rust.html">Data Federation and Trustfall</a></li>
-           
-            <li><a href="/posts/component_model_wasm.html">Why do I like WebAssembly? And a Rust example!</a></li>
-           
-            <li><a href="/posts/visualizing_metrics.html">Visualizing Metrics</a></li>
-           
-            <li><a href="/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust.html">OpenTelemetry, time series, metrics and a bit of Rust</a></li>
-           
-            <li><a href="/posts/peg_and_rust.html">PEG and Rust</a></li>
-        
-      </ul>
-    </main>
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Rust Forge 2025</h1>
+	<h6>2025-09-02</h6>
+	<p>I normally don't write about the conferences I go here, but <a href="https://rustforgeconf.com/">Rust Forge</a> is different for two reasons: (1) I had the pleasure to give my first
+talk in English there, and (2) the conference really felt like a place to share ideas and not necesarry consume content.</p>
+<p>Let me focus for now on the conference. The first two days were &quot;co-creation days&quot; with a bunch of (technical) workshops and some tours
+around Wellington (NZ). It was a great opportunity to bound with different people over the activities. We visited <a href="https://www.visitzealandia.com/Visit">Zealandia</a> at night, and
+some people were able to see Kiwis (not me :C).</p>
+<p>During a dinner, I was lucky enough to sit with amazing people and learn so much from the conversation. I learnt some details about <a href="https://rustc-dev-guide.rust-lang.org/queries/incremental-compilation-in-detail.html">Rust Incremental Compilation</a>.
+How a &quot;push-based&quot; approach could speed up things (<a href="https://ziggit.dev/t/how-zig-incremental-compilation-is-implemented-internally/3543/2">more similar to Zig approach</a>)
+and that sometimes the rustc may do some work and throw the result away later, because it was not needed.
+I also learnt about <a href="https://github.com/davidlattimore/wild">wild linker</a> (btw, amazing talk during the conf about it by David!) and <a href="https://github.com/HKalbasi/zngur">zngur</a>
+(tool for C++/Rust interop).</p>
+<p><img src="https://www.elias.sh/forge/all_of_us.webp" alt="" /></p>
+<p>The talks were about Rust in embedded, passing by linkers, <a href="https://github.com/obi1kenobi/cargo-semver-checks">cargo-semver-checks</a> to community and governance.</p>
+<p>A lot of the talks were made by the local community which made everything even more fun!</p>
+<p>I also gave a talk there about <a href="https://github.com/era/rust-forge-2025">Rust testing</a>. It was my first time speaking in a conference in English, the last
+time I talked in a conf was during FliSol in 2013, back in Brazil!</p>
+<p>My talk was mainly about how the <a href="https://www.hyrumslaw.com/">Hyrum's Law</a> makes any re-write much harder than we can think of, because we
+have to keep any observable behaviour, which may be hidden away in some abstraction / lib we used and won't be able to use it anymore. Of course, we can
+use tests to help us: &quot;replaying production traffic&quot;, table-driven tests and shadow envs. That is what I tried to show with a real world example.</p>
+<p>I almost forgot about the food, <a href="https://timclicks.dev/">Tim</a> prepared for us a lot of snacks and food during the breaks. All of it was vegetarian or vegan,
+which really made my life (as a vegan) much nicer. Normally the vegan food is just an after-thought, but during Rust Forge it was one of the main options!</p>
+<p>I hope there is a Rust Forge next year, and for that to happen more companies need to step up and help financially...</p>
+	</main>
         <div class="footer">
       Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
     </div>
