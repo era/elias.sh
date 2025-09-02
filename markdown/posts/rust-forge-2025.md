@@ -4,7 +4,7 @@ date: 2025-09-02
 ---
 
 I normally don't write about the conferences I go here, but [Rust Forge](https://rustforgeconf.com/) is different for two reasons: (1) I had the pleasure to give my first
-talk in English there, and (2) the conference really felt like a place to share ideas and not necesarry consume content.
+talk in English there, and (2) the conference really felt like a place to share ideas and not necessarily consume content.
 
 Let me focus for now on the conference. The first two days were "co-creation days" with a bunch of (technical) workshops and some tours
 around Wellington (NZ). It was a great opportunity to bound with different people over the activities. We visited [Zealandia](https://www.visitzealandia.com/Visit) at night, and
