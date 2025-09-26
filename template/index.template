@@ -288,5 +288,6 @@ nav a::after {
       </ul>
     </main>
     {{ render('template/_footer.template')}}
+    ✊ <span class="symbol">🇵🇸</span> I stand with Palestine - Free Palestine <span class="symbol">🇵🇸</span> ✊
   </body>
 </html>
