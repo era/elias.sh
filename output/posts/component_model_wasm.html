@@ -1,33 +1,35 @@
 <html>
   <head>
     <title>Elias' homepage</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/base16/black-metal-bathory.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
 	<meta charset="utf-8">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 	<script>hljs.highlightAll();</script>
 <style>
 
 :root {
-
-    --base-font-size: 18px; /* Increased from typical 16px */
+    --base-font-size: 18px;
     --heading-multiplier: 1.5;
     
-    --main-font: 'Courier New', 'Lucida Console', monospace;
-    --alt-font: 'Share Tech Mono', 'Consolas', monospace;
+    --main-font: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    --alt-font: 'JetBrains Mono', 'Source Code Pro', monospace;
 
-    --accent: #b388ff;  /* Light purple */
-    --accent-hover: #d1b3ff;  /* Very light purple */
-    --accent-visited: #c7a3ff;  /* Light visited color */
-    --accent-glow: rgba(179, 136, 255, 0.4);  /* Stronger glow */
-    --terminal-link: #66ff99;  /* Bright terminal green */
+    /* Rust-themed colors - inspired by Rust orange and dark themes */
+    --rust-primary: #DEA584;        /* Rust orange/brown */
+    --rust-secondary: #B7410E;      /* Darker rust */
+    --rust-accent: #FF7F50;         /* Coral/orange accent */
+    --rust-hover: #FFA07A;          /* Light salmon */
+    --rust-visited: #CD5B45;        /* Tomato red */
+    --rust-glow: rgba(222, 165, 132, 0.4);
+    --terminal-link: #83C092;       /* Softer green that complements rust colors */
     
-    /* Original colors */
-    --main-bg: #000000;
-    --secondary-bg: #0a0a12;
-    --text-primary: #e0e0e0;
-    --text-secondary: #a0a0c0;
-    --glitch-color1: #00ffff;
-    --glitch-color2: #ff00ff;
+    /* Updated color scheme */
+    --main-bg: #1A1A1A;            /* Dark gray instead of pure black */
+    --secondary-bg: #252525;        /* Slightly lighter dark gray */
+    --text-primary: #E8E8E8;
+    --text-secondary: #B0B0B0;
+    --glitch-color1: #DEA584;       /* Rust color for glitch */
+    --glitch-color2: #83C092;       /* Terminal green for glitch */
 }
 
 img {
@@ -44,19 +46,15 @@ body {
     font-size: 18px;
     margin: 0;
     padding: 0;
-    background-image: 
-        radial-gradient(circle at 10% 20%, var(--accent-glow) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, var(--accent-glow) 0%, transparent 20%);
-    background-attachment: fixed;
     overflow-x: hidden;
 }
 
-
 h1, h2, h3 {
     color: var(--text-primary);
-    font-weight: normal;
+    font-weight: 600; /* Slightly bolder for better readability */
     text-transform: uppercase;
     letter-spacing: 2px;
+    font-family: var(--alt-font);
 }
 
 h1 {
@@ -64,11 +62,27 @@ h1 {
     margin-bottom: 0.5rem;
     position: relative;
     display: inline-block;
+    color: var(--rust-primary);
 }
 
 h1::after {
     content: '_';
     animation: blink 1s step-end infinite;
+    color: var(--rust-accent);
+    margin-left: 5px;
+}
+
+.rust-crab {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 1.8rem;
+    animation: crab-walk 3s ease-in-out infinite;
+}
+
+@keyframes crab-walk {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(5px) rotate(-5deg); }
+    75% { transform: translateX(-5px) rotate(5deg); }
 }
 
 @keyframes blink {
@@ -77,12 +91,13 @@ h1::after {
 }
 
 nav {
-    background-color: rgba(10, 10, 18, 0.8);
+    background-color: rgba(37, 37, 37, 0.95); /* Using secondary bg with transparency */
     backdrop-filter: blur(5px);
     padding: 1rem;
     position: sticky;
     top: 0;
     z-index: 100;
+    border-bottom: 1px solid var(--rust-primary);
 }
 
 nav ul {
@@ -105,10 +120,11 @@ footer {
     padding: 2rem;
     font-size: 0.8rem;
     color: var(--text-secondary);
-    border-top: 1px solid var(--accent);
+    border-top: 1px solid var(--rust-primary);
+    background-color: var(--secondary-bg);
 }
 
-/* Glitch effect (use sparingly) */
+/* Enhanced glitch effect with rust colors */
 .glitch {
     position: relative;
 }
@@ -143,22 +159,25 @@ footer {
     100% { transform: translate(0); }
 }
 
-/* Terminal-like elements */
+/* Terminal-like elements with rust theme */
 .terminal {
     background-color: var(--secondary-bg);
-    border: 1px solid var(--accent);
+    border: 1px solid var(--rust-primary);
     padding: 1rem;
-    font-family: monospace;
+    font-family: var(--main-font);
     position: relative;
     margin: 2rem 0;
+    border-radius: 4px;
+    box-shadow: 0 0 15px var(--rust-glow);
 }
 
 .terminal::before {
-    content: '>';
+    content: '$';
     position: absolute;
     left: 0.5rem;
     top: 0.5rem;
-    color: var(--terminal-green);
+    color: var(--rust-accent);
+    font-weight: bold;
 }
 
 .terminal p {
@@ -166,6 +185,22 @@ footer {
     padding-left: 1.5rem;
     color: var(--text-secondary);
 }
+
+/* Cargo.toml style code block */
+.code-block {
+    background-color: #2D2D2D;
+    border-left: 4px solid var(--rust-primary);
+    padding: 1rem;
+    margin: 1.5rem 0;
+    font-family: var(--main-font);
+    font-size: 0.9rem;
+    overflow-x: auto;
+}
+
+.code-key { color: #83C092; }      /* Green for keys */
+.code-string { color: #D19A66; }   /* Orange for strings */
+.code-comment { color: #5C6370; }  /* Gray for comments */
+.code-number { color: #D19A66; }   /* Orange for numbers */
 
 /* Responsive design */
 @media (max-width: 768px) {
@@ -180,7 +215,7 @@ footer {
 }
 
 a {
-    color: var(--accent);
+    color: var(--rust-accent);
     text-decoration: none;
     position: relative;
     font-weight: bold;
@@ -189,9 +224,9 @@ a {
 }
 
 a:hover {
-    color: var(--accent-hover);
-    text-shadow: 0 0 8px var(--accent-glow);
-    background-color: rgba(138, 92, 255, 0.1);
+    color: var(--rust-hover);
+    text-shadow: 0 0 8px var(--rust-glow);
+    background-color: rgba(222, 165, 132, 0.1);
 }
 
 /* Underline animation */
@@ -202,7 +237,7 @@ a::after {
     height: 2px;
     bottom: -2px;
     left: 0;
-    background: linear-gradient(90deg, var(--accent), transparent);
+    background: linear-gradient(90deg, var(--rust-accent), transparent);
     transform: scaleX(0);
     transform-origin: bottom right;
     transition: transform 0.4s ease;
@@ -211,88 +246,87 @@ a::after {
 a:hover::after {
     transform: scaleX(1);
     transform-origin: bottom left;
-    background: linear-gradient(90deg, var(--accent-hover), transparent);
+    background: linear-gradient(90deg, var(--rust-hover), transparent);
 }
 
 /* Visited links */
 a:visited {
-    color: #c792ff; /* Slightly different shade for visited links */
+    color: var(--rust-visited);
 }
 
 /* Active/focused links */
 a:active, a:focus {
     color: var(--text-primary);
-    outline: 1px dotted var(--accent);
-    background-color: rgba(138, 92, 255, 0.2);
+    outline: 1px dotted var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.2);
 }
 
 /* Special link styles for navigation */
 nav a {
     padding: 0.5rem 1rem;
     border: 1px solid transparent;
+    transition: all 0.3s ease;
 }
 
 nav a:hover {
-    border: 1px solid var(--accent);
-    background-color: rgba(138, 92, 255, 0.15);
+    border: 1px solid var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.15);
+    border-radius: 3px;
 }
 
 nav a::after {
-    display: none; /* Remove underline effect from nav links */
+    display: none;
 }
 
 /* Terminal-style links */
 .terminal a {
-    color: var(--terminal-green);
+    color: var(--terminal-link);
 }
 
 .terminal a:hover {
-    color: #00ff88;
-    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+    color: #A7D8B9;
+    text-shadow: 0 0 5px rgba(131, 192, 146, 0.5);
 }
 
 .terminal a::after {
-    background: linear-gradient(90deg, var(--terminal-green), transparent);
+    background: linear-gradient(90deg, var(--terminal-link), transparent);
 }
+
 .center-image {
     display: flex;
     justify-content: center;
-    margin: 2rem 0;
     position: relative;
 }
 
 .center-image img {
     width: 150px;
-    transition: all 0.3s ease;
 }
-
-
 
 blockquote {
     font-family: var(--alt-font);
     font-size: 1.2rem;
     color: var(--text-secondary);
-    border-left: 3px solid var(--accent);
-    background: rgba(10, 10, 30, 0.3);
+    border-left: 3px solid var(--rust-primary);
+    background: rgba(37, 37, 37, 0.5);
     padding: 1.5rem 2rem;
     margin: 2rem 0;
     position: relative;
     line-height: 1.8;
     border-radius: 0 4px 4px 0;
-    box-shadow: 0 0 15px rgba(102, 0, 204, 0.1);
+    box-shadow: 0 0 15px rgba(222, 165, 132, 0.1);
     overflow: hidden;
 }
 
 blockquote::before {
-    content: '"';
-    font-family: serif;
-    font-size: 4rem;
-    color: var(--accent-glow);
+    content: '//';
+    font-family: var(--main-font);
+    font-size: 1.5rem;
+    color: var(--rust-glow);
     position: absolute;
     left: 0.5rem;
     top: 0.5rem;
     line-height: 1;
-    opacity: 0.3;
+    opacity: 0.5;
 }
 
 blockquote::after {
@@ -302,7 +336,7 @@ blockquote::after {
     bottom: 0;
     width: 30%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    background: linear-gradient(90deg, transparent, var(--rust-primary), transparent);
 }
 
 blockquote p {
@@ -315,42 +349,55 @@ blockquote footer {
     font-size: 0.9rem;
     text-align: right;
     margin-top: 1rem;
-    color: var(--accent);
+    color: var(--rust-accent);
     font-style: normal;
+    border: none;
+    background: none;
 }
 
 blockquote footer::before {
     content: '— ';
 }
 
-/* Glitch effect on hover */
+/* Subtle glitch effect on hover */
 blockquote:hover {
-    animation: glitch-text 0.5s linear infinite;
-    text-shadow: 0 0 5px var(--accent-glow);
+    animation: subtle-glitch 0.8s linear;
+    text-shadow: 0 0 5px var(--rust-glow);
 }
 
-@keyframes glitch-text {
-    0% { transform: translate(0); }
-    20% { transform: translate(-1px, 1px); }
-    40% { transform: translate(1px, -1px); }
-    60% { transform: translate(1px, 1px); }
-    80% { transform: translate(-1px, -1px); }
-    100% { transform: translate(0); }
+@keyframes subtle-glitch {
+    0%, 100% { transform: translate(0); }
+    33% { transform: translate(-1px, 1px); }
+    66% { transform: translate(1px, -1px); }
 }
-
 
 img {
-    filter: brightness(0.7) contrast(1.1);
+    filter: brightness(0.8) contrast(1.1) sepia(0.1);
     transition: filter 0.4s ease;
 }
 
-/* Hover effect to slightly reveal original */
-img:hover {
-    filter: brightness(0.85) contrast(1.1);
+
+/* Rust specific status indicators */
+.status-compiling {
+    color: var(--rust-primary);
+    animation: pulse 2s infinite;
 }
 
+.status-success {
+    color: var(--terminal-link);
+}
 
-     </style>
+.status-error {
+    color: var(--rust-secondary);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+</style>
+
   </head>
   <body class="hack main container">
 	<a href="https://elias.sh">< back to home</a>
