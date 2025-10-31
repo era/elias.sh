@@ -30,6 +30,8 @@ But when you are using Tokio Mutex, you must be careful because "in contrast to 
 That is true not only for threads that panic'ed but also for futures that were in the middle of an operation and were dropped, [for example this](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=b68c55f773aaaace2d805c3c656b21a9). You should keep the invariants true at every await point.
 
 
+EDIT: Seems like there is one more mistake you can do with Mutexes and Async Rust, which Oxide is calling "Futurelock", check their [RFD](https://rfd.shared.oxide.computer/rfd/0609).
+
 ----
 
 Post based on [a thread on bsky.app](https://bsky.app/profile/alilleybrinker.com/post/3lggs4l5y3k27) and a [PoC](https://github.com/era/do-not-block-inside-rust-async/tree/master) I did at work to exemplify the problem with blocking inside an async runtime in Rust.
