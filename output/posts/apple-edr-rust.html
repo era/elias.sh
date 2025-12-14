@@ -374,14 +374,14 @@ img {
 endpoint_sec::Client::new(|client: &amp;mut endpoint_sec::Client, message: endpoint_sec::Message| {
     // try not to block here and reply very fast to AUTH messages
     // if you are too slow the system may kill your EDR application, but worst than that:
-    // Messages are handled strictly serially and in the order they are delivered.
+    // Messages are handled strictly serially and in the order they are delivered. 
     // Returning control from the handler causes the next available message to be dequeued.
    match message.event_type() {
       endpoint_sec_sys::es_event_type_t::ES_EVENT_TYPE_AUTH_EXEC =&gt; todo!(),
       _ =&gt; todo!(),
    };
 
-}).unwrap();
+}).unwrap(); 
 </code></pre>
 <p>Second we need to subscribe to the different events with <a href="https://docs.rs/endpoint-sec/0.4.3/endpoint_sec/struct.Client.html#method.subscribe">subscribe</a>.</p>
 <p>There are two types of messages: Notify and Auth. Notify messages are notification only. The event already happened and the system is just letting us know. The Auth messages on the other hand are messages that we need to authorize (using a <a href="https://docs.rs/endpoint-sec/0.4.3/endpoint_sec/struct.Client.html#method.respond_auth_result">special function from our client</a>).</p>

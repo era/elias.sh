@@ -356,7 +356,8 @@ img {
       <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems. I'm also a big fan of Platform Engineering and DX, I love to build software that writes software.</p> 
       <p>You can check some of the things I build on <a href="https://github.com/era">Github</a>.
 
-      <p>Right now, I'm working for a Cybersecurity company, writing unsafe and safe Rust code to deliver one of the best EDR (endpoint detection and response) experience in the world.</p>
+      <p>Right now, I'm working for a Cybersecurity company, writing unsafe and safe Rust code to deliver one of the best EDR (endpoint detection and response) experience in the world. I'm working as an Engineering Manager
+      but I also write a lot of code.</p>
 
       <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`. I'm available during business hours in Central European Time (CET).</p>
 

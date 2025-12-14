@@ -392,7 +392,7 @@ ident_list = _{ !digit ~ ident ~ (&quot; &quot; ~ ident)+ }
 <p>If we try to match against <code>a 1 b</code>, it will generate the following:</p>
 <pre><code class="language-jsx">- ident &gt; alpha: &quot;a&quot;
 - ident &gt; digit: &quot;1&quot;
-- ident &gt; alpha: &quot;b&quot;
+- ident &gt; alpha: &quot;b&quot; 
 </code></pre>
 <p>You may notice that we do not have any <code>ident_list</code> and the reason is that the <code>_</code> is a modifier to make it a “silent rule”, basically a rule that will not be in our final AST.</p>
 <p>The output generated looks like the following image where all the idents are on the same iterable data structure:</p>
