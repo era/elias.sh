@@ -343,29 +343,30 @@ img {
 </style>
   </head>
   <body class="hack main container">
-  <div class="center-image">
-  <img src="https://www.elias.sh/ferris.png" width="150px" />
-  </div>
-  </center>
     <main>
-      <p>Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
-      Nice to meet you. I create stuff for a living. And well... I am a Software Engineer, 
-      I previously worked at Huawei Ireland Research Center and more specifically at the Cloud Reliability R&D lab, building the foundations of Huawei Cloud. I was mainly focused on observability infrastructure.</p>
+      <p><img src="https://www.elias.sh/glauber.png" style="float: left; margin-right: 25px;" />
+      Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
+      Nice to meet you. I create stuff for a living. And well... I am a Software Engineer.</p>
 
-      <p>I also worked on projects like Redshift (AWS) and financial systems (Stripe, Cielo, Banco Original, Banco Votorantim). </p>
-      <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems. I'm also a big fan of Platform Engineering and DX, I love to build software that writes software.</p> 
-      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a>.
-
-      <p>Right now, I'm working for a Cybersecurity company (as an Engineering Manager), writing unsafe and safe Rust code to deliver one of the best EDR (endpoint detection and response) experience in the world. 
-      </p>
+      <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems.
+      I'm also a big fan of Platform Engineering and DX.</p>
+      <br />
+      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a> or follow me at <a href="https://bsky.app/profile/elias.sh">Bsky</a>.
 
       <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`. I'm available during business hours in Central European Time (CET).</p>
 
-      <h2>Social Networks</h2>
+      <p><small style="font-size: 12px;">In case you don't know, the person in the photo is <a href="https://en.wikipedia.org/wiki/Glauber_Rocha">Glauber Rocha</a>,
+      not me.</small></p>
+      <h2>Work</h2>
       <ul>
-        <li><a href="https://www.linkedin.com/in/elias-d-23a19020/">Linkedin</a>: do I need to explain it? :)</li>
-        <li><a href="https://bsky.app/profile/elias.sh">Bsky</a>: Where I post about coding and personal stuff</li>
-      </ul>  
+        <li>(2024-) Cybereason: (safe and unsafe) Rust for EDR produts</li>
+        <li>(2024-2024) Mercari: A lot of golang and Flink for Trust & Safety organization</li>
+        <li>(2021-2024) Huawei Cloud: Rust and Golang for cloud infrastructure</li>
+        <li>(2019-2021) Stripe: Ruby for payments</li>
+        <li>(2015-2019) AWS: Control Plane development for Redshift</li>
+        <li>...</li>
+      </ul>
+
       <h1>Blog Posts</h1>
       <ul>
         {% for post in sort_by_key(posts.items, 'date', 'reversed') %}   
