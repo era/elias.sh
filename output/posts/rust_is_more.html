@@ -1,7 +1,9 @@
-<!-- index.html -->
 <html>
   <head>
-    <title>Elias' homepage</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 <style>
 
 :root {
@@ -107,7 +109,7 @@ nav ul {
 }
 
 main {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 2rem auto;
     padding: 0 2rem;
 }
@@ -211,6 +213,8 @@ a::after {
     transition: transform 0.4s ease;
 }
 
+
+
 /* Visited links */
 a:visited {
     color: var(--rust-visited);
@@ -228,6 +232,12 @@ nav a {
     padding: 0.5rem 1rem;
     border: 1px solid transparent;
     transition: all 0.3s ease;
+}
+
+nav a:hover {
+    border: 1px solid var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.15);
+    border-radius: 3px;
 }
 
 nav a::after {
@@ -315,6 +325,7 @@ blockquote footer::before {
     content: '— ';
 }
 
+
 img {
     filter: brightness(0.8) contrast(1.1) sepia(0.1);
     transition: filter 0.4s ease;
@@ -341,65 +352,24 @@ img {
 }
 
 </style>
+  <title>Rust is much more than just a programming language </title>
+
   </head>
   <body class="hack main container">
-    <main>
-      <p><img src="https://www.elias.sh/glauber.png" style="float: left; margin-right: 25px;" />
-      Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
-      Nice to meet you. I create stuff for a living. And well... I am a Software Engineer.</p>
-
-      <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems.
-      I'm also a big fan of Platform Engineering and DX.</p>
-      <br />
-      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a> or follow me at <a href="https://bsky.app/profile/elias.sh">Bsky</a>.
-
-      <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`. I'm available during business hours in Central European Time (CET).</p>
-
-      <p><small style="font-size: 12px;">In case you don't know, the person in the photo is <a href="https://en.wikipedia.org/wiki/Glauber_Rocha">Glauber Rocha</a>,
-      not me.</small></p>
-      <h2>Work</h2>
-      <ul>
-        <li>(2024-) Cybereason: (safe and unsafe) Rust for EDR produts</li>
-        <li>(2024-2024) Mercari: A lot of golang and Flink for Trust & Safety organization</li>
-        <li>(2021-2024) Huawei Cloud: Rust and Golang for cloud infrastructure</li>
-        <li>(2019-2021) Stripe: Ruby for payments</li>
-        <li>(2015-2019) AWS: Control Plane development for Redshift</li>
-        <li>...</li>
-      </ul>
-
-      <h1>Blog Posts</h1>
-      <ul>
-           
-            <li><a href="/posts/rust_is_more.html">Rust is much more than just a programming language</a></li>
-           
-            <li><a href="/posts/apple-edr-rust.html">EDR, Rust and Apple</a></li>
-           
-            <li><a href="/posts/kernel-mode-and-cybersecurity.html">Kernel Mode, Cybersecurity and Rust</a></li>
-           
-            <li><a href="/posts/rust-forge-2025.html">Rust Forge 2025</a></li>
-           
-            <li><a href="/posts/quic.html">Quic server in Rust</a></li>
-           
-            <li><a href="/posts/query_engine.html">Iceberg, Parquet and query engines</a></li>
-           
-            <li><a href="/posts/common_mistakes_with_async_rust.html">Common mistakes with Async Rust</a></li>
-           
-            <li><a href="/posts/datafederation_and_rust.html">Data Federation and Trustfall</a></li>
-           
-            <li><a href="/posts/component_model_wasm.html">Why do I like WebAssembly? And a Rust example!</a></li>
-           
-            <li><a href="/posts/visualizing_metrics.html">Visualizing Metrics</a></li>
-           
-            <li><a href="/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust.html">OpenTelemetry, time series, metrics and a bit of Rust</a></li>
-           
-            <li><a href="/posts/peg_and_rust.html">PEG and Rust</a></li>
-        
-      </ul>
-    </main>
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Rust is much more than just a programming language</h1>
+	<h6>2026-01-04</h6>
+	<p>When <a href="https://www.pcmag.com/news/github-blocks-paid-access-for-users-in-iran-syria-crimea">software engineers were cut off from GitHub</a> simply due to their birthplace, I warned, &quot;Today it targets the Iranian, but who tomorrow?&quot; We could all sense the USA grappling with its fading unipolar dominance, unwilling to share power quietly. It became clear that any contender for the top would face sanctions. China recognized this threat, exemplified by the campaign against <a href="https://www.congress.gov/crs-product/R47012">Huawei</a>. Its strategic response was to <a href="https://www.computerweekly.com/news/366608127/The-rise-and-rise-of-open-source-in-China">double down on Open Source</a>, first as a shield against sanctions, and later as a means to <a href="https://journals.sagepub.com/doi/10.1177/29768640251376497">lead global standards</a>. Integral to this shift is China's adoption of Rust to build critical low-level systems, like the <a href="https://asterinas.github.io/">Asterinas</a> kernel and its own <a href="https://github.com/bytedance/monoio">Rust Async Runtime</a>. Rust offers a cheaper, faster path to rebuilding core infrastructure, finally allowing new players to challenge a monopolized market.</p>
+<p>Today, the USA’s biggest leverage is its chip supremacy, particularly NVIDIA's GPUs. Regardless of one’s views on GenAI, the battle lines of this new cold war are drawn around computing power. After the U.S. blocked access to advanced chips and TSMC’s manufacturing, China’s counter-strategy emerged on two fronts: a national pivot to open architectures like <a href="https://asiatimes.com/2025/03/china-all-in-on-risc-v-open-source-chip-design/">RISC-V</a>, and private-sector innovation, with Huawei investing massively to <a href="https://www.cnbc.com/2025/06/10/huawei-chips-are-one-generation-behind-us-but-firm-finding-workarounds-ceo-says.html">produce capable chips with available tech</a>. Each closed door thus opens a window, this time, to a multi-polar world where technology is a shared foundation, not a proprietary weapon.</p>
+<p>For someone from the Global North, this might not sound so interesting. For those of us in the Global South, it’s a narrative of hope. It’s a guard against a new <a href="https://academic.oup.com/book/46567/chapter/408130272">form of digital colonialism</a>. This is why China’s long-standing advocacy for <a href="https://vienna.china-mission.gov.cn/eng/mtjj/202410/t20241011_11505683.htm">multilateralism</a> resonates beyond diplomacy; it signals the possibility of a more balanced technological order we can all participate in building.</p>
+<p>The core mission of Rust is to empower <em>everyone</em> to build reliable and efficient software. It’s no surprise, then, that it's the foundation for a new generation of critical infrastructure: the next version of <a href="https://github.com/influxdata/influxdb">InfluxDB</a>, the search engine <a href="https://quickwit.io/">Quickwit</a>, and <a href="https://pola.rs/">Polars</a>. This global trend is equally powerful in China, where <a href="https://trusted-programming.github.io/">Huawei</a> invests heavily in Rust and is part of the Rust Foundation.</p>
+<p>In essence, Rust functions like a printing press for systems programming: it democratizes and accelerates the spread of robust engineering knowledge. Its compiler teaches about memory and concurrency. Its community provides essential support when the compiler's errors are inscrutable. It helps individuals who would like to learn more, but also countries fighting for digital sovereign.</p>
+<p>Rust is not just a programming language, but a tool for revolution.</p>
+	</main>
         <div class="footer">
       Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
     </div>
 
-    ✊ <span class="symbol">🇵🇸</span> I stand with Palestine - Free Palestine <span class="symbol">🇵🇸</span> ✊
   </body>
 </html>
