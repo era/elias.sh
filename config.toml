@@ -2,3 +2,5 @@ website_name = "Elias"
 uri = "https://elias.sh"
 [custom_keys]
 author = "Era"
+description = "Blog about Rust, programming, and technology"
+language = "en-us"

@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Elias</title><link>https://elias.sh/rss.xml</link><description>Blog about Rust, programming, and technology</description><language>en-us</language><lastBuildDate>Sat, 10 Jan 2026 01:44:37 +0000</lastBuildDate><generator>Squid</generator><item><title>Rust_is_more</title><link>https://elias.sh/posts/rust_is_more.html</link><description><![CDATA[When [software engineers were cut off from GitHub][1] simply due to their
+birthplace, I warned, "Today it targets the Iranian, but who tomorrow?" We c]]></description><author></author><guid>https://elias.sh/posts/rust_is_more.html</guid><pubDate>Sun, 4 Jan 2026 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>When <a href="https://www.pcmag.com/news/github-blocks-paid-access-for-users-in-iran-syria-crimea">software engineers were cut off from GitHub</a> simply due to their birthplace, I warned, &quot;Today it targets the Iranian, but who tomorrow?&quot; We could all sense the USA grappling with its fading unipolar dominance, unwilling to share power quietly. It became clear that any contender for the top would face sanctions. China recognized this threat, exemplified by the campaign against <a href="https://www.congress.gov/crs-product/R47012">Huawei</a>. Its strategic response was to <a href="https://www.computerweekly.com/news/366608127/The-rise-and-rise-of-open-source-in-China">double down on Open Source</a>, first as a shield against sanctions, and later as a means to <a href="https://journals.sagepub.com/doi/10.1177/29768640251376497">lead global standards</a>. Integral to this shift is China's adoption of Rust to build critical low-level systems, like the <a href="https://asterinas.github.io/">Asterinas</a> kernel and its own <a href="https://github.com/bytedance/monoio">Rust Async Runtime</a>. Rust offers a cheaper, faster path to rebuilding core infrastructure, finally allowing new players to challenge a monopolized market.</p>
+<p>Today, the USA’s biggest leverage is its chip supremacy, particularly NVIDIA's GPUs. Regardless of one’s views on GenAI, the battle lines of this new cold war are drawn around computing power. After the U.S. blocked access to advanced chips and TSMC’s manufacturing, China’s counter-strategy emerged on two fronts: a national pivot to open architectures like <a href="https://asiatimes.com/2025/03/china-all-in-on-risc-v-open-source-chip-design/">RISC-V</a>, and private-sector innovation, with Huawei investing massively to <a href="https://www.cnbc.com/2025/06/10/huawei-chips-are-one-generation-behind-us-but-firm-finding-workarounds-ceo-says.html">produce capable chips with available tech</a>. Each closed door thus opens a window, this time, to a multi-polar world where technology is a shared foundation, not a proprietary weapon.</p>
+<p>For someone from the Global North, this might not sound so interesting. For those of us in the Global South, it’s a narrative of hope. It’s a guard against a new <a href="https://academic.oup.com/book/46567/chapter/408130272">form of digital colonialism</a>. This is why China’s long-standing advocacy for <a href="https://vienna.china-mission.gov.cn/eng/mtjj/202410/t20241011_11505683.htm">multilateralism</a> resonates beyond diplomacy; it signals the possibility of a more balanced technological order we can all participate in building.</p>
+<p>The core mission of Rust is to empower <em>everyone</em> to build reliable and efficient software. It’s no surprise, then, that it's the foundation for a new generation of critical infrastructure: the next version of <a href="https://github.com/influxdata/influxdb">InfluxDB</a>, the search engine <a href="https://quickwit.io/">Quickwit</a>, and <a href="https://pola.rs/">Polars</a>. This global trend is equally powerful in China, where <a href="https://trusted-programming.github.io/">Huawei</a> invests heavily in Rust and is part of the Rust Foundation.</p>
+<p>In essence, Rust functions like a printing press for systems programming: it democratizes and accelerates the spread of robust engineering knowledge. Its compiler teaches about memory and concurrency. Its community provides essential support when the compiler's errors are inscrutable. It helps individuals who would like to learn more, but also countries fighting for digital sovereign.</p>
+<p>Rust is not just a programming language, but a tool for revolution.</p>]]></content:encoded></item><item><title>Apple Edr Rust</title><link>https://elias.sh/posts/apple-edr-rust.html</link><description><![CDATA[[In the last post][1], I described a little bit about EDR and how we can
+implement it for Windows. If you look closer at what I described, you are goi]]></description><author></author><guid>https://elias.sh/posts/apple-edr-rust.html</guid><pubDate>Fri, 7 Nov 2025 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p><a href="https://www.elias.sh/posts/kernel-mode-and-cybersecurity">In the last post</a>, I described a little bit about EDR and how we can implement it for Windows. If you look closer at what I described, you are going to see a clear pattern:</p>
+<ol>
+<li>We have a Driver hook up to certain events from the kernel that sends this info to a user-mode application</li>
+<li>The user-mode application reads the information about the event and makes a decision (&quot;Inline Threat Prevention&quot;)</li>
+</ol>
+<p>As we discussed previously, building a driver is hard, and any mistake can make your whole system restart. Imagine every single EDR provider building their own drivers and making repeated mistakes (because everything is proprietary). This is not good for all the parts.</p>
+<p>Apple has a better way of implementing this, which is called &quot;<a href="https://developer.apple.com/documentation/endpointsecurity">endpoint security</a>&quot;. As they describe it: &quot;Endpoint Security is a C API for monitoring system events for potentially malicious activity. Your client registers with Endpoint Security to authorize pending events, or receive notifications of events that already occurred. These events include process executions, mounting file systems, forking processes, and raising signals.&quot;</p>
+<p>In a way, it's like Apple already wrote the driver for us, and we just need to consume the messages sent from them on our User-mode application. Yay, perfect, one less source of mistakes, right?</p>
+<p>There is only one problem, it's a C API. If you know me, you know I'm interested in Rust. So how can we use this to build a Rust UserMode EDR application? Well, <a href="https://github.com/HarfangLab">HarfangLab</a> did a lot of the hard work for us and created a safe abstraction for us: endpoint_sec.</p>
+<p>We basically need two things, first <a href="https://docs.rs/endpoint-sec/0.4.3/endpoint_sec/struct.Client.html#method.new">we need to create a client able to handle the different messages types</a>:</p>
+<pre><code class="language-rust">
+endpoint_sec::Client::new(|client: &amp;mut endpoint_sec::Client, message: endpoint_sec::Message| {
+    // try not to block here and reply very fast to AUTH messages
+    // if you are too slow the system may kill your EDR application, but worst than that:
+    // Messages are handled strictly serially and in the order they are delivered. 
+    // Returning control from the handler causes the next available message to be dequeued.
+   match message.event_type() {
+      endpoint_sec_sys::es_event_type_t::ES_EVENT_TYPE_AUTH_EXEC =&gt; todo!(),
+      _ =&gt; todo!(),
+   };
+
+}).unwrap(); 
+</code></pre>
+<p>Second we need to subscribe to the different events with <a href="https://docs.rs/endpoint-sec/0.4.3/endpoint_sec/struct.Client.html#method.subscribe">subscribe</a>.</p>
+<p>There are two types of messages: Notify and Auth. Notify messages are notification only. The event already happened and the system is just letting us know. The Auth messages on the other hand are messages that we need to authorize (using a <a href="https://docs.rs/endpoint-sec/0.4.3/endpoint_sec/struct.Client.html#method.respond_auth_result">special function from our client</a>).</p>
+<p>So yeah, while an EDR product 100% written in Rust is a bit complicated on Windows, it seems like a reality on MacOS! So reality, that maybe <a href="https://harfanglab.io/">Harfanglab</a> is already doing it? Not sure, but we have to thank them for the opensource crate!</p>]]></content:encoded></item><item><title>Kernel Mode And Cybersecurity</title><link>https://elias.sh/posts/kernel-mode-and-cybersecurity.html</link><description><![CDATA[Since last year, I have been working in cybersecurity. I mostly worked on the
+data ingestion side of things, but lately I started working on the agent]]></description><author></author><guid>https://elias.sh/posts/kernel-mode-and-cybersecurity.html</guid><pubDate>Sat, 6 Sep 2025 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>Since last year, I have been working in cybersecurity. I mostly worked on the data ingestion side of things, but lately I started working on the agents that run on user machines. I want to take this opportunity to write a little bit about User Space and Kernel Space, but before jumping into it, let me explain the macro view of a cybersecurity product like EDR (Endpoint Detection and Response).</p>
+<p>First, what is EDR? Well, corporations don't want their information to leak, and a common attack is through employees' laptops (endpoints). In a way, you can think of an EDR as a system that monitors endpoints and tries to respond to malware and other cyber threats. To do that, it needs to look at your computer activities and categorise actions as benign or (possibly) malicious. Unlike an anti-virus, which performs most of this analysis locally, most EDR agents (the software running on your computer) send that data to a centralised place where it can take an action based on aggregated information (e.g. all laptops of the company).</p>
+<p>This is not that different from an observability pipeline (which has been my focus for the last ~3 years before moving to Japan). You basically have an agent on the computers sending telemetry data to a system that should perform an action based on a set of rules.</p>
+<p>The difference is that when we are talking about observability of the services we have built, we control the metrics and logs we expose. We don't need to inject something to collect that information for us. Although you may see people using eBFP for continuous profiling.</p>
+<p>If we want to observe the behaviour of the user's computer, we really need a &quot;spyware&quot; able to look at which processes are running and any I/O they are doing. But as you may imagine, an application cannot randomly poke other applications to see what they are doing. Those applications run in what we call User Mode.  In User Mode, you have a virtual memory (the address the application sees is not the real physical addresses), and to access the hardware, for example, the disk, the application needs to ask the OS for it (which will verify permissions and so on). The OS runs in Kernel Mode, which allows it to have control over hardware and all applications. When an application needs to ask for something, it does a syscall.</p>
+<p>As you may have thought by now, we need &quot;two applications&quot;, one running in User Mode to send the telemetry data to the cloud and another running in Kernel Mode.  How can we do it? Well, it's going to depend on which OS we are talking about, but for most of them, a common option is to run a Kernel Driver. The problem with kernel drivers is that any bug in them may cause the whole system to crash (remember the number of issues this has caused Microsoft). In Linux, we can <a href="https://redcanary.com/blog/threat-detection/ebpf-for-security/">use eBPF for this</a>. eBPF runs on a virtual machine inside the kernel; the main advantage is that you can run your code in kernel mode without fearing a bug will crash the whole system.</p>
+<p>You may know that most companies outside tech use Windows machines. On Windows, you don't have eBPF; you have to write your own kernel driver for that. Although Microsoft is heavily investing in Rust, making it easier to write applications with it thanks to <a href="https://github.com/microsoft/windows-rs">windows-rs</a> and <a href="https://github.com/microsoft/windows-drivers-rs">windows-drivers-rs</a>, we are far from being able to write Windows kernel drivers with Rust. The solution is to write an agent in Rust, which communicates with a C++ kernel driver using <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/IO/fn.DeviceIoControl.html">DeviceIoControl</a>.</p>
+<p><a href="https://techcommunity.microsoft.com/blog/windowsdriverdev/towards-rust-in-windows-drivers/4449718">There is a near future where we can write all those layers in Rust</a>, but we are not there yet.</p>]]></content:encoded></item><item><title>Rust Forge 2025</title><link>https://elias.sh/posts/rust-forge-2025.html</link><description><![CDATA[I normally don't write about the conferences I go here, but [Rust Forge][1] is
+different for two reasons: (1) I had the pleasure to give my first talk]]></description><author></author><guid>https://elias.sh/posts/rust-forge-2025.html</guid><pubDate>Tue, 2 Sep 2025 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>I normally don't write about the conferences I go here, but <a href="https://rustforgeconf.com/">Rust Forge</a> is different for two reasons: (1) I had the pleasure to give my first
+talk in English there, and (2) the conference really felt like a place to share ideas and not necessarily consume content.</p>
+<p>Let me focus for now on the conference. The first two days were &quot;co-creation days&quot; with a bunch of (technical) workshops and some tours
+around Wellington (NZ). It was a great opportunity to bound with different people over the activities. We visited <a href="https://www.visitzealandia.com/Visit">Zealandia</a> at night, and
+some people were able to see Kiwis (not me :C).</p>
+<p>During a dinner, I was lucky enough to sit with amazing people and learn so much from the conversation. I learnt some details about <a href="https://rustc-dev-guide.rust-lang.org/queries/incremental-compilation-in-detail.html">Rust Incremental Compilation</a>.
+How a &quot;push-based&quot; approach could speed up things (<a href="https://ziggit.dev/t/how-zig-incremental-compilation-is-implemented-internally/3543/2">more similar to Zig approach</a>)
+and that sometimes the rustc may do some work and throw the result away later, because it was not needed.
+I also learnt about <a href="https://github.com/davidlattimore/wild">wild linker</a> (btw, amazing talk during the conf about it by David!) and <a href="https://github.com/HKalbasi/zngur">zngur</a>
+(tool for C++/Rust interop).</p>
+<p><img src="https://www.elias.sh/forge/all_of_us.webp" alt="" /></p>
+<p>The talks were about Rust in embedded, passing by linkers, <a href="https://github.com/obi1kenobi/cargo-semver-checks">cargo-semver-checks</a> to community and governance.</p>
+<p>A lot of the talks were made by the local community which made everything even more fun!</p>
+<p>I also gave a talk there about <a href="https://github.com/era/rust-forge-2025">Rust testing</a>. It was my first time speaking in a conference in English, the last
+time I talked in a conf was during FliSol in 2013, back in Brazil!</p>
+<p>My talk was mainly about how the <a href="https://www.hyrumslaw.com/">Hyrum's Law</a> makes any re-write much harder than we can think of, because we
+have to keep any observable behaviour, which may be hidden away in some abstraction / lib we used and won't be able to use it anymore. Of course, we can
+use tests to help us: &quot;replaying production traffic&quot;, table-driven tests and shadow envs. That is what I tried to show with a real world example.</p>
+<p>I almost forgot about the food, <a href="https://timclicks.dev/">Tim</a> prepared for us a lot of snacks and food during the breaks. All of it was vegetarian or vegan,
+which really made my life (as a vegan) much nicer. Normally the vegan food is just an after-thought, but during Rust Forge it was one of the main options!</p>
+<p>I hope there is a Rust Forge next year, and for that to happen more companies need to step up and help financially...</p>]]></content:encoded></item><item><title>Quic</title><link>https://elias.sh/posts/quic.html</link><description><![CDATA[Last year, I was working in a server that would "bridge" notebooks with a custom
+backend service. One of the decisions was to use QUIC instead of your]]></description><author></author><guid>https://elias.sh/posts/quic.html</guid><pubDate>Wed, 27 Aug 2025 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>Last year, I was working in a server that would &quot;bridge&quot; notebooks with a custom backend service. One of the decisions was to use QUIC instead of your
+old TCP or UDP friends.</p>
+<p>I like to describe <a href="https://quicwg.org/">QUIC</a> as &quot;TCP implemented on User Space on top of UDP&quot;. It establishes a bunch of multiplexed connections on top of UDP and it's
+suppose to be an improvement over TCP.</p>
+<p>This was my first time working with QUIC, so I wanted a playground where I could learn all the details of the protocol without the deadlines. And that is why I put
+together <a href="https://github.com/era/debra">debra</a>. <code>debra</code> is basically a chat application, where computers can connect to a single backend that handles the routing of
+the messages.
+Since QUIC allows us to have bi-directional streams, everything works out of the box. Computer A sends a message to the server to be routed to Computer B.
+Server finds which stream belongs to the Computer B and sends the message. Since this is a toy, we drop the message if Computer B is not online.</p>
+<p>I wanted to play with the protocol, but not implement it from scratch, I decided to use <a href="https://docs.rs/quinn/latest/quinn/">quinn</a> to abstract it away for
+me (it was the same crate used at work as well).</p>
+<p>The code is simple, every time a new connection comes, we get the bidirectional stream. For the receiver, we put it in a tokio task to handle all the new messages.
+For the sender, we put it in our map, so we later can find it when we need to send a message. We assume the first message the client will send is its id.</p>
+<pre><code class="language-rust">
+pub async fn new_connection(&amp;self, conn: quinn::Incoming) -&gt; Result&lt;()&gt; {
+    let connection = conn.await?;
+
+    let stream = connection.accept_bi().await;
+    let (sender, mut receiver) = match stream {
+        Err(quinn::ConnectionError::ApplicationClosed { .. }) =&gt; {
+            info!(&quot;connection closed&quot;);
+            return Ok(());
+        }
+        Err(e) =&gt; {
+            return Err(e.into());
+        }
+        Ok(s) =&gt; s,
+    };
+
+
+    let bytes = read_bytes(&amp;mut receiver).await?;
+
+    let message =
+        root_as_message(&amp;bytes).map_err(|e| anyhow!(&quot;failed parsing message: {:?}&quot;, e))?;
+
+    if message.message_type() != MessageType::ClientRegistration {
+        error!(&quot;not expecting message type: {:?}&quot;, message.message_type());
+        return Err(anyhow!(&quot;First Message should be client registration&quot;));
+    }
+
+    let id = message.client_id();
+
+    // we just assume something else is setting the ids for the clients
+    // and we can trust the clients
+    self.clients
+        .insert(message.client_id(), Arc::new(Mutex::new(sender)));
+
+    let sender = self.tx.clone();
+
+    tokio::spawn(async move {
+        // this will keep reading messages from the stream
+        // until an error happens.
+        loop {
+            match read_bytes(&amp;mut receiver).await {
+                Ok(bytes) =&gt; {
+                    info!(&quot;new message from client: {id}&quot;);
+                    let letter_to = root_as_message(&amp;bytes)
+                        .map_err(|e| error!(&quot;failed parsing message: {:?}&quot;, e))
+                        .ok()
+                        .map(|m| m.for_client());
+
+                    if let Some(letter_to) = letter_to {
+                        // ignore the error for now
+                        let _ = sender.send(Letter::Forward(letter_to, bytes)).await;
+                    } else {
+                        info!(&quot;message for nobody&quot;);
+                    }
+                }
+                Err(e) =&gt; {
+                    error!(&quot;error while reading message: {:?}&quot;, e);
+                    // ignore the error for now
+                    let _ = sender.send(Letter::Remove(id)).await;
+                    break;
+                }
+            }
+        }
+    });
+
+    Ok(())
+}
+</code></pre>
+<p>In order to send messages we just need to find the right stream:</p>
+<pre><code class="language-rust">
+async fn handle_letters(&amp;self, letter: Letter) -&gt; Option&lt;()&gt; {
+    match letter {
+        Letter::Remove(id) =&gt; {
+            self.clients.remove(&amp;id);
+        }
+        Letter::Forward(letter_to, bytes) =&gt; {
+            // clones to avoid deadlock due to clashmap
+            let stream = self.clients.get(&amp;letter_to)?.clone();
+            // spawns a new task to avoid blocking our main loop
+            tokio::spawn(async move {
+                let mut stream = stream.lock().await;
+                // first bytes are always the size
+                let _ = stream
+                    .write_all(&amp;bytes.len().to_be_bytes())
+                    .await
+                    .map_err(|e| error!(&quot;error while sending message {:?}&quot;, e));
+
+                let _ = stream
+                    .write_all(&amp;bytes)
+                    .await
+                    .map_err(|e| error!(&quot;error while sending message {:?}&quot;, e));
+
+                info!(&quot;finished forwarding message&quot;);
+            });
+        }
+    }
+
+    Some(())
+}
+
+</code></pre>
+<p>I also built a <a href="https://github.com/era/debra/blob/master/src/bin/client.rs">client</a>
+for it. The client code is a bit more hacky, since I needed something quick and dirty
+to test. And as you can imagine, it follows more or less the same steps as the server.</p>
+]]></content:encoded></item><item><title>Query_engine</title><link>https://elias.sh/posts/query_engine.html</link><description><![CDATA[During my time at Huawei, one of the biggest problem we had was "how to store
+our observability data". Our initial database was based on [OpenGemini][]]></description><author></author><guid>https://elias.sh/posts/query_engine.html</guid><pubDate>Fri, 25 Apr 2025 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>During my time at Huawei, one of the biggest problem we had was &quot;how to store our observability data&quot;. Our initial database was based on <a href="https://github.com/openGemini/openGemini">OpenGemini</a>, but we were always looking for places to improve.</p>
+<p>A common design for this type of database is to split the compute nodes from the storage, a very recent example of this is the new InfluxDB written in Rust (<a href="https://www.influxdata.com/blog/influxdb-engine/">ref</a>). The data is stored in a Object Store (such as S3), while the other nodes handle the ingestion and querying (query execution plan, physical and logical).</p>
+<p><img src="https://elias.sh/iceberg/InfluxDB-powered-by-IOx.png" alt="InfluxDB arch" /></p>
+<p>Another example is ScopeDB (<a href="https://www.scopedb.io/blog/manage-observability-data-in-petabytes">ref</a>), which is very similar:</p>
+<p><img src="https://elias.sh/iceberg/scopedb.png" alt="ScopeDB arch" /></p>
+<p>Since I took both images from the blogs of both companies, their terms are not normalized. InfludDB has no &quot;Metadata Service&quot;, while ScopeDB has no &quot;Catalog&quot;. Why? They seem so similar, they sure need similar components, right?</p>
+<p>Well, a catalog is the Metadata Service, it works as a &quot;structural blueprint&quot;, storing metadata and organizing schemas.</p>
+<p>Anyway, going back to those databases. Within the Big Data scene, we have a bunch of new products build on top of the same standards:</p>
+<ul>
+<li><a href="https://parquet.apache.org/">Parquet</a>: Parquet is a columnar storage format. It's a self describing format, if you read the file from disk, you can find out the schema of the data by reading its metadata. Another very cool thing, is that Parquet keeps a summary of each column of the file, such as min, max and distinct_count.</li>
+<li><a href="https://arrow.apache.org/">Arrow</a>: While Parquet describes the format stored in disk, Arrow describes how the data should be kept in memory. It's a columnar format, perfect for data interchange and in-memory analytics.</li>
+<li><a href="https://iceberg.apache.org/">Iceberg</a>: Iceberg is a table format. The idea is to manage a large, slow-changing collection of files in a distributed file system or key-value store as a table. Basically, you can save different Parquet files in S3 and use Iceberg to manage them (insert, delete, select, ...).</li>
+</ul>
+<p>If you add your compute nodes on top of those three standards, you can create a toy-database. You basically need a node to handle ingestion. Those nodes should write to the Object Storage and update the Iceberg metadata with information about it. Using icerberg-rs and arrow-rs, this seems more or less like:</p>
+<pre><code class="language-rust">/// In this example, let's assume we will receive the data somehow as Arrow RecordBatch.
+async fn write(&amp;self, name: TableIdent, batch: RecordBatch) -&gt; Result&lt;(), Error&gt; {
+    // iceberg transaction
+    let table = self.catalog.load_table(&amp;name).await?;
+    let transaction = Transaction::new(&amp;table);
+    let mut fast_append = transaction.fast_append(None, vec![])?;
+
+    // metadata for parquet writer
+    let file_io = table.file_io();
+    let location = DefaultLocationGenerator::new(table.metadata().clone())?;
+
+    // writing files to parquet first
+    let prefix = format!(&quot;{}-{}&quot;, name.name, Uuid::new_v4());
+    let file_name_generator = DefaultFileNameGenerator::new(
+        prefix,
+        None,                                   //suffix
+        iceberg::spec::DataFileFormat::Parquet, //format
+    );
+    let parquet_props = parquet::file::properties::WriterProperties::builder().build();
+    let parquet_writer_builder = ParquetWriterBuilder::new(
+        parquet_props,
+        table.metadata().current_schema().clone(),
+        file_io.clone(),
+        location,
+        file_name_generator,
+    );
+
+    // just one partition `0` for now
+    let data_file_writer_builder = DataFileWriterBuilder::new(parquet_writer_builder, None, 0);
+    let mut writer = data_file_writer_builder.build().await?;
+
+    writer.write(batch).await?;
+
+    let data_files = writer.close().await?;
+
+    // now write to the metadata of our table
+    fast_append.add_data_files(data_files)?;
+    let transaction = fast_append.apply().await?;
+
+    transaction.commit(&amp;*self.catalog).await?;
+
+    Ok(())
+}
+
+</code></pre>
+<p>The query engine is the hardest part here, let's assume you are going to use something like like <a href="https://docs.rs/sqlparser/latest/sqlparser/">sqlparser</a> to handle the parsing of SQL. You need to create a plan for how to fetch the data the user wants and how to execute it. For a toy project, you can push down most predicates and projections down to Iceberg. Remember that Parquet keeps some summary data about the columns? Iceberg does the same with its metadata, so it can decide if you need to open that file and do a scan there or skip it. Once you have your Parquet files, you can load them into memory using Arrow format and handle everything else you haven't pushdown to Iceberg.</p>
+<p>This part is so big, that is hard to even show a small useful code here, but I am currently playing with this idea in <a href="https://github.com/era/frieren/tree/master">a public repo</a> which you can check it out. I'm far from done (as I write this text), so bare with me as I improve that code :).</p>
+<hr />
+<ol>
+<li>Both images from InfluxDB and ScopeDB are from their websites.</li>
+<li>There is a great blog post about Iceberg <a href="https://relentless-leader.com/apache-iceberg-performance-dive-deep.html">here</a> and <a href="https://relentless-leader.com/apache-iceberg-internals-dive-deep.html">here</a>.</li>
+</ol>]]></content:encoded></item><item><title>Rust_conventions</title><link>https://elias.sh/rust_conventions.html</link><description><![CDATA[(this is not really a blog post, but rather a note that I will keep updating)]]></description><author></author><guid>https://elias.sh/rust_conventions.html</guid><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>(this is not really a blog post, but rather a note that I will keep updating)</p>
+<p>A list of Rust conventions that may not be that obvious for newcomers:</p>
+<h2>Functions that transforms data</h2>
+<ol>
+<li><code>as_$type</code>: Cheap (low-cost) conversions (e.g. <code>as_bytes()</code>)</li>
+<li><code>to_$type</code>: Higher-cost conversions that needs some &quot;work&quot; to be done, may need to allocate (e.g. <code>to_string</code>)</li>
+<li><code>into()</code> (<code>impl trait From</code>): Similar to <code>to_$type</code>.</li>
+</ol>]]></content:encoded></item><item><title>Common_mistakes_with_async_rust</title><link>https://elias.sh/posts/common_mistakes_with_async_rust.html</link><description><![CDATA[Rust prevents a lot of problems, but in order to work with Async Rust you must
+keep in mind how green threads work.]]></description><author></author><guid>https://elias.sh/posts/common_mistakes_with_async_rust.html</guid><pubDate>Sun, 26 Jan 2025 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>Rust prevents a lot of problems, but in order to work with Async Rust you must keep in mind how green threads work.</p>
+<h2>1. Do not block inside a Rust Async Runtime</h2>
+<p>If you perform I/O blocking operations inside a runtime like Tokio, you will be blocking one of the working threads, if you do that on all your working threads you could make your whole program stuck. I wrote a small example of <a href="https://github.com/era/do-not-block-inside-rust-async">this.</a></p>
+<p>Instead you should use async I/O or use something like <a href="https://docs.rs/tokio/latest/tokio/task/fn.spawn_blocking.html">spawn_blocking</a> which will run the closure on a thread which blocking won't cause issues.</p>
+<h2>2. Drop implementations which may block</h2>
+<p>This is really a variation of the first item. Some structs may try to clean up resources (like deleting a file or closing a socket) when they are dropped. Some of those operations are blocking, such as dropping <a href="https://doc.rust-lang.org/std/net/struct.TcpListener.html">std::net::TcpListener</a>: &quot;The socket will be closed when the value is dropped.&quot;</p>
+<h2>3. Creating futures too big for the stack</h2>
+<p>Async / Await generates a state machine which is by default stored on the Stack (<a href="https://eventhelix.com/rust/rust-to-assembly-async-await/">ref1</a>, <a href="https://www.youtube.com/watch?v=ThjvMReOXYM">ref2</a>, <a href="https://www.youtube.com/watch?v=bnmln9HtqEI">ref3</a>). In certain cases, you may end up with a state machine so big that it cannot be stored on the Stack. For those cases you may need to Box the future so it's allocated in the heap and not on the stack.</p>
+<p>There is a clippy lint for that, <a href="https://users.rust-lang.org/t/stack-overflow-in-async-main-function-due-to-excessive-stack-allocation-not-from-recursion/109571">more details here</a>.</p>
+<h2>4. Mutexes</h2>
+<p>Mutexes are a hard topic. First, you can use the standard library Mutex in async context. The Tokio documentation is pretty clear <a href="https://docs.rs/tokio/latest/tokio/sync/struct.Mutex.html#which-kind-of-mutex-should-you-use">about it</a>. Basically, <a href="https://github.com/tokio-rs/tokio/discussions/6785#discussioncomment-10365146">you are fine if lock takes a short time to unblock</a>. The <a href="https://tokio.rs/tokio/tutorial/shared-state">Tokio book also states the same</a>.</p>
+<p>But when you are using Tokio Mutex, you must be careful because &quot;in contrast to std::sync::Mutex, this implementation does not poison the mutex when a thread holding the MutexGuard panics. In such a case, the mutex will be unlocked. If the panic is caught, this might leave the data protected by the mutex in an inconsistent state.&quot;.</p>
+<p>That is true not only for threads that panic'ed but also for futures that were in the middle of an operation and were dropped, <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=b68c55f773aaaace2d805c3c656b21a9">for example this</a>. You should keep the invariants true at every await point.</p>
+<p>EDIT: Seems like there is one more mistake you can do with Mutexes and Async Rust, which Oxide is calling &quot;Futurelock&quot;, check their <a href="https://rfd.shared.oxide.computer/rfd/0609">RFD</a>.</p>
+<hr />
+<p>Post based on <a href="https://bsky.app/profile/alilleybrinker.com/post/3lggs4l5y3k27">a thread on bsky.app</a> and a <a href="https://github.com/era/do-not-block-inside-rust-async/tree/master">PoC</a> I did at work to exemplify the problem with blocking inside an async runtime in Rust.</p>
+<p>Code for the mutex problem from: https://bsky.app/profile/mattkeeter.com/post/3lgguzn3vec2u</p>]]></content:encoded></item><item><title>Datafederation_and_rust</title><link>https://elias.sh/posts/datafederation_and_rust.html</link><description><![CDATA[Data federation is an approach that consolidates data from multiple sources into
+a single virtual view. This method eradicates data duplication and th]]></description><author></author><guid>https://elias.sh/posts/datafederation_and_rust.html</guid><pubDate>Tue, 29 Aug 2023 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>Data federation is an approach that consolidates data from multiple sources into a single virtual view. This method eradicates data duplication and the formation of data silos, currently drawing significant attention from industry players like Databricks, Starburst, and major cloud providers such as AWS (Athena and Redshift Spectrum). But why is this trend gaining momentum?</p>
+<p><a href="https://www.starburst.io/blog/data-federation-and-data-virtualization-never-worked-in-the-past-but-now-its-different/">Daniel Abadi says in his post about the subject</a> “Thirty years ago it was already commonplace for large businesses to have hundreds — even thousands of different database instances managing data from the variety of different applications running at that business”. This situation resulted in the proliferation of data silos, complicating the retrieval of answers that required combining information from various sources.</p>
+<p>Traditionally, organizations addressed this challenge by building ETL (extract, transform, load) pipelines to centralize data into a single warehouse, such as AWS Redshift (where I had the opportunity to work during my time at Amazon :P). However, this approach introduces friction, requiring ongoing pipeline maintenance. Moreover, running these jobs continuously may impact application performance, leading many to schedule batch jobs at night, resulting in a centralized view that is at least one day delayed.</p>
+<p><img src="/datafederation_and_rust/Untitled.png" alt="" /></p>
+<p>A contrasting approach involves employing a data federation system capable of translating user requests across different data sources. This becomes especially valuable when merging data from different sources.</p>
+<p><img src="/datafederation_and_rust/Untitled%201.png" alt="" /></p>
+<p>This methodology enables the retrieval of more &quot;fresh&quot; data, querying directly from where it resides. A practical example involves using Presto to query diverse data sources.</p>
+<p>Digging into the Presto architecture, outlined in the <a href="https://trino.io/Presto_SQL_on_Everything.pdf">Presto white paper</a>, the coordinator manages complex tasks like optimizing query plans, while the optimizer/planner transforms SQL queries (SQL is a declarative language, so it does not tell HOW things should be executed, but WHAT the user wants) into executable plans. It will also break the request into smaller tasks and split it between the workers so it can be run in parallel. Presto's ability to return results incrementally, rather than waiting for completion, adds to its appeal.</p>
+<p><img src="/datafederation_and_rust/Untitled%202.png" alt="" /></p>
+<p>But we were talking about taking a user request and translating it into the commands of different data sources, so let’s jump into the worker which is responsible for fetching the data from a diverse set of data sources. To connect Presto to the rest of the world, you need to implement the <a href="https://prestodb.io/docs/current/develop/connectors.html">Connector</a> interface. It is the Connector which will helps Presto translate its internal representation to where the data is stored.</p>
+<p>Presto provides a unified database feel for answering queries, but what if we could query different APIs as seamlessly as we do with Presto?</p>
+<h2>Querying (almost) everything</h2>
+<p>Enter <a href="https://github.com/obi1kenobi/trustfall">Trustfall</a>, a Rust-based project enabling users to query almost any data source, from APIs and databases to various files on disk — and even AI models.</p>
+<p>To connect Trustfall to diverse data sources, users need to define the schema and craft an adapter capable of communicating with the data source. As the user sends a query, the frontend compiles it into a lazily evaluated intermediate representation. During interpretation, the adapter is invoked to fetch the required data. For more insights, check out <a href="https://www.hytradboi.com/2022/how-to-query-almost-everything">this informative talk</a>.</p>
+<p><img src="/datafederation_and_rust/Untitled%203.png" alt="" /></p>
+<p>This approach allows you to do very cool things such as cross-API queries. We can see a demo of a query responding “<em>Which GitHub Actions are used in projects on the front page of HackerNews with &gt;=10 points?” (which is available on the repo readme)</em></p>
+<p><img src="/datafederation_and_rust/query-demo.gif" alt="" /></p>
+<h2>Why am I talking about Trustfall?</h2>
+<p>Well, it's an interesting project :). But I also got the chance to <a href="https://github.com/obi1kenobi/trustfall/commits/main/?author=era">collaborate with it a little bit</a>.</p>]]></content:encoded></item><item><title>Component_model_wasm</title><link>https://elias.sh/posts/component_model_wasm.html</link><description><![CDATA[> WebAssembly (abbreviated *Wasm*) is a binary instruction format for a
+> stack-based virtual machine. Wasm is designed as a portable compilation targ]]></description><author></author><guid>https://elias.sh/posts/component_model_wasm.html</guid><pubDate>Sun, 9 Jul 2023 00:00:00 +0000</pubDate><content:encoded><![CDATA[<blockquote>
+<p>WebAssembly (abbreviated <em>Wasm</em>) is a binary instruction format for
+a stack-based virtual machine. Wasm is designed as a portable
+compilation target for programming languages, enabling deployment on the
+web for client and server applications. - <a href="https://webassembly.org/">https://webassembly.org/</a></p>
+</blockquote>
+<p>WebAssembly and Rust are currently my favorite topics. As with many other engineers I work with, I don't usually spend much time doing web development. Therefore, when I talk about WebAssembly, many of them are not really sure why I am interested in it. The main reason is that the name is misleading. Although WebAssembly can be used to run fast applications on browsers, it can also be used to run applications on the server side. You can use WebAssembly almost like you would use Docker, and deploy your sandboxed application at the edge. I won’t talk about it in this text, but you can check out this <a href="https://wasmlabs.dev/articles/docker-without-containers/">article</a> to learn more.</p>
+<p>For me, the most interesting aspect of WebAssembly is the low overhead between host and guest applications when embedding a runtime. This opens up the possibility of extending software using plugin systems. However, before delving into the details of this, let's first review the basics.</p>
+<h2>The web</h2>
+<p>Let's take a moment to understand how WebAssembly works on the front-end. Normally, when you're on the web, you're executing untrusted code. You don't want a website making random I/O syscalls to your operating system. Therefore, by default, you want to block almost everything.</p>
+<p>WebAssembly is built with this idea in mind. The wasm module runs in a sandbox and only has access to whatever the host application allows it to access.</p>
+<p>In the browser, this means that you can import functions that are exposed from the JavaScript world.</p>
+<p><img src="/component_model_wasm/firefox-webassembly.png" alt="firefox-webassembly.png" /></p>
+<p>In the previous image, our WebAssembly Module has access to the console.log function. It exposes MyModuleFunction to be called in our JavaScript application.</p>
+<p>However, it's not that simple. Some boilerplate code is necessary to correctly manage types and memory communication between WebAssembly and JavaScript. WebAssembly memory is simply an <code>ArrayBuffer</code> (or a <code>SharedArrayBuffer</code>). When passing arguments or receiving the return of a function, some work is required to properly represent those bytes as a JavaScript or WebAssembly type.</p>
+<p>Writing the code by hand for WebAssembly can be tedious and error-prone. Fortunately, there are libraries available to generate the code for you. One such library is <a href="https://rustwasm.github.io/wasm-bindgen/">wasm-bindgen</a>, although it is specific to Rust. However, generating the code is only a small part of the problem. Ideally, you want to easily describe what you expect to be available for the WebAssembly Module and what it must expose. For this purpose, you can use the <a href="https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md">WIT</a> file from the <a href="https://github.com/WebAssembly/component-model">component model</a>. Then, use <a href="https://github.com/bytecodealliance/wit-bindgen">wit-bindgen</a> to generate the glue code. The wit-bindgen is also more generic and should support more languages. Note that WIT, component model, and the wit-bindgen are not yet stable, so expect many changes in the coming months.</p>
+<h2>Embedding the Runtime</h2>
+<blockquote>
+<p>A WebAssembly implementation will typically be <em>embedded</em> into a <em>host</em> environment.
+An <em>embedder</em> implements the connection between such a host
+environment and the WebAssembly semantics as defined in the main body of
+this specification.
+An embedder is expected to interact with the semantics in well-defined
+ways. - <a href="https://webassembly.github.io/spec/core/appendix/embedding.html">Source</a></p>
+</blockquote>
+<p>We can embed WebAssembly in our regular applications to run WebAssembly modules. From now on, I will refer to our regular applications as the &quot;host&quot; and the WebAssembly modules as the &quot;guest.&quot;</p>
+<p><img src="/component_model_wasm/host-app.png" alt="host-app.png" /></p>
+<p>There are several runtimes available, each with a different focus or set of features. Some are designed for minimal footprint, while others aim to simplify integration with host applications. Personally, my go-to runtime is <a href="https://wasmtime.dev/">Wasmtime</a>, which is well-maintained and has a large community.</p>
+<h2>Creating an application with WebAssembly Modules in Rust</h2>
+<p>Let’s use the WebAssembly runtime to allow users to extend an application with the Component Model. The source code is at <a href="https://github.com/era/example-of-plugins-with-webassembly/tree/master">github</a>. I will be explaining the most important parts of it, but make sure to take a quick look at the source code before reading the rest of this post.</p>
+<p>Before starting we need a couple of tools. First let’s add the wasm target for our rustc: <code>rustup target add wasm32-wasi</code>. Great, so now we can compile to wasm32. The wasi in the end has a special meaning. “WASI is a modular system interface for WebAssembly. As described in <a href="https://hacks.mozilla.org/2019/03/standardizing-wasi-a-webassembly-system-interface/">the initial announcement</a>, it’s focused on security and portability.” (<a href="https://wasi.dev/">wasi.dev</a>).</p>
+<p>We also need wasm-tools, so let’s install it using cargo: <code>cargo install wasm-tools</code>.</p>
+<p>Now let’s create our application: <code>cargo new host-application</code> and our plugin: <code>cargo new --lib hello-world-plugin</code>.</p>
+<p>Let’s create our wit file as well. I have been using wit almost since July 2022. There were several changes during that period. There is a good chance that there will be small differences in the format in the future as well, so <a href="https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md">I suggest checking out the documentation if something does</a> not work for you.</p>
+<pre><code class="language-wasm">package plugin:demo
+
+world plugin {
+  import host: interface {
+    log: func(param: string)
+  }
+
+  export run: func(param: string) -&gt; string
+}
+</code></pre>
+<p>So let’s start with our plugin because it’s the most simple code 😛. Our <code>Cargo.toml</code> looks like this:</p>
+<pre><code class="language-wasm">[package]
+name = &quot;hello-world-plugin&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2021&quot;
+
+# In order to compile a wasi dynamic library
+[lib]
+crate-type = [&quot;cdylib&quot;]
+
+[dependencies]
+wit-bindgen = { git = &quot;https://github.com/bytecodealliance/wit-bindgen&quot;, version = &quot;0.8.0&quot; }
+</code></pre>
+<p>Our <code>lib.rs</code> looks like this:</p>
+<pre><code class="language-rust">// src/lib.rs
+
+// Use a procedural macro to generate bindings for the world we specified in
+// our wit file
+wit_bindgen::generate!(&quot;plugin&quot;);
+
+// Define a custom type and implement the generated `Plugin` trait for it which
+// represents implementing all the necessary exported interfaces for this
+// component.
+struct HelloWorld;
+
+impl Plugin for HelloWorld {
+    fn run(name: String) -&gt; String {
+        format!(&quot;Hello, {name}&quot;)
+    }
+}
+
+// The following macro is generated by wit-bindgen and is always named `export_{world_name}`
+export_plugin!(HelloWorld);
+</code></pre>
+<p>Remember that I told you that things are breaking and everything is not smooth yet for this, right? So a quick break to read a little bit of the documentation:</p>
+<ul>
+<li>
+<p>An important consideration when creating a component today is WASI. All current
+native toolchains for languages which have WASI support are using the
+<code>wasi_snapshot_preview1</code> version of WASI. This definition of WASI was made
+with historical <code>*.witx</code> files and is not compatible with the component model.
+There is, however, a means by which to still create components from modules
+that are using <code>wasi_snapshot_preview1</code> APIs.</p>
+</li>
+<li>
+<p>The <code>wasm-tools component new</code> subcommand takes an <code>--adapt</code> argument which acts
+as a way to polyfill non-component-model APIs, like <code>wasi_snapshot_preview1</code>,
+with component model APIs. The <a href="https://github.com/bytecodealliance/preview2-prototyping">preview2-prototyping</a> project is the current
+go-to location to acquire a polyfill from <code>wasi_snapshot_preview1</code> to an
+in-development version of &quot;wasi preview2&quot; which is specified with <a href="https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md">WIT</a>
+and the component model.</p>
+</li>
+<li>
+<p>Notably you'll want to download <a href="https://github.com/bytecodealliance/preview2-prototyping/releases/tag/latest">one of the adapter modules</a>
+and name it <code>wasi_snapshot_preview1.wasm</code> locally to pass as an <code>--adapt</code>
+argument to <code>wasm-tools component new</code>. Note that there are two modules
+provided on the downloads page, <a href="https://github.com/bytecodealliance/wasmtime/releases/latest/download/wasi_snapshot_preview1.reactor.wasm">one is for non-commands</a> which
+don't have a <code>_start</code> entrypoint in the generated core wasm module (e.g. the
+<code>cdylib</code> crate type in Rust) and <a href="https://github.com/bytecodealliance/wasmtime/releases/latest/download/wasi_snapshot_preview1.command.wasm">one that is for command modules</a>
+which has a <code>_start</code> entrypoint (e.g. a <code>src/main.rs</code> in Rust).</p>
+<p>(<a href="https://github.com/bytecodealliance/wit-bindgen">source</a>)</p>
+</li>
+</ul>
+<p>Ok, so we will be downloading the reactor adapter from <a href="https://github.com/bytecodealliance/wasmtime/releases/tag/dev">Wasmtime</a> since it will be the runtime used.</p>
+<pre><code class="language-bash">wget https://github.com/bytecodealliance/wasmtime/releases/download/dev/wasi_snapshot_preview1.reactor.wasm
+</code></pre>
+<p>To compile we will run two commands:</p>
+<pre><code class="language-bash">cargo build --release --target wasm32-wasi
+wasm-tools component new ./target/wasm32-wasi/debug/hello_world_plugin.wasm \
+    -o hello-world.wasm --adapt wasi_snapshot_preview1=./wasi_snapshot_preview1.reactor.wasm
+</code></pre>
+<p>Now we should have a <code>hello-world.wasm</code> file. Let’s move it to <code>host-application/plugins</code>.</p>
+<p>Our host is a bit more complicated. Our <code>Cargo.toml</code> looks like this:</p>
+<pre><code class="language-bash">[package]
+name = &quot;host-application&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2021&quot;
+
+[dependencies]
+thiserror = &quot;1.0.43&quot;
+wasmtime-wasi = { git= &quot;https://github.com/bytecodealliance/wasmtime&quot;, branch=&quot;main&quot;, features=[&quot;preview2&quot;]}
+wasmtime = { git= &quot;https://github.com/bytecodealliance/wasmtime&quot;, branch=&quot;main&quot;, features = [&quot;component-model&quot;, &quot;async&quot;]}
+tokio = { version = &quot;1.29.1&quot;, features = [&quot;full&quot;] }
+</code></pre>
+<p>Tokio is there because I was not able to use the current component model without activating the async mode as well. thiserror makes life a bit easier to handle errors. Wasmtime is our runtime and wasmtime-wasi offers some helpers that are needed to make sure we expose the wasi default methods to our module.</p>
+<p>So how do we get a WebAssembly Module and use it on our application? First of all, we need to expose the functions we promised to our module so we can properly instantiate it. From our wit the only function we are allowing them to use is the log function, so let’s do that:</p>
+<pre><code class="language-rust">// first let's generate all the glue code we need
+wasmtime::component::bindgen!({world: &quot;plugin&quot;});
+
+struct PluginRuntime{}
+// Implements the Trait which represents the functions
+// the module imported
+impl crate::plugin::host::Host for PluginRuntime {
+    fn log(&amp;mut self, txt: String) -&gt; wasmtime::Result&lt;()&gt; {
+        println!(&quot;{txt}&quot;);
+        Ok(())
+    }
+}
+</code></pre>
+<p>Ok, I was not been precise, we also promised to expose the wasi functions, so we need to somehow do it. We actually just need to expose <code>WasiCtx</code>. So let’s change our struct a little bit:</p>
+<pre><code class="language-rust">use wasmtime_wasi::preview2::WasiCtx;
+use wasmtime_wasi::preview2::WasiCtxBuilder;
+
+struct PluginRuntime {
+    wasi_ctx: WasiCtx,
+    table: wasi_preview2::Table,
+}
+
+impl PluginRuntime {
+    pub fn new() -&gt; Self {
+        let mut table = wasmtime_wasi::preview2::Table::new();
+        Self {
+            wasi_ctx: WasiCtxBuilder::new().build(&amp;mut table).unwrap(),
+            table,
+        }
+    }
+}
+</code></pre>
+<p>Let’s also create a <code>WasmModule</code> struct to represent any plugin we want to instantiate. The code is a bit complex, so read the comments to understand what is going on:</p>
+<pre><code class="language-rust">pub struct WasmModule {
+    module: Component,
+    linker: Linker&lt;PluginRuntime&gt;,
+    engine: Engine,
+}
+
+impl WasmModule {
+    pub fn new(path: &amp;str) -&gt; Result&lt;Self, WasmError&gt; {
+        // An engine stores and configures global compilation settings like
+        // optimization level, enabled wasm features, etc.
+        let mut config = Config::new();
+        config.wasm_component_model(true);
+        config.async_support(true);
+        let engine = Engine::new(&amp;config)
+            .map_err(|e| WasmError::GenericError(format!(&quot;{} {}&quot;, e, path)))?;
+
+        // We start off by creating a `Module` which represents a compiled form
+        // of our input wasm module. In this case it'll be JIT-compiled after
+        // we parse the text format.
+        //could use from_binary as well
+        let module = Component::from_file(&amp;engine, path)
+            .map_err(|e| WasmError::GenericError(format!(&quot;{} {}&quot;, e, path)))?;
+
+        let mut linker = Linker::new(&amp;engine);
+
+        // Links our Runtime exposing the methods to our module
+        Plugin::add_to_linker(&amp;mut linker, |state: &amp;mut PluginRuntime| state)
+            .map_err(|e| WasmError::GenericError(e.to_string()))?;
+
+        // since we are using wasi, we need to add the functions related with it
+        // wasi_preview2 is a helper that will do that for us
+        wasi_preview2::wasi::command::add_to_linker(&amp;mut linker)
+            .map_err(|e| WasmError::GenericError(e.to_string()))?;
+
+        Ok(Self {
+            module,
+            linker,
+            engine,
+        })
+    }
+
+    // invoke our plugin (the `run` function)
+    pub async fn invoke(&amp;mut self, arg: &amp;str) -&gt; Result&lt;String, WasmError&gt; {
+        // A `Store` is what will own instances, functions, globals, etc. All wasm
+        // items are stored within a `Store`, and it's what we'll always be using to
+        // interact with the wasm world. Custom data can be stored in stores but for
+        // now we just use `()`.
+        let mut store = Store::new(&amp;self.engine, PluginRuntime::new());
+
+        // With a compiled `Module` we can then instantiate it, creating
+        // an `Instance` which we can actually poke at functions on.
+        let instance = self
+            .linker
+            .instantiate_async(&amp;mut store, &amp;self.module)
+            .await
+            .map_err(|e| WasmError::GenericError(e.to_string()))?;
+
+        // our result will be here
+        let mut result = [Val::S32(0)];
+        // let's get the function we are interested and call it
+        instance
+            .get_func(&amp;mut store, &quot;run&quot;)
+            .unwrap()
+            .call_async(&amp;mut store, &amp;[Val::String(arg.into())], &amp;mut result)
+            .await
+            .map_err(|e| WasmError::GenericError(e.to_string()))?;
+
+        Ok(format!(&quot;{:?}&quot;, result))
+    }
+</code></pre>
+<p>With all of that, we can call the module from our main function:</p>
+<pre><code class="language-rust">mod plugin;
+
+#[tokio::main]
+async fn main() {
+    let result = plugin::WasmModule::new(&quot;plugins/hello-world.wasm&quot;)
+        .unwrap()
+        .invoke(&quot;world!&quot;)
+        .await
+        .unwrap();
+    println!(&quot;{result}&quot;);
+}
+</code></pre>
+<p>Now we can modify our main function to dynamically load any wasm file at the <code>plugins</code> folder and call the <code>run</code> function. Which I won’t do in this post.</p>
+<p>The code for the WasmModule is a bit more complex than what I showed here, make sure to checkout the <a href="https://github.com/era/example-of-plugins-with-webassembly/blob/master/host-application/src/plugin.rs">plugin.rs</a>.</p>]]></content:encoded></item><item><title>Visualizing_metrics</title><link>https://elias.sh/posts/visualizing_metrics.html</link><description><![CDATA[The last project I worked on at my job was a data visualization system,
+specifically a metrics dashboard. Although my role was primarily on the
+back-e]]></description><author></author><guid>https://elias.sh/posts/visualizing_metrics.html</guid><pubDate>Tue, 27 Jun 2023 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>The last project I worked on at my job was a data visualization system, specifically a metrics dashboard. Although my role was primarily on the back-end, I still provided input on the user experience for SREs (Front-End development of the system) and also to guide SREs on how to better use the new system. I didn't want to rely solely on my personal experiences, so I sought a more theoretical foundation. In this post, I will share some of my notes. Most of these notes were taken from &quot;Better Data Visualizations&quot; by Jonathan Schwabish, or from my own notes during the <a href="https://ic.unicamp.br/en/~mdc/">Complex Data Mining</a> course.</p>
+<h2>What do we need to avoid?</h2>
+<p>When building a dashboard to display the health of a system, it's important to avoid spaghetti charts. These charts are difficult to read and should be avoided, especially since the dashboard may be used by people during late hours. Do you really want a tired person to try and make sense of a chart like this bellow?</p>
+<p><img src="/visualizing_metrics/Untitled.png" alt="Untitled" /></p>
+<p>Following any of those timeseries can be challenging. One approach, suggested by Jonathan Schwabish, is to break the chart into multiple smaller versions. For instance, if you're displaying CPU usage on machines, you could break it down by AZ or region. Alternatively, you might want to filter the timeseries to focus only on those with big changes in the last few minutes.</p>
+<p>Pie charts are generally not recommended. Schwabish explains that humans struggle to compare slices of different sizes easily (refer to the chart below to see which one clearly shows the proportion of each company's revenue). Although there are cases where it’s acceptable to use pie charts, such as when the slices are of known proportions (e.g. 50%-50%; 25%-25%-25%-25%), we are specifically discussing metrics and creating a useful dashboard for SREs. Since the data will be dynamic, you want your engineers to be able to quickly scan the dashboard and get a sense of what is wrong. Parsing a pie chart takes time and may lead to the wrong conclusion. Therefore, it is best to avoid using them.</p>
+<p><img src="/visualizing_metrics/Untitled%201.png" alt="Untitled" /></p>
+<p>(Image from <a href="https://towardsdatascience.com/the-case-against-the-pie-chart-43f4c3fccc6">https://towardsdatascience.com/the-case-against-the-pie-chart-43f4c3fccc6</a> )</p>
+<p>Another point to avoid is relying solely on the average. Depending on the distribution of your data, it may mislead you. A great article on this topic can be found at <a href="https://towardsdatascience.com/avoid-troubles-with-average-923012d1cd3e">Towards Data Science</a>.</p>
+<p>For metrics, you are probably not interested in averages, but rather in values such as p90, p99, or max/min.</p>
+<h2>Accessible dashboards</h2>
+<p>In our industry, many people assume that certain things are &quot;obvious&quot; and don't bother explaining them. As a result, engineers who are unfamiliar with the subject may be too hesitant to ask questions. This can lead to chaos and confusion.</p>
+<p>All charts on a dashboard should include explanations, so that anyone, even someone from another team, can understand what is happening. This is especially important because during an outage at 3 AM, other teams may check your dashboard to determine whether your service is the cause of the issue, or if it has also been affected.</p>
+<p>It's also useful to include a link to a runbook that explains what to do if the metrics are abnormal and how to debug the issue. This is helpful not only for other teams, but also for your own SREs.</p>
+<p>Be cautious of the colors you use on your dashboard, as some colorblind individuals may be misled by certain colors.</p>
+<p>While this document focuses on the people creating the dashboards, it's worth noting that the dashboard system should also be accessible to screen-readers. Whatever system you use, it should support screen-readers.</p>
+<h2>Line Charts</h2>
+<p>Line charts are the most common type of chart used for metric visualization. They are great because they allow you to quickly see the behavior of a time series within a specified time window. Additionally, you can add threshold lines to indicate what normal behavior should look like.</p>
+<h2>Beyond your line chart</h2>
+<p>Line charts are a great way to visually represent data and are my go-to choice almost all of the time. However, there are instances when they may not be sufficient for quickly grasping an overview of a system. In such cases, heatmaps are an excellent alternative. Heatmaps use colors and color saturations to represent data values, creating a 3D chart that is particularly useful for high-frequency data or when understanding general patterns is more important than exact values.</p>
+<p>For example, we are mapping the duration_ms over time and the frequency of those values below:</p>
+<p><img src="/visualizing_metrics/Untitled%202.png" alt="Untitled" /></p>
+<h2>Group your data with meaningful tags</h2>
+<p>When creating your dashboard, consider using tags such as region, service, and http_status. This makes it easy to filter results and identify issues. Additionally, using tags instead of hardcoding IPs allows you to change your fleet without worrying about updating dashboards. This makes maintaining your dashboard up-to-date effortless.</p>
+<h2>The end</h2>
+<p>In conclusion, building a metrics dashboard system requires careful consideration of the UX for SREs. Avoiding confusing chart types such as spaghetti charts and pie charts, making explanations and playbooks accessible, and using meaningful tags are all important steps to creating a useful and effective dashboard. Line charts are a common chart type, but heatmaps can also be useful for high-frequency data or when seeing general patterns are more important than exact values. Ultimately, a well-designed dashboard can help teams quickly identify and respond to issues in their systems.</p>]]></content:encoded></item><item><title>Opentelemetry_timeseries_metrics_and_a_bit_of_rust</title><link>https://elias.sh/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust.html</link><description><![CDATA[> OpenTelemetry is a collection of tools, APIs, and SDKs. Use it to instrument,
+> generate, collect, and export telemetry data (metrics, logs, and tra]]></description><author></author><guid>https://elias.sh/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust.html</guid><pubDate>Sat, 20 May 2023 00:00:00 +0000</pubDate><content:encoded><![CDATA[<blockquote>
+<p>OpenTelemetry is a collection of tools, APIs, and SDKs. Use it to instrument, generate, collect, and export telemetry data (metrics, logs, and traces) to help you analyze your software’s performance and behavior.</p>
+</blockquote>
+<p>Let’s break down the statement from OpenTelemetry website to better understand it. And of course, let’s start by the end “help you analyze your software’s performance and behavior”.</p>
+<h2>The life of software running on production</h2>
+<p>No software is perfect and every software will misbehave. It’s just a matter of time. If the software is running on your machine, you can probably check the logs, reproduce the issue a couple of times and find what is the problem. You probably can do that if the software is running on a server as well. But the life of software is much more than the bugs we have acknowledged.</p>
+<p>If your software is used by hundreds of people, it’s going to be much more difficult to observe only based on logs if everything is ok. Also, not everything is about your software, sometimes users may not be able to get the service quality they want due to another component using 100% of the CPU time. Long story short: we cannot rely only on logs. We need metrics!</p>
+<h3>Metrics</h3>
+<blockquote>
+<p><strong>Metrics</strong> are aggregations over a period of time of numeric data about your
+infrastructure or application. Examples include: system error rate, CPU
+utilization, request rate for a given service. - <a href="https://opentelemetry.io/docs/concepts/observability-primer/#reliability--metrics">OpenTelemetry docs</a></p>
+</blockquote>
+<p>I find it easier to visualize metrics than to write about them. So imagine we have a metric called “Memory Usage” which measures the percentage of memory used every minute. We would have something like:</p>
+<p><img src="/opentelemetry_timeseries_metrics_and_a_bit_of_rust/memory-usage-ts.png" alt="memory-usage-ts.png" /></p>
+<p>That would help us to answer questions like: what is the memory usage of the last 5 minutes? What was the aggregated memory usage of the last hour?</p>
+<p>Metrics normally don’t make sense on their own. If you have a single metric for a single minute, there is not much you can discover about the software you are looking at. We are normally interested in the behaviour of the system over a period of time. So we normally plot those metrics as a line chart.</p>
+<p><img src="/opentelemetry_timeseries_metrics_and_a_bit_of_rust/linechart.png" alt="linechart.png" /></p>
+<p>There is something missing in my explanation, in a world where software is deployed on different machines, different regions and different setups, having raw data of “memory usage” is useless if we cannot categorize this data per the different dimensions our software stack has.</p>
+<p>People call those dimensions different things, such as tags and labels. To simplify things I will only use tags. Tags help us to answer questions like: “Which Availability Zone has the higher rate of errors?”, “Which server has the higher CPU usage rate?”, “Which version of the software has the lower response time?”. All of that is by grouping the metrics by different tags.</p>
+<p>Let’s pause a bit, and define another term. Time-series. A time series refers to a sequence of data points collected or recorded in chronological order. It represents the measurement or observation of a variable or multiple variables over time. So from now on, instead of saying “metric x over the last y minutes”, I will just say the metric x time series.</p>
+<p><img src="/opentelemetry_timeseries_metrics_and_a_bit_of_rust/two-ts.png" alt="two-ts.png" /></p>
+<p>Ok, let’s continue. So as we were talking, tags are very important for our time series. It helps us to group by different points of view. So we should to make them right! If you use a tool like <a href="https://docs.honeycomb.io/concepts/high-cardinality/">HoneyComb you are probably not worried about high cardinality</a>, otherwise, you should!</p>
+<p>But wait, we haven’t talked about cardinality yet! Honeycomb’s doc says: “The dimensionality of a dataset is the number of different attributes that it has. A high-dimensionality dataset, then, has many different attributes.”. Let’s go back to our tags. Let’s say we have: host_ip, availability_zone (az) and region tags for all of our metrics. Even if the number of hosts is big, we are not concerned with high dimensionality for this dataset. We should not expect a huge number of availability zone (e.g. AWS have very few per region), or even region. So our cardinality is bound to be low.</p>
+<p>Well, let’s imagine that we add a request id tag to our metrics, and request_id is a uuid. We can bet it will have high cardinality. But, why this is bad?</p>
+<p>Time-series databases normally optimize the queries based on the tags and time. Having an infinite number of tag values for a specific tag means they will have an infinite number of time series to scan, which will have a high cost for most of their designs.</p>
+<p>Some people call metrics with high-cardinality data “events”. One of the reasons is that if we have high-cardinality data, there is a big chance that we are not aggregating data anymore. Events are not exactly that, but we will discuss it on the next topic.</p>
+<h3>Structured Events</h3>
+<blockquote>
+<p>In contrast to metrics, events are snapshots of what happened at a particular point</p>
+</blockquote>
+<blockquote>
+<p>in time. One thousand discrete events may have occurred within that same trailing five-second period in the preceding example - <a href="https://info.honeycomb.io/observability-engineering-oreilly-book-2022">Honeycomb’s O’Reilly Book Observability Engineering</a></p>
+</blockquote>
+<p>OpenTelemetry does not have the “structured event” concept, but I find it useful as a building block concept for understanding distributed tracing.</p>
+<p>I will follow Honeycomb’s book definition: “An event is a record of everything that occurred while one particular request interacted with your service”.</p>
+<p>So let’s imagine you have a map for each request made for your service where the key is the name of a dimension or metric name and the values, well, are the metric or dimension value. If you store them in a database and later retrieve them by (only an example) request id. It would be possible to know all the details of that particular request: how long it took, which user initiated it and so on.</p>
+<pre><code class="language-json">{
+  &quot;request_id&quot;: 123,
+  &quot;user_id&quot;: 456,
+  &quot;response_time&quot;: 300,
+  &quot;params&quot;: [&quot;something=else&quot;],
+  &quot;database_response_time&quot;: 200,
+}
+</code></pre>
+<p>You can pick one of those dimensions and try to aggregate it to create a time series, but there is a lot of value in picking it up and looking directly at a single structured event.</p>
+<h3>Distributed Tracing</h3>
+<blockquote>
+<p>Distributed traces are simply an interrelated series of events - Honeycomb’s O’Reilly Book Observability Engineering</p>
+</blockquote>
+<p>Let’s build on top of the structured events. What if a user request to your system would mean that a couple of internal services would be called before the response is sent back to them? So, let’s say that we have something like:</p>
+<p><img src="/opentelemetry_timeseries_metrics_and_a_bit_of_rust/service-req.png" alt="service-req.png" /></p>
+<p>From our previous definition, each service would store its own structured event and it would not be possible to connect the three together. In the image, we could share the same request id, but imagine that service 1 sends 3 or 4 requests to service 2. Service 2 would have 3 or 4 structured events (one for each request) and it would be very confusing to connect everything together.</p>
+<p>OpenTelemetry <a href="https://opentelemetry.io/docs/concepts/signals/traces/">has a nice set of standards for us to follow</a> in order to create well-structured traces. The first concept is the “Span”, you know what I just called in the previous paragraph “each service structured event”? We are now going to call it Span. A span represents a unit of work or operation.</p>
+<p>Every span has a <a href="https://opentelemetry.io/docs/concepts/signals/traces/#spans">set of attributes</a> which I will not detail. Although I need to talk about a few important to our initial problem: how to connect those spans together.</p>
+<ol>
+<li>All of the Spans related to the same request will have the same trace id (which is somewhat similar to what we were calling request id)</li>
+<li>All of the Spans will have span id</li>
+<li>All (except the root) spans will have a parent span id, which as the name says it’s the id of the span which made the request to that specific span.</li>
+</ol>
+<p>With all that data you can construct waterfall charts just as the one in the OpenTelemetry documentation:</p>
+<p><img src="/opentelemetry_timeseries_metrics_and_a_bit_of_rust/Untitled.png" alt="Untitled" /></p>
+<p>As they say on the website “Waterfall diagrams show the parent-child relationship between a root span and its child spans. When a span encapsulates another span, this also represents a nested relationship.”</p>
+<h2>Instrument your code</h2>
+<p>The theory was nice, but how can we use OpenTelemetry?</p>
+<blockquote>
+<p><strong>Note</strong>: As I write this, the status of the <code>Metric</code> support for Rust on OpenTelemetry is Alpha, so you can expect it to change fast. As I researched to write this examples I found many posts/examples that were just not working anymore. Now they do have a working example on the official repo, so I would expect it to always work with the latest crate version: <a href="https://github.com/open-telemetry/opentelemetry-rust/blob/main/examples/metrics-basic/src/main.rs">https://github.com/open-telemetry/opentelemetry-rust/blob/main/examples/metrics-basic/src/main.rs</a></p>
+</blockquote>
+<p>I’m using OpenTelemetry new <a href="https://github.com/open-telemetry/opentelemetry-rust/commit/e4ef2a9f23becf057f4ea9963fe17a4be274eeeb">SDK API</a>. As I write it’s not released it at crates.io, so we need to fetch directly from Github:</p>
+<pre><code class="language-rust">opentelemetry_api = { git = &quot;https://github.com/open-telemetry/opentelemetry-rust.git&quot;, features = [&quot;metrics&quot;] }
+opentelemetry_sdk = { git = &quot;https://github.com/open-telemetry/opentelemetry-rust.git&quot;, features = [&quot;rt-tokio&quot;] }
+opentelemetry-otlp = { git = &quot;https://github.com/open-telemetry/opentelemetry-rust.git&quot;, features = [&quot;tonic&quot;, &quot;metrics&quot;] }
+</code></pre>
+<p>About the code, let’s for sake of the example create a super simple webservice that just returns “Hello World” with actix-web.</p>
+<pre><code class="language-rust">#[actix_web::main]
+async fn main() -&gt; std::io::Result&lt;()&gt; {
+
+    HttpServer::new(|| App::new().service(index))
+        .bind((&quot;127.0.0.1&quot;, 8080))?
+        .run()
+        .await;
+
+    Ok(())
+}
+
+#[get(&quot;/&quot;)]
+async fn index() -&gt; impl Responder {
+    &quot;Hello, World!&quot;
+}
+</code></pre>
+<p>Ok, so now we need to instrument our code. OpenTelemetry allow users to properly handle metrics, traces and logs. Logs is not yet implemented for Rust SDK and for the sake of simplicity let’s only setup metrics.</p>
+<p>OpenTelemetry works with different vendors, but let’s go full on OpenTelemetry and use their own protocol: OTLP:</p>
+<pre><code class="language-rust">fn init_meter_provider() -&gt; metrics::Result&lt;MeterProvider&gt; {
+    let export_config = ExportConfig {
+        endpoint: &quot;http://localhost:4317&quot;.to_string(),
+        ..ExportConfig::default()
+    };
+    opentelemetry_otlp::new_pipeline()
+        .metrics(runtime::Tokio)
+        .with_exporter(
+            opentelemetry_otlp::new_exporter()
+                .tonic()
+                .with_export_config(export_config),
+        )
+        .build()
+}
+</code></pre>
+<p>That code uses the <code>opentelemetry_otlp</code> crate to define our new pipeline.</p>
+<p>Now we need to call that method on our main:</p>
+<pre><code class="language-rust">#[actix_web::main]
+async fn main() -&gt; std::io::Result&lt;()&gt; {
+
+    let meter_provider = init_meter_provider().unwrap();
+
+    HttpServer::new(|| App::new().service(index))
+        .bind((&quot;127.0.0.1&quot;, 8080))?
+        .run()
+        .await;
+
+    meter_provider.shutdown().unwrap();
+    Ok(())
+}
+</code></pre>
+<p>Great! Let’s emit a metric everytime someone access our webservice. There are different types of metrics and the following are the supported by OpenTelemetry SDK (quoting their <a href="https://opentelemetry.io/docs/concepts/signals/metrics/">documentation</a>)</p>
+<ul>
+<li><strong>Counter</strong>: A value that accumulates over time – you can think of this like
+an odometer on a car; it only ever goes up.</li>
+<li><strong>Asynchronous Counter</strong>: Same as the <strong>Counter</strong>, but is collected once for
+each export. Could be used if you don’t have access to the continuous
+increments, but only to the aggregated value.</li>
+<li><strong>UpDownCounter</strong>: A value that accumulates over time, but can also go down
+again. An example could be a queue length, it will increase and decrease with
+the number of work items in the queue.</li>
+<li><strong>Asynchronous UpDownCounter</strong>: Same as the <strong>UpDownCounter</strong>, but is
+collected once for each export. Could be used if you don’t have access to the
+continuous changes, but only to the aggregated value (e.g., current queue
+size).</li>
+<li><strong>(Asynchronous) Gauge</strong>: Measures a current value at the time it is read. An
+example would be the fuel gauge in a vehicle. Gauges are <em>always</em>
+asynchronous.</li>
+<li><strong>Histogram</strong>: A histogram is a client-side aggregation of values, e.g.,
+request latencies. A histogram is likely a good choice if you have a lot of
+values, and are not interested in every individual value, but a statistic
+about these values (e.g., How many requests take fewer than 1s?)</li>
+</ul>
+<p>Let’s count the number of requests, so let’s use counter:</p>
+<pre><code class="language-rust">#[get(&quot;/&quot;)]
+async fn index() -&gt; impl Responder {
+    let cx = Context::current();
+    let meter = global::meter(&quot;hello_world_saas&quot;);
+    let counter = meter.u64_counter(&quot;requests&quot;).init();
+    counter.add(&amp;cx, 1, &amp;[KeyValue::new(&quot;server&quot;, &quot;my_pc&quot;)]);
+    &quot;Hello, World!&quot;
+}
+</code></pre>
+<p>So we get our <code>requests</code> counter from our <code>hellow_world_saas</code> meter and we increment by one using the tag <code>server</code> with the value <code>my_pc</code>.</p>
+<p>And yeah, that is it! Emitting metrics should always be super simple, the main problem is really finding the right ones to emit. If you don’t want to think too much about it, you can use something like <a href="https://autometrics.dev/">https://autometrics.dev/</a> to automatically generate the most useful metrics for you and you can add your own custom metrics as you go.</p>
+<h2>The Data Collector</h2>
+<blockquote>
+<p>The OpenTelemetry project facilitates the collection of telemetry data via the OpenTelemetry Collector. The OpenTelemetry Collector offers a vendor-agnostic implementation on how to receive, process, and export telemetry data. It removes the need to run, operate, and maintain multiple agents/collectors in order to support open source observability data formats (e.g. Jaeger, Prometheus, etc.) sending to one or more open source or commercial back-ends. In addition, the Collector gives end-users control of their data. The Collector is the default location instrumentation libraries export their telemetry data. - <a href="https://opentelemetry.io/docs/concepts/data-collection/">OpenTelemetry documentation</a></p>
+</blockquote>
+<p>So how you expose your data now that we have instrumented our code? Well, you could push your data directly to whatever backend you are using for your telemetry, but as OpenTelemetry <a href="https://opentelemetry.io/docs/collector/#when-to-use-a-collector">tells</a> “In general we recommend using a collector alongside your service, since it allows your service to offload data quickly and the collector can take care of additional handling like retries, batching, encryption or even sensitive data filtering.” That is the “agent” mode, we could also have a gateway where multiple machines push to it. Another option would be to let something pull your metrics. For example, you could expose a <code>/metrics</code> endpoint where a Prometheus instance would pull the metrics from your service.</p>
+<p>The  “<a href="https://opentelemetry.io/docs/collector/deployment/agent/">agent</a>” mode looks like this:</p>
+<p><img src="/opentelemetry_timeseries_metrics_and_a_bit_of_rust/Untitled%201.png" alt="Untitled" /></p>
+<p>Where your application and the collector are on the same machine.</p>
+<p>If you want to try another mode check out the “<a href="https://opentelemetry.io/docs/collector/getting-started/">Getting Started</a>” and “<a href="https://opentelemetry.io/docs/collector/deployment/">Deployment</a>” sections of their documentation.</p>
+<p>Our service pushes the metrics using gRPC and the collector handles whatever backend we are using (e.g. Prometheus). This works fine because the Collector, as the <a href="https://opentelemetry.io/docs/concepts/data-collection/#components">documentation</a> says, is made of four components:</p>
+<ol>
+<li>Receivers: How to get data into the Collector; these can be push or pull based</li>
+<li>Processors: What to do with received data</li>
+<li>Exporters: Where to send received data; these can be push or pull based</li>
+<li>Connectors: A connector is both an exporter and receiver. It consumes data as an exporter in one pipeline and emits data as a receiver in another pipeline</li>
+</ol>
+<p>You can setup the collector easily with different modes, but in our case we just want to see it collecting data, so let’s use the following configuration</p>
+<pre><code class="language-yaml"># otel-collector-config.yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+exporters:
+  logging:
+    loglevel: debug
+  file:
+    path: /etc/otelcol/metrics.json
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: []
+      exporters: [logging, file]
+</code></pre>
+<p>And if we run this using the docker:</p>
+<pre><code class="language-bash">docker run  \
+    -p 4317:4317 -p 13133:13133 \
+    -v $(pwd)/otel-collector-config.yaml:/etc/otelcol/config.yaml \
+    -v $(pwd)/metrics.json:/etc/otelcol/metrics.json \
+    otel/opentelemetry-collector:latest
+</code></pre>
+<p>We should now have a collector running on our machine. And if you <code>tail -F the metrics.json</code> file that we mapped through docker you should see our metrics:</p>
+<pre><code class="language-bash">{
+  &quot;resourceMetrics&quot;: [
+    {
+      &quot;resource&quot;: {
+        &quot;attributes&quot;: [
+          {
+            &quot;key&quot;: &quot;service.name&quot;,
+            &quot;value&quot;: {
+              &quot;stringValue&quot;: &quot;unknown_service&quot;
+            }
+          }
+        ]
+      },
+      &quot;scopeMetrics&quot;: [
+        {
+          &quot;scope&quot;: {
+            &quot;name&quot;: &quot;hello_world_saas&quot;
+          },
+          &quot;metrics&quot;: [
+            {
+              &quot;name&quot;: &quot;requests&quot;,
+              &quot;sum&quot;: {
+                &quot;dataPoints&quot;: [
+                  {
+                    &quot;attributes&quot;: [
+                      {
+                        &quot;key&quot;: &quot;server&quot;,
+                        &quot;value&quot;: {
+                          &quot;stringValue&quot;: &quot;my_pc&quot;
+                        }
+                      }
+                    ],
+                    &quot;startTimeUnixNano&quot;: &quot;1684482478787681712&quot;,
+                    &quot;timeUnixNano&quot;: &quot;1684482768597127582&quot;,
+                    &quot;asInt&quot;: &quot;1&quot;
+                  }
+                ],
+             ......
+</code></pre>
+<p>The full example is available at: <a href="https://github.com/era/rust_opentelemetry_with_otlp_example">github/era/rust_opentelemetry_with_otlp_example</a>.</p>
+<p>The advantage of using OpenTelemetry instead of something like Prometheus or even more proprietary software (HoneyComb, CloudWatch, …) directly is that if we ever change our telemetry backend, we don’t have to worry about changing all of our services with new SDKs. Another point is that maybe for production you want to use some paid service, but for dev you just want to use Prometheus since it’s super quick and cheap to setup.</p>
+<p>Monitoring and Observability is an important part of any production system. If you want to read more about it I do recommend <a href="https://info.honeycomb.io/observability-engineering-oreilly-book-2022">Honeycomb’s book</a> and <a href="https://www.amazon.co.uk/Practical-Monitoring-Mike-Julian/dp/1491957352">Practical Monitoring: Effective Strategies for the Real World</a>.</p>
+<h2>The end</h2>
+<p>I hope this quick introduction to metrics and OpenTelemetry is useful for someone. If you want to discuss something or you have a opensource project that you want some help with, just ping me on <a href="https://www.twitter.com/elias_era">twitter</a> or send me an email at rust@{{this_domain}}.</p>]]></content:encoded></item><item><title>Peg_and_rust</title><link>https://elias.sh/posts/peg_and_rust.html</link><description><![CDATA[For the first post here, nothing better than writing a bit about the tool I
+created to build this static website.]]></description><author></author><guid>https://elias.sh/posts/peg_and_rust.html</guid><pubDate>Tue, 16 May 2023 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>For the first post here, nothing better than writing a bit about the tool I created to build this static website.</p>
+<p>During the end of the pandemic, I had the opportunity to take the “<a href="http://lms.classpert.com/classpertx/courses/building-a-programming-language/cohort">Building a Programming Language</a>” by Roberto Ierusalimschy (creator of the Lua programming language). He mainly talked about PEGs, more specifically about LPEG (a Lua library he created). Since then I wanted to play with PEG using Rust and the TinyLang is the result of it.</p>
+<p>First things first, before I talk about PEG in Rust (and my <a href="https://github.com/era/tinylang">TinyLang</a>), let’s go through the basics.</p>
+<h2>How programming languages are born</h2>
+<p>Take a look at the main components of an Interpreted Programming Language:</p>
+<ol>
+<li>Tokenizer (Lexical Analysis): scans the source code and breaks it down into meaningful tokens. Tokens represent the smallest units of the language, such as keywords, identifiers, literals, and operators.</li>
+<li>Parser: Takes the tokens generated by the Tokenizer and constructs a parse tree or an abstract syntax tree (AST). The parse tree represents the structure of the program based on the grammar rules of your language.</li>
+<li>Interpreter (tree-walk Interpreter): Walks the AST and handles the runtime environment, including memory management, variable tracking, and control flow handling.</li>
+</ol>
+<h2>Parsing expression grammar (PEG)</h2>
+<blockquote>
+<p>In computer science, a parsing expression grammar (PEG) is a type of analytic formal grammar, i.e. it describes a formal language in terms of a set of rules for recognizing strings in the language.
+Syntactically, PEGs also look similar to context-free grammars (CFGs), but they have a different interpretation: the choice operator selects the first match in PEG, while it is ambiguous in CFG. This is closer to how string recognition tends to be done in practice, e.g. by a recursive descent parser.</p>
+<p>Unlike CFGs, PEGs cannot be ambiguous; a string has exactly one valid parse tree or none. PEGs are well-suited to parsing computer languages.</p>
+<p><a href="https://en.wikipedia.org/wiki/Parsing_expression_grammar">https://en.wikipedia.org/wiki/Parsing_expression_grammar</a></p>
+</blockquote>
+<p>The Wikipedia description of it does not seem easy to parse (pun intended), it basically defines PEGs in contrast with CFGs.</p>
+<p>Both PEG and CFG can be used to create parsers for programming languages. The main difference is that PEG cannot be ambiguous, so in theory you can easily read the PEG file and understand the grammar.</p>
+<p>Let’s take a look at <a href="https://pest.rs/">PEST</a> a PEG Rust Library with an example from their documentation.  The following is an example of a grammar for a list of alpha-numeric identifiers where the first identifier does not start with a digit:</p>
+<pre><code>alpha = { 'a'..'z' | 'A'..'Z' }
+digit = { '0'..'9' }
+
+ident = { (alpha | digit)+ }
+
+ident_list = _{ !digit ~ ident ~ (&quot; &quot; ~ ident)+ }
+</code></pre>
+<p>Forget about the <code>_</code> for now. The first rule defines alpha characters and will match with anything between a and z and A and Z. The second match digits following the same approach.</p>
+<p>The third rule is more interesting it matches <code>alpha</code> or <code>digit</code> ONE or more times (the <code>+</code>) If we wanted to match ZERO or more we could replace it with <code>*</code>. The rule <code>ident_list</code> matches something that is not (<code>!</code>) a digit followed (<code>~</code>) by an <code>ident</code> followed by a “space and ident” one or more times.</p>
+<p>If we try to match against <code>a 1 b</code>, it will generate the following:</p>
+<pre><code class="language-jsx">- ident &gt; alpha: &quot;a&quot;
+- ident &gt; digit: &quot;1&quot;
+- ident &gt; alpha: &quot;b&quot; 
+</code></pre>
+<p>You may notice that we do not have any <code>ident_list</code> and the reason is that the <code>_</code> is a modifier to make it a “silent rule”, basically a rule that will not be in our final AST.</p>
+<p>The output generated looks like the following image where all the idents are on the same iterable data structure:</p>
+<p><img src="/peg_and_rust/Untitled-2023-05-16-0903(1).png" alt="" /></p>
+<h2>TinyLang</h2>
+<p>Ok, so let’s head back to my side project. TinyLang is not really a general-purpose language, but a template language. The main goal is to define based on templates how a static website will look like. My main needs are:</p>
+<ol>
+<li>Anything that is pure HTML should just be copied over</li>
+<li>I need a way to “print” variable values</li>
+<li>I need flow control so I can hide sections depending on variable values and repeat sections based on collections</li>
+<li>I need to render partials.</li>
+</ol>
+<p>Let’s forget the fourth need for now. If you take a look at my <a href="https://github.com/era/tinylang/blob/master/grammar/template_lang.pest">pest file</a> (where I define the grammar for the language) you are going to see that the entry point of my grammar (rule <code>g</code>) is the following:</p>
+<p><code>g = ${ (dynamic | print | invalid | html)* }</code></p>
+<p>The <code>$</code> makes the rule a compound atomic. I needed it because by default PEST would consider that each rule is separated by space. And would “eat” a space in some cases. I will detail this more later.</p>
+<p>Also, remember from our definition of PEG, that the order of the rules is important! If an input matches the first rule, the PEG library won’t try to match it against the other rules to see if they “match more”. In our case, the <code>html</code>rule is:</p>
+<p><code>html = !{ (ANY ~ (!(&quot;{{&quot; | &quot;{%&quot;) ~ ANY)*) ~ NON_SILENT_WHITESPACE** }</code></p>
+<p>You can see that we match against ANY character, if the HTML rule was the first it could crash with other rules. One interesting point is that the rule will match any character until it finds a <code>{{</code> or a <code>{%</code> but originally the rule was something like <code>html = { ANY }</code>. That would create a token for each character and slow down the whole process. And of course, the order in which HTML appears on the <code>g</code> rule would matter even more since would match everything without consideration for the other rules.</p>
+<p>The <code>dynamic</code> handles my third need (the control flow) and the commands should be inside a <code>{% %}</code> . The <code>print</code> handles my second need and whatever I want to print should be inside <code>{{ }}</code>. The <code>invalid</code> is actually a hack to handle invalid inputs, where you add a <code>{%</code> or a <code>{{</code> and never close it.  I will probably remove it at a later stage. The final rule is HTML which is basically anything.</p>
+<p>That grammar should output things like:</p>
+<p><img src="/peg_and_rust/tinylang-g.png" alt="" /></p>
+<p>So each HTML node just points to a big <code>&amp;str</code>, while print and dynamic point to more complex data structures, since they should handle expressions such as <code>a + 4  + 5 + my_object.property + func_call()</code>.</p>
+<p>So in theory we could walk the main iterable structure and handle each node with a special function. Rust is great for that! Something like:</p>
+<pre><code class="language-rust">use pest::Parser;
+
+#[derive(Parser)]
+#[grammar = &quot;../grammar/template_lang.pest&quot;]
+struct TemplateLangParser;
+
+pub fn eval(input: &amp;str) -&gt; Result&lt;String, ParseError&gt; {
+    let pairs = parse(input)?.next().unwrap().into_inner();
+    let mut output = String::new();
+
+    for pair in pairs {
+        let current_output = match pair.as_rule() {
+            Rule::html =&gt; visit_html(pair)?,
+            Rule::print =&gt; visit_print(pair.into_inner())?,
+            Rule::dynamic =&gt; visit_dynamic(pair.into_inner())?,
+            Rule::invalid =&gt; visit_invalid(pair.into_inner())?,
+            _ =&gt; unreachable!(),
+        };
+        output.push_str(&amp;current_output);
+    }
+
+    Ok(output)
+}
+
+pub fn parse(input: &amp;str) -&gt; Result&lt;Pairs&lt;Rule&gt;, ParseError&gt; {
+    // this is g which contains children which are
+    // either html chars, print statments or dynamic statements
+    TemplateLangParser::parse(Rule::g, input).map_err(|e| {
+        ParseError::Generic(e.to_string())
+    })
+}
+</code></pre>
+<p>Thanks to Rust enums and the PEST library we could write something this simple to make everything work. Each of the <code>visit_*</code> methods would also need to have a <code>match</code> against the rules they are supposed to handle and thanks to the power of abstraction we would have our language done.</p>
+<p>But TinyLang has one implementation detail that complicates our life. If our grammar would output something like:</p>
+<p><img src="/peg_and_rust/tinylang-ideal.png" alt="" /></p>
+<p>That initial design would work almost out of the box. When processing a dynamic node we would match against the possible rules (<code>if</code>, <code>for</code> and so on). For the <code>if</code> node, we evaluate its first child, if it’s <code>true</code>, we execute/output the second child, if not we execute/output the third (if exists).</p>
+<p>But for our grammar will really output the following:</p>
+<p><img src="/peg_and_rust/tinylang-real-world.png" alt="" /></p>
+<p>This complicates a bit more things, as we walk through the main iterable structure, we also need to keep track of things like: <code>if</code>, <code>for</code> and so on. Which “uglifies” the code a bit, but the concept is still the same.
+And of course, I could modify the grammar to output the previous solution (and probably I will at some point in the future).</p>
+<h2>State and function calls</h2>
+<p>The template language also needs a state. Because we want to setup common variables and collections to use it inside the templates. One common example is looping through all the posts collections in order to show their titles on index.</p>
+<p>To make it more simple, users are not allowed to assign new values to variables. Well, not explicitly anyway, because the for loop will create a variable to allow things like:</p>
+<pre><code class="language-jsx">{% for item in colection %}
+
+	{{item}}
+
+{% end %}
+</code></pre>
+<p>Another simplification is that we have only a global state, meaning we don't need to worry about local variables on different scopes. This mostly makes sense because users cannot assign new values to variables anyway.</p>
+<p>This global state is basically a map between variable names and values. That is why TinyLang uses a <code>HashMap&lt;String, ???&gt;</code> as state. The keys are the variable names, but what about the values? What should it be? In theory, we could just say that any valid Rust value is also valid, but the implementation of TinyLang and Rust would be much more coupled than it already is. Instead, we use an enum <code>TinyLangType</code>, which basically represents any possible value inside TinyLang world.</p>
+<pre><code class="language-rust">type State = HashMap&lt;String, TinyLangType&gt;
+
+pub enum TinyLangType {
+    String(String),
+    /// any integer or float is represented as a f64
+    Numeric(f64),
+    Bool(bool),
+    /// Any function will receive the parameters as an array
+    /// so sum(1, 2, 3, 4) will be transformed as sum(vec![1, 2, 3, 4])
+    /// all functions must return a TinyLangType, if yours does not return
+    /// anything use the TinyLangType::Nil type.
+    /// Users cannot declare functions inside the template file.
+    /// The function also receives the global state
+    Function(Function),
+    /// Represents a Vector to be iterated using the for loop
+    /// it cannot be created inside the template file.
+    Vec(Vec&lt;TinyLangType&gt;),
+    /// Each instance of an object has their own &quot;vtable&quot;
+    Object(State),
+    Nil,
+}
+</code></pre>
+<p>Thanks to the traits in the Rust ecosystem we can make it easier for users to transform Rust types into TinyLangTypes:</p>
+<pre><code class="language-rust">impl From&lt;&amp;str&gt; for TinyLangType {
+    fn from(value: &amp;str) -&gt; Self {
+        Self::String(value.to_string())
+    }
+}
+</code></pre>
+<p>Allowing us to write:</p>
+<pre><code class="language-rust">let a_tinylang_string: TinyLangType = &quot;yay, super simple&quot;.into();
+</code></pre>
+<p>TinyLang also supports function calls such as <code>{% my_func_call('abc') %}</code>. I won't enter into much details here, but this works by packing all parameters as an array of <code>TinyLangType</code> and calling a function declared on the Rust side.</p>
+<h2>Code</h2>
+<p>With all this information, I think is possible to navigate the code and understand what is going on, even if you never used PEST or PEGs before. I chose PEST because it seemed the simplest library out there and the documentation was good enough. I hope this post contributes somehow to people that want to use PEST, but wants a bigger example than the one in their book.</p>
+<p>The code is available at <a href="https://github.com/era/tinylang">https://github.com/era/tinylang</a>. And since it's so easy to compile to WebAssembly, I also made a website where you can try it out <a href="https://tinylang.elias.tools/">https://tinylang.elias.tools/</a>.</p>
+<h2>That is it</h2>
+<p>I hope you enjoyed this trip around my pet project.
+At the moment I’m really enthusiastic about Rust programming language and
+I’m looking for projects to collaborate with.
+If you want help with your side/pet project, let me know on <a href="https://www.twitter.com/elias_era">Twitter</a>, and feel free to DM me :), or just email me rust@{{this_domain}}.</p>
+<p>If you are interested on TinyLang, you can check it on <a href="https://github.com/era/tinylang">Github</a>.</p>
+<p>The code for this website is at <a href="https://github.com/era/elias.sh">Github</a> as well.</p>
+<p>Thank you for reading,</p>]]></content:encoded></item></channel></rss>
