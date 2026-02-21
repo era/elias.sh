@@ -429,7 +429,7 @@ fn main() {
     trace.stop();
 }
 </code></pre>
-<p>Nice, prety simple, right? And with that we can get the finromation we want. But the sad part is what we can do if we are dropping messages? And how do we even know that?</p>
+<p>Nice, prety simple, right? And with that we can get the infromation we want. But the sad part is what we can do if we are dropping messages? And how do we even know that?</p>
 <p>We can query the stats:</p>
 <pre><code>logman query &quot;YourSessionName&quot; -ets
 
@@ -443,6 +443,7 @@ Buffers lost:         0
 <p>With FerrisEtw we can use <a href="https://docs.rs/ferrisetw/latest/ferrisetw/trace/struct.TraceProperties.html">TraceProperties</a> to try to optimize the buffers for our usage. Another option is to use a channel to push all
 the events to another thread.</p>
 <p>Also VERY IMPORTANT, do not block on the <code>callback</code>, events are proccessed in order, so if you block, you are holding the queue.</p>
+<p>Other than that, there is no much we can do. If there is a burst of events and you can keep up, you are going to lose some of them.</p>
 	</main>
         <div class="footer">
       Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
