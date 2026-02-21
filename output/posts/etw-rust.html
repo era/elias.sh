@@ -1,7 +1,9 @@
-<!-- index.html -->
 <html>
   <head>
-    <title>Elias' homepage</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 <style>
 
 :root {
@@ -107,7 +109,7 @@ nav ul {
 }
 
 main {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 2rem auto;
     padding: 0 2rem;
 }
@@ -211,6 +213,8 @@ a::after {
     transition: transform 0.4s ease;
 }
 
+
+
 /* Visited links */
 a:visited {
     color: var(--rust-visited);
@@ -228,6 +232,12 @@ nav a {
     padding: 0.5rem 1rem;
     border: 1px solid transparent;
     transition: all 0.3s ease;
+}
+
+nav a:hover {
+    border: 1px solid var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.15);
+    border-radius: 3px;
 }
 
 nav a::after {
@@ -315,6 +325,7 @@ blockquote footer::before {
     content: '— ';
 }
 
+
 img {
     filter: brightness(0.8) contrast(1.1) sepia(0.1);
     transition: filter 0.4s ease;
@@ -341,69 +352,101 @@ img {
 }
 
 </style>
+  <title>EDR, ETW and Rust </title>
+
   </head>
   <body class="hack main container">
-    <main>
-      <p><img src="https://www.elias.sh/glauber.png" style="float: left; margin-right: 25px;" />
-      Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
-      Nice to meet you. I create stuff for a living. And well... I am a Software Engineer.</p>
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>EDR, ETW and Rust</h1>
+	<h6>2026-02-21</h6>
+	<p>Still on the EDR theme. I would like to talk a little bit about <a href="https://learn.microsoft.com/en-us/windows/win32/etw/event-tracing-portal">Event Tracing for Windows (ETW)</a>. ETW is a logging mechanism built into Windows that allows applications and the kernel to log events. From an EDR perspective, it's one of the main sources of telemetry for monitoring system activity.</p>
+<p>The API is organized around three components: controllers manage tracing sessions and enable providers, providers generate the events, and consumers read and process them. For EDR purposes, we are interested in the consumer side, specifically consuming events in real time from memory, as opposed to reading from log files.</p>
+<p><img src="https://www.elias.sh/etw/diagram.png" alt="ETW diagram" /></p>
+<p>As a consumer, our role is simple: we select one or more ETW sessions as event sources and process the events as they arrive. A consumer can tap into multiple sessions simultaneously, with the system delivering events in chronological order.</p>
+<p>ETW is lossy. Events can and will be dropped under certain conditions:</p>
+<ul>
+<li>When an event (including its header and payload) exceeds 64K in size</li>
+<li>When the ETW buffer size is smaller than the event size</li>
+<li>When a real-time consumer isn't consuming events fast enough—if we can't keep up, events get dropped</li>
+<li>When logging to disk, if the disk is too slow to handle the logging rate</li>
+</ul>
+<p>ETW is not exactly friendly. There are many details and caveats to navigate just to get a trace session running, and once you do, you still have to deal with schema discovery and parsing event properties. So of course, we shouldn't write all by hand. In Rust, we can use ferrisetw for that.</p>
+<p>From the documentation, we have the following example:</p>
+<pre><code class="language-rust">use ferrisetw::EventRecord;
+use ferrisetw::schema_locator::SchemaLocator;
+use ferrisetw::parser::Parser;
+use ferrisetw::provider::Provider;
+use ferrisetw::trace::{UserTrace, TraceTrait};
 
-      <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems.
-      I'm also a big fan of Platform Engineering and DX.</p>
-      <br />
-      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a> or follow me at <a href="https://bsky.app/profile/elias.sh">Bsky</a>.
+fn process_callback(record: &amp;EventRecord, schema_locator: &amp;SchemaLocator) {
+    // Basic event scrutinizing can be done directly from the `EventRecord`
+    if record.event_id() == 2 {
+        // More advanced info can be retrieved from the event schema
+        // (the SchemaLocator caches the schema for a given kind of event, so this call is cheap in case you've already encountered the same event kind previously)
+        match schema_locator.event_schema(record) {
+            Err(err) =&gt; println!(&quot;Error {:?}&quot;, err),
+            Ok(schema) =&gt; {
+                println!(&quot;Received an event from provider {}&quot;, schema.provider_name());
 
-      <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`. I'm available during business hours in Central European Time (CET).</p>
+                // Finally, properties for a given event can be retrieved using a Parser
+                let parser = Parser::create(record, &amp;schema);
 
-      <p><small style="font-size: 12px;">In case you don't know, the person in the photo is <a href="https://en.wikipedia.org/wiki/Glauber_Rocha">Glauber Rocha</a>,
-      not me.</small></p>
-      <h2>Work</h2>
-      <ul>
-        <li>(2024-) Cybereason: (safe and unsafe) Rust for EDR produts</li>
-        <li>(2024-2024) Mercari: A lot of golang and Flink for Trust & Safety organization</li>
-        <li>(2021-2024) Huawei Cloud: Rust and Golang for cloud infrastructure</li>
-        <li>(2019-2021) Stripe: Ruby for payments</li>
-        <li>(2015-2019) AWS: Control Plane development for Redshift</li>
-        <li>...</li>
-      </ul>
+                // You'll need type inference to tell ferrisetw what type you want to parse into
+                // In actual code, be sure to correctly handle Err values!
+                let process_id: u32 = parser.try_parse(&quot;ProcessID&quot;).unwrap();
+                let image_name: String = parser.try_parse(&quot;ImageName&quot;).unwrap();
+                println!(&quot;PID: {} ImageName: {}&quot;, process_id, image_name);
+            }
+        }
+    }
+}
 
-      <h1>Blog Posts</h1>
-      <ul>
-           
-            <li><a href="/posts/etw-rust.html">EDR, ETW and Rust</a></li>
-           
-            <li><a href="/posts/the_rust_revolution.html">The Rust Revolution</a></li>
-           
-            <li><a href="/posts/rust_is_more.html">Rust is much more than just a programming language</a></li>
-           
-            <li><a href="/posts/apple-edr-rust.html">EDR, Rust and Apple</a></li>
-           
-            <li><a href="/posts/kernel-mode-and-cybersecurity.html">Kernel Mode, Cybersecurity and Rust</a></li>
-           
-            <li><a href="/posts/rust-forge-2025.html">Rust Forge 2025</a></li>
-           
-            <li><a href="/posts/quic.html">Quic server in Rust</a></li>
-           
-            <li><a href="/posts/query_engine.html">Iceberg, Parquet and query engines</a></li>
-           
-            <li><a href="/posts/common_mistakes_with_async_rust.html">Common mistakes with Async Rust</a></li>
-           
-            <li><a href="/posts/datafederation_and_rust.html">Data Federation and Trustfall</a></li>
-           
-            <li><a href="/posts/component_model_wasm.html">Why do I like WebAssembly? And a Rust example!</a></li>
-           
-            <li><a href="/posts/visualizing_metrics.html">Visualizing Metrics</a></li>
-           
-            <li><a href="/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust.html">OpenTelemetry, time series, metrics and a bit of Rust</a></li>
-           
-            <li><a href="/posts/peg_and_rust.html">PEG and Rust</a></li>
-        
-      </ul>
-    </main>
+fn main() {
+    // First we build a Provider
+    let process_provider = Provider
+        ::by_guid(&quot;22fb2cd6-0e7b-422b-a0c7-2fad1fd0e716&quot;) // Microsoft-Windows-Kernel-Process
+        .add_callback(process_callback)
+        // .add_callback(process_callback) // it is possible to add multiple callbacks for a given provider
+        // .add_filter(event_filters)      // it is possible to filter by event ID, process ID, etc.
+        .build();
+
+    // We start a real-time trace session for the previously registered provider
+    // Callbacks will be run in a separate thread.
+    let mut trace = UserTrace::new()
+        .named(String::from(&quot;MyTrace&quot;))
+        .enable(process_provider)
+        // .enable(other_provider) // It is possible to enable multiple providers on the same trace.
+        // .set_etl_dump_file(...) // It is possible to dump the events that the callbacks are processing into a file
+        .start_and_process()       // This call will spawn the thread for you.
+                                   // See the doc for alternative ways of processing the trace,
+                                   // with more or less flexibility regarding this spawned thread.
+        .unwrap();
+
+    std::thread::sleep(std::time::Duration::from_secs(3));
+
+    // We stop the trace
+    trace.stop();
+}
+</code></pre>
+<p>Nice, prety simple, right? And with that we can get the finromation we want. But the sad part is what we can do if we are dropping messages? And how do we even know that?</p>
+<p>We can query the stats:</p>
+<pre><code>logman query &quot;YourSessionName&quot; -ets
+
+
+Name:                 YourSessionName
+...
+Lost events:          42
+Buffers written:      100
+Buffers lost:         0
+</code></pre>
+<p>With FerrisEtw we can use <a href="https://docs.rs/ferrisetw/latest/ferrisetw/trace/struct.TraceProperties.html">TraceProperties</a> to try to optimize the buffers for our usage. Another option is to use a channel to push all
+the events to another thread.</p>
+<p>Also VERY IMPORTANT, do not block on the <code>callback</code>, events are proccessed in order, so if you block, you are holding the queue.</p>
+	</main>
         <div class="footer">
       Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
     </div>
 
-    ✊ <span class="symbol">🇵🇸</span> I stand with Palestine - Free Palestine <span class="symbol">🇵🇸</span> ✊
   </body>
 </html>
