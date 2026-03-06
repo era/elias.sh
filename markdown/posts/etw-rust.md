@@ -80,7 +80,7 @@ fn main() {
 }
 ```
 
-Nice, prety simple, right? And with that we can get the infromation we want. But the sad part is what we can do if we are dropping messages? And how do we even know that?
+Nice, pretty simple, right? And with that we can get the information we want. But the sad part is what we can do if we are dropping messages? And how do we even know that?
 
 We can query the stats:
 
@@ -95,9 +95,8 @@ Buffers written:      100
 Buffers lost:         0
 ```
 
-With FerrisEtw we can use [TraceProperties](https://docs.rs/ferrisetw/latest/ferrisetw/trace/struct.TraceProperties.html) to try to optimize the buffers for our usage. Another option is to use a channel to push all
-the events to another thread.
+With FerrisETW, we can use [TraceProperties](https://docs.rs/ferrisetw/latest/ferrisetw/trace/struct.TraceProperties.html) to try to optimize the buffers for our use. Another option is to use a channel to push all the events to another thread.
 
-Also VERY IMPORTANT, do not block on the `callback`, events are proccessed in order, so if you block, you are holding the queue.
+Also VERY IMPORTANT: do not block on the `callback`. Events are processed in order, so if you block, you are holding up the queue.
 
-Other than that, there is no much we can do. If there is a burst of events and you can keep up, you are going to lose some of them.
+Other than that, there is not much we can do. If there is a burst of events and you can't keep up, you are going to lose some of them.
