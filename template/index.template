@@ -373,6 +373,7 @@ img {
             <li><a href="{{post.partial_uri}}">{{ post.title }}</a></li>
         {% end %}
       </ul>
+      <img src="https://elias.sh/comunista.jpg" />
     </main>
     {{ render('template/_footer.template')}}
     ✊ <span class="symbol">🇵🇸</span> I stand with Palestine - Free Palestine <span class="symbol">🇵🇸</span> ✊
