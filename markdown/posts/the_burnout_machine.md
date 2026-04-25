@@ -12,7 +12,4 @@ The second aspect is the quality gates. If someone on your team is producing one
 The third aspect is a consequence of the previous two: quality is lower, and the number of features per day is huge. If you have worked on software engineering, you know what that equals to. So many bugs. Omg, so many of them. And bugs have higher priority; someone is suffering in production. I hope you are not oncall, because now, not only do you have to fix it during your business hours, but you need to mitigate an issue at 3AM, with a code so terrible, written by an LLM with so many useless abstractions that you decide to light a cigarette, after years without one. Is this life now? Well, probably. Finish this mitigation fast; tomorrow, you wake up early to keep delivering broken features.
 
 
-
-
-
-
+![](https://elias.sh/blade_runner.jpg)
