@@ -37,7 +37,7 @@ And these targets are always changing \[4\]:
 
 ## CIA Triad (Confidentiality, Integrity, Availability)
 
-The CIA triad is the foundation for major governmental regulations, such as Brasil's LGPD and the EU's GPDR. The concept maps information security measures to three components: confidentiality, integrity, and availability. It was introduced by Anderson Report in 1972. It's used mainly as goals or characteristics that software must hold regarding information security \[5\]:
+The CIA triad is the foundation for major governmental regulations, such as Brasil's LGPD and the EU's GPDR. The concept maps information security measures to three components: confidentiality, integrity, and availability. It was introduced by Anderson Report in 1972. It's used mainly as goals or characteristics that software must hold regarding information security \[5\], it's less about "how to detect and prevent cyber attacks" and more about "the bare minimum companies holding your data should do":
 
 **Confidentiality**: the property of information not being available or disclosed to unauthorised users. Data can only be accessed by the intended individuals or entities.
 
