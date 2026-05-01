@@ -1,0 +1,400 @@
+<html>
+  <head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+<style>
+
+:root {
+    --base-font-size: 18px;
+    --heading-multiplier: 1.5;
+    
+    --main-font: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    --alt-font: 'JetBrains Mono', 'Source Code Pro', monospace;
+
+    /* Rust-themed colors - inspired by Rust orange and dark themes */
+    --rust-primary: #DEA584;        /* Rust orange/brown */
+    --rust-secondary: #B7410E;      /* Darker rust */
+    --rust-accent: #FF7F50;         /* Coral/orange accent */
+    --rust-hover: #FFA07A;          /* Light salmon */
+    --rust-visited: #CD5B45;        /* Tomato red */
+    --rust-glow: rgba(222, 165, 132, 0.4);
+    --terminal-link: #83C092;       /* Softer green that complements rust colors */
+    
+    /* Updated color scheme */
+    --main-bg: #1A1A1A;            /* Dark gray instead of pure black */
+    --secondary-bg: #252525;        /* Slightly lighter dark gray */
+    --text-primary: #E8E8E8;
+    --text-secondary: #B0B0B0;
+    --glitch-color1: #DEA584;       /* Rust color for glitch */
+    --glitch-color2: #83C092;       /* Terminal green for glitch */
+}
+
+img {
+  max-width: 900px;
+  width: auto;
+  height: auto;
+}
+
+body {
+    background-color: var(--main-bg);
+    color: var(--text-primary);
+    font-family: var(--main-font);
+    line-height: 1.7;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+h1, h2, h3 {
+    color: var(--text-primary);
+    font-weight: 600; /* Slightly bolder for better readability */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: var(--alt-font);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+    color: var(--rust-primary);
+}
+
+h1::after {
+    content: '_';
+    animation: blink 1s step-end infinite;
+    color: var(--rust-accent);
+    margin-left: 5px;
+}
+
+.rust-crab {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 1.8rem;
+    animation: crab-walk 3s ease-in-out infinite;
+}
+
+@keyframes crab-walk {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(5px) rotate(-5deg); }
+    75% { transform: translateX(-5px) rotate(5deg); }
+}
+
+@keyframes blink {
+    from, to { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+nav {
+    background-color: rgba(37, 37, 37, 0.95); /* Using secondary bg with transparency */
+    backdrop-filter: blur(5px);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--rust-primary);
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+}
+
+main {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--rust-primary);
+    background-color: var(--secondary-bg);
+}
+
+/* Enhanced glitch effect with rust colors */
+.glitch {
+    position: relative;
+}
+
+
+/* Terminal-like elements with rust theme */
+.terminal {
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--rust-primary);
+    padding: 1rem;
+    font-family: var(--main-font);
+    position: relative;
+    margin: 2rem 0;
+    border-radius: 4px;
+    box-shadow: 0 0 15px var(--rust-glow);
+}
+
+.terminal::before {
+    content: '$';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    color: var(--rust-accent);
+    font-weight: bold;
+}
+
+.terminal p {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+/* Cargo.toml style code block */
+.code-block {
+    background-color: #2D2D2D;
+    border-left: 4px solid var(--rust-primary);
+    padding: 1rem;
+    margin: 1.5rem 0;
+    font-family: var(--main-font);
+    font-size: 0.9rem;
+    overflow-x: auto;
+}
+
+.code-key { color: #83C092; }      /* Green for keys */
+.code-string { color: #D19A66; }   /* Orange for strings */
+.code-comment { color: #5C6370; }  /* Gray for comments */
+.code-number { color: #D19A66; }   /* Orange for numbers */
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+
+a {
+    color: var(--rust-accent);
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    padding: 0 2px;
+}
+
+a:hover {
+    color: var(--rust-hover);
+    text-shadow: 0 0 8px var(--rust-glow);
+    background-color: rgba(222, 165, 132, 0.1);
+}
+
+/* Underline animation */
+a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, var(--rust-accent), transparent);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.4s ease;
+}
+
+
+
+/* Visited links */
+a:visited {
+    color: var(--rust-visited);
+}
+
+/* Active/focused links */
+a:active, a:focus {
+    color: var(--text-primary);
+    outline: 1px dotted var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.2);
+}
+
+/* Special link styles for navigation */
+nav a {
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    border: 1px solid var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.15);
+    border-radius: 3px;
+}
+
+nav a::after {
+    display: none;
+}
+
+/* Terminal-style links */
+.terminal a {
+    color: var(--terminal-link);
+}
+
+.terminal a:hover {
+    color: #A7D8B9;
+    text-shadow: 0 0 5px rgba(131, 192, 146, 0.5);
+}
+
+.terminal a::after {
+    background: linear-gradient(90deg, var(--terminal-link), transparent);
+}
+
+.center-image {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.center-image img {
+    width: 150px;
+}
+
+blockquote {
+    font-family: var(--alt-font);
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--rust-primary);
+    background: rgba(37, 37, 37, 0.5);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    position: relative;
+    line-height: 1.8;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 15px rgba(222, 165, 132, 0.1);
+    overflow: hidden;
+}
+
+blockquote::before {
+    content: '//';
+    font-family: var(--main-font);
+    font-size: 1.5rem;
+    color: var(--rust-glow);
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    line-height: 1;
+    opacity: 0.5;
+}
+
+blockquote::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 30%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rust-primary), transparent);
+}
+
+blockquote p {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+blockquote footer {
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 1rem;
+    color: var(--rust-accent);
+    font-style: normal;
+    border: none;
+    background: none;
+}
+
+blockquote footer::before {
+    content: '— ';
+}
+
+
+img {
+    filter: brightness(0.8) contrast(1.1) sepia(0.1);
+    transition: filter 0.4s ease;
+}
+
+
+/* Rust specific status indicators */
+.status-compiling {
+    color: var(--rust-primary);
+    animation: pulse 2s infinite;
+}
+
+.status-success {
+    color: var(--terminal-link);
+}
+
+.status-error {
+    color: var(--rust-secondary);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+</style>
+  <title>Understanding Cybersecurity (Part 1) </title>
+
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Understanding Cybersecurity (Part 1)</h1>
+	<h6>2026-05-05</h6>
+	<p>Working on Cybersecurity for over a year has made me realise how much this industry relies on naming that is not common among the rest of the software engineering industry. Even when I was interviewing people for my team, the term &quot;endpoint&quot; would often be misunderstood, as it has a different meaning outside the cybersecurity world. Thus, the idea for this series of posts is to try to put some of my personal notes out there. And since it's a huge topic, I will split it into different parts. For the first post I will focus more on data. I won´t repeat what I have already described regarding <a href="https://www.elias.sh/posts/kernel-mode-and-cybersecurity">EDR</a>, <a href="https://www.elias.sh/posts/etw-rust">ETW</a>, eBPF and <a href="https://www.elias.sh/posts/apple-edr-rust">Apple endpoint-security</a>.</p>
+<h2>MITRE ATT&amp;CK framework</h2>
+<p>Maybe one of the most important terms is the famous MITRE ATT&amp;CK framework. Microsoft has a great explanation for it [1]:</p>
+<blockquote>
+<p>The MITRE ATT&amp;CK framework is a globally accessible knowledge base that documents real-world adversary tactics, techniques, and procedures (TTPs) based on actual <a href="https://www.microsoft.com/en-us/security/business/security-101/what-is-cybersecurity">cybersecurity</a> incidents. It was developed by MITRE, a not-for-profit organisation that was established to advance national security and serve the public interest as an independent advisor. The MITRE ATT&amp;CK helps organizations understand how attackers operate, improve threat detection, and strengthen defense strategies. ATT&amp;CK stands for adversarial tactics, techniques, and common knowledge.</p>
+</blockquote>
+<p>In a way, it's a knowledge database, covering: why an attacker performs a certain action (tactic), how they perform it (technique and sub-technique), and how this looks in the real world (procedures). Besides allowing blue teams (defence teams) to build software to prevent attacks, red teams (&quot;attack simulating teams&quot;) to mimic real behaviour, and SOC (Security operations centre) to quickly handle issues, it also gives all of us a common nomenclature, a common way to name what is going on. Imagine joining a call and having to explain each step performed by the attacker in order to make everyone aware of what is going on. It's much easier to just refer to the MITRE ATT&amp;CK framework, as all the explanation needed is already known or at least easily accessible.</p>
+<p>That is why it's extremely important for cybersecurity software to highlight the ATT&amp;CK technique they blocked or detected.</p>
+<p>Understanding this framework also helps in finding the right data sources. We are normally interested in the smallest set of log sources and fields that still support robust, high-value detections [2].</p>
+<h3>What good data looks like</h3>
+<p>I worked for years (7 years) at Cloud companies (Huawei Cloud and AWS). A lot of time writing software that consumed or emitted telemetry for detecting production incidents. The concepts [3] are not so far away from the cybersecurity telemetry data.</p>
+<p>For cybersecurity [2], we should focus on data sources that provide:</p>
+<p>Context: Can we differentiate malicious intent from normal use?</p>
+<p>Coverage: &quot;Does the source enable detections for all implementations?&quot;</p>
+<p>Robustness: &quot;Does the source enable detections that are difficult to evade?&quot;</p>
+<p>Fidelity: &quot;Does the source provide enough detail to fully investigate the activity?&quot;</p>
+<p>And these targets are always changing [4]:</p>
+<blockquote>
+<p>Detection creation is not just about creating and fine-tuning alerts. There are many different ways that a detection can be developed. […] If you don't have an understanding of your landscape, it creates huge gaps in your ability to detect the true bad. MITRE is always changing, always in review. Understand that as the threat landscape increases, as attacks become more complex and interconnected, it is difficult to see the complete picture.</p>
+</blockquote>
+<h2>CIA Triad (Confidentiality, Integrity, Availability)</h2>
+<p>The CIA triad is the foundation for major governmental regulations, such as Brasil's LGPD and the EU's GPDR. The concept maps information security measures to three components: confidentiality, integrity, and availability. It was introduced by Anderson Report in 1972. It's used mainly as goals or characteristics that software must hold regarding information security [5]:</p>
+<p><strong>Confidentiality</strong>: the property of information not being available or disclosed to unauthorised users. Data can only be accessed by the intended individuals or entities.</p>
+<p><strong>Integrity:</strong> the property of accuracy and completeness. Data cannot be modified by unauthorised users at any stage of its lifecycle or in transit.</p>
+<p><strong>Availability</strong>: the property of accessibility and usability on demand. Data systems must function so that authorised users are able to access data whenever and wherever they need.</p>
+<p>It goes a little bit further than just cybersecurity, as software bugs may also compromise this: errors on permissions, allowing unauthorised employees to access personal information about colleagues, production incidents hurting availability and so on.</p>
+<p>[1] - <a href="https://www.microsoft.com/en-us/security/business/security-101/what-is-mitre-attack-framework">https://www.microsoft.com/en-us/security/business/security-101/what-is-mitre-attack-framework</a></p>
+<p>[2] - <a href="https://ctid.mitre.org/blog/2026/02/19/ambiguous-techniques-extension/">https://ctid.mitre.org/blog/2026/02/19/ambiguous-techniques-extension/</a></p>
+<p>[3] - <a href="https://www.elias.sh/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust">https://www.elias.sh/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust</a></p>
+<p>[4] - <a href="https://www.deepwatch.com/blog/deepwatch-detections-content-and-mitre-attck/">https://www.deepwatch.com/blog/deepwatch-detections-content-and-mitre-attck/</a></p>
+<p>[5] - <a href="https://shardsecure.com/blog/cia-triad-explained">https://shardsecure.com/blog/cia-triad-explained</a></p>
+	</main>
+        <div class="footer">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
