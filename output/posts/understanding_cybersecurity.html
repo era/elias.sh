@@ -352,14 +352,14 @@ img {
 }
 
 </style>
-  <title>Understanding Cybersecurity (Part 1) </title>
+  <title>Understanding Cybersecurity MITRE ATT&CK + CIA Triad </title>
 
   </head>
   <body class="hack main container">
 	<a href="https://elias.sh">< back to home</a>
 	<main>
-	<h1>Understanding Cybersecurity (Part 1)</h1>
-	<h6>2026-05-05</h6>
+	<h1>Understanding Cybersecurity MITRE ATT&CK + CIA Triad</h1>
+	<h6>2026-05-01</h6>
 	<p>Working on Cybersecurity for over a year has made me realise how much this industry relies on naming that is not common among the rest of the software engineering industry. Even when I was interviewing people for my team, the term &quot;endpoint&quot; would often be misunderstood, as it has a different meaning outside the cybersecurity world. Thus, the idea for this series of posts is to try to put some of my personal notes out there. And since it's a huge topic, I will split it into different parts. For the first post I will focus more on data. I won´t repeat what I have already described regarding <a href="https://www.elias.sh/posts/kernel-mode-and-cybersecurity">EDR</a>, <a href="https://www.elias.sh/posts/etw-rust">ETW</a>, eBPF and <a href="https://www.elias.sh/posts/apple-edr-rust">Apple endpoint-security</a>.</p>
 <h2>MITRE ATT&amp;CK framework</h2>
 <p>Maybe one of the most important terms is the famous MITRE ATT&amp;CK framework. Microsoft has a great explanation for it [1]:</p>
@@ -381,7 +381,7 @@ img {
 <p>Detection creation is not just about creating and fine-tuning alerts. There are many different ways that a detection can be developed. […] If you don't have an understanding of your landscape, it creates huge gaps in your ability to detect the true bad. MITRE is always changing, always in review. Understand that as the threat landscape increases, as attacks become more complex and interconnected, it is difficult to see the complete picture.</p>
 </blockquote>
 <h2>CIA Triad (Confidentiality, Integrity, Availability)</h2>
-<p>The CIA triad is the foundation for major governmental regulations, such as Brasil's LGPD and the EU's GPDR. The concept maps information security measures to three components: confidentiality, integrity, and availability. It was introduced by Anderson Report in 1972. It's used mainly as goals or characteristics that software must hold regarding information security [5]:</p>
+<p>The CIA triad is the foundation for major governmental regulations, such as Brasil's LGPD and the EU's GPDR. The concept maps information security measures to three components: confidentiality, integrity, and availability. It was introduced by Anderson Report in 1972. It's used mainly as goals or characteristics that software must hold regarding information security [5], it's less about &quot;how to detect and prevent cyber attacks&quot; and more about &quot;the bare minimum companies holding your data should do&quot;:</p>
 <p><strong>Confidentiality</strong>: the property of information not being available or disclosed to unauthorised users. Data can only be accessed by the intended individuals or entities.</p>
 <p><strong>Integrity:</strong> the property of accuracy and completeness. Data cannot be modified by unauthorised users at any stage of its lifecycle or in transit.</p>
 <p><strong>Availability</strong>: the property of accessibility and usability on demand. Data systems must function so that authorised users are able to access data whenever and wherever they need.</p>

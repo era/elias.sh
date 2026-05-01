@@ -1,5 +1,5 @@
 ---
-title: Understanding Cybersecurity: MITRE ATT&CK + CIA Triad
+title: Understanding Cybersecurity MITRE ATT&CK + CIA Triad
 date: 2026-05-01
 ---
 
