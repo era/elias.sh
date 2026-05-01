@@ -376,6 +376,6 @@ img {
       <img src="https://elias.sh/comunista.jpg" />
     </main>
     {{ render('template/_footer.template')}}
-    ✊ <span class="symbol">🇵🇸</span> I stand with Palestine - Free Palestine <span class="symbol">🇵🇸</span> ✊
+    <img src="https://raw.githubusercontent.com/saedyousef/StandWithPalestine/main/badges/flat/bordered/StandWithPalestine.svg" />
   </body>
 </html>
