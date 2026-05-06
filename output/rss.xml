@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Elias</title><link>https://elias.sh/rss.xml</link><description>Blog about Rust, programming, and technology</description><language>en-us</language><lastBuildDate>Wed, 6 May 2026 08:59:32 +0000</lastBuildDate><generator>Squid</generator><item><title>Understanding Cybersecurity MITRE ATT&amp;CK + CIA Triad</title><link>https://elias.sh/posts/understanding_cybersecurity.html</link><description><![CDATA[Working on Cybersecurity for over a year has made me realise how much this
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Elias</title><link>https://elias.sh/rss.xml</link><description>Blog about Rust, programming, and technology</description><language>en-us</language><lastBuildDate>Wed, 6 May 2026 09:02:54 +0000</lastBuildDate><generator>Squid</generator><item><title>Understanding Cybersecurity MITRE ATT&amp;CK + CIA Triad</title><link>https://elias.sh/posts/understanding_cybersecurity.html</link><description><![CDATA[Working on Cybersecurity for over a year has made me realise how much this
 industry relies on naming that is not common among the rest of the software]]></description><author></author><guid>https://elias.sh/posts/understanding_cybersecurity.html</guid><pubDate>Fri, 1 May 2026 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>Working on Cybersecurity for over a year has made me realise how much this industry relies on naming that is not common among the rest of the software engineering industry. Even when I was interviewing people for my team, the term &quot;endpoint&quot; would often be misunderstood, as it has a different meaning outside the cybersecurity world. Thus, the idea for this series of posts is to try to put some of my personal notes out there. And since it's a huge topic, I will split it into different parts. For the first post I will focus more on data. I won´t repeat what I have already described regarding <a href="https://www.elias.sh/posts/kernel-mode-and-cybersecurity">EDR</a>, <a href="https://www.elias.sh/posts/etw-rust">ETW</a>, eBPF and <a href="https://www.elias.sh/posts/apple-edr-rust">Apple endpoint-security</a>.</p>
 <h2>MITRE ATT&amp;CK framework</h2>
 <p>Maybe one of the most important terms is the famous MITRE ATT&amp;CK framework. Microsoft has a great explanation for it [1]:</p>
@@ -1093,7 +1093,7 @@ I’m looking for projects to collaborate with.
 If you want help with your side/pet project, let me know on <a href="https://www.twitter.com/elias_era">Twitter</a>, and feel free to DM me :), or just email me rust@{{this_domain}}.</p>
 <p>If you are interested on TinyLang, you can check it on <a href="https://github.com/era/tinylang">Github</a>.</p>
 <p>The code for this website is at <a href="https://github.com/era/elias.sh">Github</a> as well.</p>
-<p>Thank you for reading,</p>]]></content:encoded></item><item><title>Working at AWS</title><link>https://elias.sh/work/aws.html</link><description><![CDATA[# What I Learned Working at Amazon]]></description><author></author><guid>https://elias.sh/work/aws.html</guid><pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate><content:encoded><![CDATA[<h1>What I Learned Working at Amazon</h1>
+<p>Thank you for reading,</p>]]></content:encoded></item><item><title>Working at AWS</title><link>https://elias.sh/work/aws.html</link><description><![CDATA[## What I Learned Working at Amazon]]></description><author></author><guid>https://elias.sh/work/aws.html</guid><pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate><content:encoded><![CDATA[<h2>What I Learned Working at Amazon</h2>
 <p>Working at Amazon, especially in infrastructure and operations-heavy environments, shaped how I think about software engineering. These are some of the most important lessons I took with me:</p>
 <ul>
 <li>Don’t restart systems just to “fix” issues. Understand the root cause, debug the problem, and fix it properly.</li>
@@ -1112,8 +1112,8 @@ If you want help with your side/pet project, let me know on <a href="https://www
 <li>Build reusable tools and frameworks whenever possible.</li>
 <li>Automatic recovery is usually better than requiring human intervention for routine failures.</li>
 </ul>
-<h1>Working at Amazon AWS (2015 - 2019)</h1>
-<h2>The First Year</h2>
+<h2>Working at Amazon AWS (2015 - 2019)</h2>
+<h3>The First Year</h3>
 <p>My first year was both challenging and rewarding.</p>
 <p>I was starting a new job, living in a new country, and working daily in a second language. Fortunately, many members of the team were also relatively new, which created a strong sense of collaboration from the beginning.</p>
 <p>I learned a great deal from my teammates, both technically and professionally.</p>
@@ -1125,17 +1125,17 @@ If you want help with your side/pet project, let me know on <a href="https://www
 </ul>
 <p>The workload was intense, but it created excellent opportunities to learn how large-scale systems behave in production.</p>
 <p>The team culture was healthy and focused on continuous improvement. Engineers were encouraged to take ownership, learn from mistakes, and support one another.</p>
-<h2>2017 - 2019</h2>
+<h3>2017 - 2019</h3>
 <p>Over time, our organization evolved significantly.</p>
 <p>As the product and team matured, engineering priorities increasingly focused on reliability, operational excellence, and long-term maintainability.</p>
 <p>This created opportunities to improve existing systems, reduce operational overhead, and invest heavily in automation.</p>
 <p>Our local leadership created an environment of trust, ownership, and technical autonomy, which allowed engineers to propose and implement meaningful improvements.</p>
 <p>The team also grew internationally, including the opening of a new engineering office in Berlin. I had the opportunity to help onboard and mentor engineers there.</p>
 <p>As our tooling and automation improved, operational load decreased significantly, allowing the team to focus more on engineering initiatives and platform improvements.</p>
-<h1>Projects I Worked On</h1>
-<h2>Redshift</h2>
+<h2>Projects I Worked On</h2>
+<h3>Redshift</h3>
 <p>I worked across multiple areas of the platform, primarily using Java, building internal tools, improving operational systems, and contributing to platform reliability.</p>
-<h3>OpsConsole</h3>
+<h4>OpsConsole</h4>
 <p>Lead developer for an internal Rails application that allowed engineers to:</p>
 <ul>
 <li>Perform operational actions on Redshift clusters</li>
@@ -1143,11 +1143,11 @@ If you want help with your side/pet project, let me know on <a href="https://www
 <li>Troubleshoot production issues safely</li>
 </ul>
 <p>The goal was to reduce operational complexity and standardize critical workflows.</p>
-<h3>Auto-Recovery</h3>
+<h4>Auto-Recovery</h4>
 <p>I helped design and implement automated recovery systems for Redshift clusters.</p>
 <p>These systems consumed events emitted by clusters and supporting infrastructure such as EC2, then executed recovery workflows automatically when known failure patterns were detected.</p>
 <p>The goal was to reduce operational intervention and improve system resilience.</p>
-<h3>Canary</h3>
+<h4>Canary</h4>
 <p>Lead developer for a workflow-aware canary system.</p>
 <p>I modernized an existing Ruby application that initially performed basic API checks and expanded it into a system capable of validating real production workflows.</p>
 <p>This included:</p>

@@ -3,7 +3,7 @@ title: Working at AWS
 date: 2020-09-23
 ---
 
-# What I Learned Working at Amazon
+## What I Learned Working at Amazon
 
 Working at Amazon, especially in infrastructure and operations-heavy environments, shaped how I think about software engineering. These are some of the most important lessons I took with me:
 
@@ -23,9 +23,9 @@ Working at Amazon, especially in infrastructure and operations-heavy environment
 - Build reusable tools and frameworks whenever possible.
 - Automatic recovery is usually better than requiring human intervention for routine failures.
 
-# Working at Amazon AWS (2015 - 2019)
+## Working at Amazon AWS (2015 - 2019)
 
-## The First Year
+### The First Year
 
 My first year was both challenging and rewarding.
 
@@ -44,7 +44,7 @@ The workload was intense, but it created excellent opportunities to learn how la
 
 The team culture was healthy and focused on continuous improvement. Engineers were encouraged to take ownership, learn from mistakes, and support one another.
 
-## 2017 - 2019
+### 2017 - 2019
 
 Over time, our organization evolved significantly.
 
@@ -58,13 +58,13 @@ The team also grew internationally, including the opening of a new engineering o
 
 As our tooling and automation improved, operational load decreased significantly, allowing the team to focus more on engineering initiatives and platform improvements.
 
-# Projects I Worked On
+## Projects I Worked On
 
-## Redshift
+### Redshift
 
 I worked across multiple areas of the platform, primarily using Java, building internal tools, improving operational systems, and contributing to platform reliability.
 
-### OpsConsole
+#### OpsConsole
 
 Lead developer for an internal Rails application that allowed engineers to:
 
@@ -74,7 +74,7 @@ Lead developer for an internal Rails application that allowed engineers to:
 
 The goal was to reduce operational complexity and standardize critical workflows.
 
-### Auto-Recovery
+#### Auto-Recovery
 
 I helped design and implement automated recovery systems for Redshift clusters.
 
@@ -82,7 +82,7 @@ These systems consumed events emitted by clusters and supporting infrastructure 
 
 The goal was to reduce operational intervention and improve system resilience.
 
-### Canary
+#### Canary
 
 Lead developer for a workflow-aware canary system.
 
