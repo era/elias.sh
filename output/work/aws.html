@@ -1,7 +1,9 @@
-<!-- index.html -->
 <html>
   <head>
-    <title>Elias' homepage</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 <style>
 
 :root {
@@ -107,7 +109,7 @@ nav ul {
 }
 
 main {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 2rem auto;
     padding: 0 2rem;
 }
@@ -211,6 +213,8 @@ a::after {
     transition: transform 0.4s ease;
 }
 
+
+
 /* Visited links */
 a:visited {
     color: var(--rust-visited);
@@ -228,6 +232,12 @@ nav a {
     padding: 0.5rem 1rem;
     border: 1px solid transparent;
     transition: all 0.3s ease;
+}
+
+nav a:hover {
+    border: 1px solid var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.15);
+    border-radius: 3px;
 }
 
 nav a::after {
@@ -315,6 +325,7 @@ blockquote footer::before {
     content: '— ';
 }
 
+
 img {
     filter: brightness(0.8) contrast(1.1) sepia(0.1);
     transition: filter 0.4s ease;
@@ -341,41 +352,83 @@ img {
 }
 
 </style>
+  <title>Working at AWS </title>
+
   </head>
   <body class="hack main container">
-    <main>
-      <p><img src="https://www.elias.sh/glauber.png" style="float: left; margin-right: 25px;" />
-      Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
-      Nice to meet you. I create stuff for a living. And well... I am a Software Engineer.</p>
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Working at AWS</h1>
+	<h6>2020-09-23</h6>
+	<h1>What I Learned Working at Amazon</h1>
+<p>Working at Amazon, especially in infrastructure and operations-heavy environments, shaped how I think about software engineering. These are some of the most important lessons I took with me:</p>
+<ul>
+<li>Don’t restart systems just to “fix” issues. Understand the root cause, debug the problem, and fix it properly.</li>
+<li>People should not be paged in the middle of the night if there is nothing meaningful they can do.</li>
+<li>If an application requires constant manual supervision, invest in metrics, observability, and automation.</li>
+<li>At large scale, even rare failures become frequent. Either fix the issue or build systems that recover automatically.</li>
+<li>If a human has to run a manual command, eventually someone will make a mistake. Build safer systems.</li>
+<li>Automation should live in code, not only in documentation.</li>
+<li>Code is more reliable than undocumented processes.</li>
+<li>Documentation is better than tribal knowledge.</li>
+<li>If something can safely wait a few hours, it probably does not need an immediate interruption.</li>
+<li>Understanding Linux and Unix fundamentals is essential.</li>
+<li>Learn shell scripting and automate repetitive tasks.</li>
+<li>If a tool helps you, share it with your team.</li>
+<li>Encourage others to share their automation.</li>
+<li>Build reusable tools and frameworks whenever possible.</li>
+<li>Automatic recovery is usually better than requiring human intervention for routine failures.</li>
+</ul>
+<h1>Working at Amazon AWS (2015 - 2019)</h1>
+<h2>The First Year</h2>
+<p>My first year was both challenging and rewarding.</p>
+<p>I was starting a new job, living in a new country, and working daily in a second language. Fortunately, many members of the team were also relatively new, which created a strong sense of collaboration from the beginning.</p>
+<p>I learned a great deal from my teammates, both technically and professionally.</p>
+<p>During my first months, I spent a significant amount of time in operational rotations, dealing with infrastructure incidents, hardware issues, and production support. That experience gave me a strong foundation in distributed systems and operational excellence.</p>
+<p>Each engineer participated in operational rotations that included:</p>
+<ul>
+<li>One week as primary on-call every month</li>
+<li>One additional week focused on operational improvements and maintenance</li>
+</ul>
+<p>The workload was intense, but it created excellent opportunities to learn how large-scale systems behave in production.</p>
+<p>The team culture was healthy and focused on continuous improvement. Engineers were encouraged to take ownership, learn from mistakes, and support one another.</p>
+<h2>2017 - 2019</h2>
+<p>Over time, our organization evolved significantly.</p>
+<p>As the product and team matured, engineering priorities increasingly focused on reliability, operational excellence, and long-term maintainability.</p>
+<p>This created opportunities to improve existing systems, reduce operational overhead, and invest heavily in automation.</p>
+<p>Our local leadership created an environment of trust, ownership, and technical autonomy, which allowed engineers to propose and implement meaningful improvements.</p>
+<p>The team also grew internationally, including the opening of a new engineering office in Berlin. I had the opportunity to help onboard and mentor engineers there.</p>
+<p>As our tooling and automation improved, operational load decreased significantly, allowing the team to focus more on engineering initiatives and platform improvements.</p>
+<h1>Projects I Worked On</h1>
+<h2>Redshift</h2>
+<p>I worked across multiple areas of the platform, primarily using Java, building internal tools, improving operational systems, and contributing to platform reliability.</p>
+<h3>OpsConsole</h3>
+<p>Lead developer for an internal Rails application that allowed engineers to:</p>
+<ul>
+<li>Perform operational actions on Redshift clusters</li>
+<li>Inspect cluster state</li>
+<li>Troubleshoot production issues safely</li>
+</ul>
+<p>The goal was to reduce operational complexity and standardize critical workflows.</p>
+<h3>Auto-Recovery</h3>
+<p>I helped design and implement automated recovery systems for Redshift clusters.</p>
+<p>These systems consumed events emitted by clusters and supporting infrastructure such as EC2, then executed recovery workflows automatically when known failure patterns were detected.</p>
+<p>The goal was to reduce operational intervention and improve system resilience.</p>
+<h3>Canary</h3>
+<p>Lead developer for a workflow-aware canary system.</p>
+<p>I modernized an existing Ruby application that initially performed basic API checks and expanded it into a system capable of validating real production workflows.</p>
+<p>This included:</p>
+<ul>
+<li>Creating clusters</li>
+<li>Running operational actions</li>
+<li>Validating state transitions</li>
+<li>Cleaning up resources</li>
+</ul>
+<p>This approach allowed us to detect issues that traditional health checks could not identify.</p>
+	</main>
+        <div class="footer">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
 
-      <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems.
-      I'm also a big fan of Platform Engineering and DX.</p>
-      <br />
-      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a> or follow me at <a href="https://bsky.app/profile/elias.sh">Bsky</a>.
-
-      <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`. I'm available during business hours in Central European Time (CET).</p>
-
-      <p><small style="font-size: 12px;">In case you don't know, the person in the photo is <a href="https://en.wikipedia.org/wiki/Glauber_Rocha">Glauber Rocha</a>,
-      not me.</small></p>
-      <h2>Work</h2>
-      <ul>
-        <li>(2024-) Cybereason: (safe and unsafe) Rust for cybersecurity produts</li>
-        <li>(2024-2024) Mercari: A lot of golang and Flink for Trust & Safety organization</li>
-        <li>(2021-2024) Huawei Cloud: Rust and Golang for cloud infrastructure</li>
-        <li>(2019-2021) Stripe: Ruby for payments</li>
-        <li>(2015-2019) <a href="/work/aws.html">AWS: Control Plane development for Redshift</a></li>
-        <li>...</li>
-      </ul>
-
-      <h1>Blog Posts</h1>
-      <ul>
-        {% for post in sort_by_key(posts.items, 'date', 'reversed') %}   
-            <li><a href="{{post.partial_uri}}">{{ post.title }}</a></li>
-        {% end %}
-      </ul>
-      <img src="https://elias.sh/comunista.jpg" />
-    </main>
-    {{ render('template/_footer.template')}}
-    <img src="https://raw.githubusercontent.com/saedyousef/StandWithPalestine/main/badges/flat/bordered/StandWithPalestine.svg" />
   </body>
 </html>
