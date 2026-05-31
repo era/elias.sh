@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Elias</title><link>https://elias.sh/rss.xml</link><description>Blog about Rust, programming, and technology</description><language>en-us</language><lastBuildDate>Sat, 30 May 2026 02:56:22 +0000</lastBuildDate><generator>Squid</generator><item><title>Work</title><link>https://elias.sh/posts/my-life.html</link><description><![CDATA[Recently, a lot of folks on the internet have shared how work looked like for
-their parents or grandparents. All to rethink what AI means for our life]]></description><author></author><guid>https://elias.sh/posts/my-life.html</guid><pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>Recently, a lot of folks on the internet have shared how work looked like for their parents or grandparents. All
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Elias</title><link>https://elias.sh/rss.xml</link><description>Blog about Rust, programming, and technology</description><language>en-us</language><lastBuildDate>Sun, 31 May 2026 00:03:01 +0000</lastBuildDate><generator>Squid</generator><item><title>Work</title><link>https://elias.sh/posts/my-life.html</link><description><![CDATA[Recently, a lot of folks on the internet have shared what work looked like for
+their parents or grandparents. All to rethink what AI means for our lif]]></description><author></author><guid>https://elias.sh/posts/my-life.html</guid><pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>Recently, a lot of folks on the internet have shared what work looked like for their parents or grandparents. All
 to rethink what AI means for our life. I'm not sure if I can do that, as most of my arguments will be derived from
 <a href="https://www.elias.sh/posts/the_burnout_machine">a previous post</a>, so I will try to skip the AI bits and focus on my family.</p>
-<p>My grandfather died while working. Really, he worked at a construction site. He had an heart-attack.
-My father worked on the same place.
+<p>My grandfather died while working. Really, he worked at a construction site. He had a heart attack.
+My father worked at the same place.
 This happened years before I was born, but I have a vivid memory as I was there thanks to a history told once
-when I was a kid: My father learning what was happening and jumping off the office window to run in to the ambulance.</p>
+when I was a kid: My father learning what was happening and jumping off the office window to run to the ambulance.</p>
 <p>Work can kill you.</p>
-<p>My uncle worked in an factory dealing with very toxic material. The owners, to increase profit, did not provided all
-security equipment, and they forced the employees to work overtime off the books. My uncle died of Cancer a years after
-he started work on that place.</p>
+<p>My uncle worked in a factory dealing with very toxic material. The owners, to increase profit, did not provide all
+security equipment, and they forced the employees to work overtime off the books. My uncle died of cancer a year after
+he started work at that place.</p>
 <p>Work may be killing you, a bit at a time.</p>
 <p>My father on the other hand is alive and very close to retire. If this was a right-wing blog, I would probably be focusing
 on him on this text: he didn't even finish middle school, but by his 30's he was doing at work all the planning the engineers
-couldn't do properly or fast enough. Even tho he was more than capable of handling all the theory
+couldn't do properly or fast enough. Even though he was more than capable of handling all the theory
 he learnt at work, the only way to keep progressing salary wise was to get a degree. So he took night classes, finished middle school, high school and started college. He started his work with no computers, and he adapted himself on each advance of his field.</p>
 <p>If you endure enough, you can survive.</p>
-<p>I promised I wasn't going to talk about AI, I lied. I think we all have to watch if AI is something that will kill us,
+<p>I promised I wasn't going to talk about AI, I lied. I think we all have to watch whether AI is something that will kill us,
 slowly make our health worse, or something we must endure.</p>]]></content:encoded></item><item><title>Understanding Cybersecurity MITRE ATT&amp;CK + CIA Triad</title><link>https://elias.sh/posts/understanding_cybersecurity.html</link><description><![CDATA[Working on Cybersecurity for over a year has made me realise how much this
 industry relies on naming that is not common among the rest of the software]]></description><author></author><guid>https://elias.sh/posts/understanding_cybersecurity.html</guid><pubDate>Fri, 1 May 2026 00:00:00 +0000</pubDate><content:encoded><![CDATA[<p>Working on Cybersecurity for over a year has made me realise how much this industry relies on naming that is not common among the rest of the software engineering industry. Even when I was interviewing people for my team, the term &quot;endpoint&quot; would often be misunderstood, as it has a different meaning outside the cybersecurity world. Thus, the idea for this series of posts is to try to put some of my personal notes out there. And since it's a huge topic, I will split it into different parts. For the first post I will focus more on data. I won´t repeat what I have already described regarding <a href="https://www.elias.sh/posts/kernel-mode-and-cybersecurity">EDR</a>, <a href="https://www.elias.sh/posts/etw-rust">ETW</a>, eBPF and <a href="https://www.elias.sh/posts/apple-edr-rust">Apple endpoint-security</a>.</p>
 <h2>MITRE ATT&amp;CK framework</h2>
