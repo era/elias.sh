@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://elias.sh/index.html</loc></url>
+  <url><loc>https://elias.sh/markdown/rust_conventions.html</loc></url>
+  <url><loc>https://elias.sh/posts/apple-edr-rust.html</loc></url>
+  <url><loc>https://elias.sh/posts/common_mistakes_with_async_rust.html</loc></url>
+  <url><loc>https://elias.sh/posts/component_model_wasm.html</loc></url>
+  <url><loc>https://elias.sh/posts/datafederation_and_rust.html</loc></url>
+  <url><loc>https://elias.sh/posts/etw-rust.html</loc></url>
+  <url><loc>https://elias.sh/posts/kernel-mode-and-cybersecurity.html</loc></url>
+  <url><loc>https://elias.sh/posts/my-life.html</loc></url>
+  <url><loc>https://elias.sh/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust.html</loc></url>
+  <url><loc>https://elias.sh/posts/peg_and_rust.html</loc></url>
+  <url><loc>https://elias.sh/posts/query_engine.html</loc></url>
+  <url><loc>https://elias.sh/posts/quic.html</loc></url>
+  <url><loc>https://elias.sh/posts/rust-forge-2025.html</loc></url>
+  <url><loc>https://elias.sh/posts/rust_is_more.html</loc></url>
+  <url><loc>https://elias.sh/posts/the_burnout_machine.html</loc></url>
+  <url><loc>https://elias.sh/posts/the_rust_revolution.html</loc></url>
+  <url><loc>https://elias.sh/posts/understanding_cybersecurity.html</loc></url>
+  <url><loc>https://elias.sh/posts/visualizing_metrics.html</loc></url>
+  <url><loc>https://elias.sh/work/aws.html</loc></url>
+</urlset>
