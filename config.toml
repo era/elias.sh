@@ -1,5 +1,6 @@
 website_name = "Elias"
 uri = "https://elias.sh"
+code_theme = "none"
 [custom_keys]
 author = "Era"
 description = "Blog about Rust, programming, and technology"
