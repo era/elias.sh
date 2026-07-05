@@ -1,7 +1,9 @@
-<!-- index.html -->
 <html>
   <head>
-    <title>Elias' homepage</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 <style>
 
 :root {
@@ -107,7 +109,7 @@ nav ul {
 }
 
 main {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 2rem auto;
     padding: 0 2rem;
 }
@@ -211,6 +213,8 @@ a::after {
     transition: transform 0.4s ease;
 }
 
+
+
 /* Visited links */
 a:visited {
     color: var(--rust-visited);
@@ -228,6 +232,12 @@ nav a {
     padding: 0.5rem 1rem;
     border: 1px solid transparent;
     transition: all 0.3s ease;
+}
+
+nav a:hover {
+    border: 1px solid var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.15);
+    border-radius: 3px;
 }
 
 nav a::after {
@@ -315,6 +325,7 @@ blockquote footer::before {
     content: '— ';
 }
 
+
 img {
     filter: brightness(0.8) contrast(1.1) sepia(0.1);
     transition: filter 0.4s ease;
@@ -341,78 +352,26 @@ img {
 }
 
 </style>
+  <title>Tech without trust </title>
+
   </head>
   <body class="hack main container">
-    <main>
-      <p><img src="https://www.elias.sh/glauber.png" style="float: left; margin-right: 25px;" />
-      Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
-      Nice to meet you. I create stuff for a living. And well... I am a Software Engineer.</p>
-
-      <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems.
-      I'm also a big fan of Platform Engineering and DX.</p>
-      <br />
-      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a> or follow me at <a href="https://bsky.app/profile/elias.sh">Bsky</a>.
-
-      <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`. I'm available during business hours in Central European Time (CET).</p>
-
-      <p><small style="font-size: 12px;">In case you don't know, the person in the photo is <a href="https://en.wikipedia.org/wiki/Glauber_Rocha">Glauber Rocha</a>,
-      not me.</small></p>
-      <h2>Work</h2>
-      <ul>
-        <li>(2024-) Cybereason: (safe and unsafe) Rust for cybersecurity products</li>
-        <li>(2024-2024) Mercari: A lot of golang and Flink for Trust & Safety organization</li>
-        <li>(2021-2024) Huawei Cloud: Rust and Golang for cloud infrastructure</li>
-        <li>(2019-2021) Stripe: Ruby for payments</li>
-        <li>(2015-2019) <a href="/work/aws.html">AWS: Control Plane development for Redshift</a></li>
-        <li>...</li>
-      </ul>
-
-      <h1>Blog Posts</h1>
-      <ul>
-           
-            <li><a href="/posts/tech-without-trust.html">Tech without trust</a></li>
-           
-            <li><a href="/posts/my-life.html">Work</a></li>
-           
-            <li><a href="/posts/understanding_cybersecurity.html">Understanding Cybersecurity MITRE ATT&CK + CIA Triad</a></li>
-           
-            <li><a href="/posts/the_burnout_machine.html">The burnout machine</a></li>
-           
-            <li><a href="/posts/etw-rust.html">EDR, ETW and Rust</a></li>
-           
-            <li><a href="/posts/the_rust_revolution.html">The Rust Revolution</a></li>
-           
-            <li><a href="/posts/rust_is_more.html">Rust is much more than just a programming language</a></li>
-           
-            <li><a href="/posts/apple-edr-rust.html">EDR, Rust and Apple</a></li>
-           
-            <li><a href="/posts/kernel-mode-and-cybersecurity.html">Kernel Mode, Cybersecurity and Rust</a></li>
-           
-            <li><a href="/posts/rust-forge-2025.html">Rust Forge 2025</a></li>
-           
-            <li><a href="/posts/quic.html">Quic server in Rust</a></li>
-           
-            <li><a href="/posts/query_engine.html">Iceberg, Parquet and query engines</a></li>
-           
-            <li><a href="/posts/common_mistakes_with_async_rust.html">Common mistakes with Async Rust</a></li>
-           
-            <li><a href="/posts/datafederation_and_rust.html">Data Federation and Trustfall</a></li>
-           
-            <li><a href="/posts/component_model_wasm.html">Why do I like WebAssembly? And a Rust example!</a></li>
-           
-            <li><a href="/posts/visualizing_metrics.html">Visualizing Metrics</a></li>
-           
-            <li><a href="/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust.html">OpenTelemetry, time series, metrics and a bit of Rust</a></li>
-           
-            <li><a href="/posts/peg_and_rust.html">PEG and Rust</a></li>
-        
-      </ul>
-      <img src="https://elias.sh/comunista.jpg" />
-    </main>
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Tech without trust</h1>
+	<h6>2026-07-06</h6>
+	<p>A lot of software engineers like to solve social problems with technical solutions. Football is the prove that not everything can be solved with more technology. The ball of this year's world cup has a chip which can tell if someone touched it. Which feels like a good tool, if the ball touches the hand of a player, we don't need to rely only on the cameras (VAR), but also have more data to come to a conclusion. The problem is that data without transparency is useless.</p>
+<p>During a match we have at least three distinct data sources: the referees in the field; the VAR and now the chip. When reviewing a match moment, the VAR needs to synchronise the chip data with the cameras data, to make sure the data match the right moment. This is not as simple as it looks like and there is no formal document stating how they are doing it. Another point is that we cannot audit the data, FIFA does not releases the chip data in a public space so that it can be validated. Data here is used only as a mean to shut up critics. It's almost like that co-worker that throws number at you during design decisions without ever providing its source or a way to verify it. &quot;Trust me, bro&quot;.</p>
+<p>There is a moment on Croatia vs Portugal, where if the ball touched the head of the Croatia the player that scored was offside. If you watched the game, you cannot see the touch from any angle. But VAR with the usage of the chip declares that there was a touch. The TV shows a replay with only one chart, only for that moment (so we cannot really see if the data is synchronised correctly). You need to believe that even tho your eyes cannot see, the ball touched the head of the player.</p>
+<img src="https://elias.sh/tech-without-trust/croatia.jpg" />
+<p>If you say: &quot;I cannot see the touch, the chip data is just used as a decoy&quot;, you are crazy and anti-tech. You are the same as the anti-vaxx people. The difference, tho, is huge. With vaccines we have the studies, the data, we can validate ourselves if needed. Any lab can prove the other studies wrong if so. With the world cup solution, we have the tech, but we cannot validate it. You have to trust.</p>
+<p>FIFA is clearly not an entity that can be trusted, as it <a href="https://www.msn.com/en-ca/news/world/fifa-lifts-us-star-striker-balogun-s-red-card-suspension-at-world-cup-after-trump-calls-infantino/ar-AA27geoT">lift a suspension from an USA player</a> without any valid reason (well, FIFA also never banned Israel from football even tho it did with Russia and gave a &quot;peace prize&quot; to Trump). So can we cannot trust the data from FIFA. It's not a conspiracy theory, if they want us to believe the data they show us, let us validate it.</p>
+<p>This is not the only place where we are living a &quot;trust us, bro&quot; moment. Tech with AI is exactly that. We have some companies from the USA saying <a href="https://www.theguardian.com/technology/2026/jan/27/wake-up-to-the-risks-of-ai-they-are-almost-here-anthropic-boss-warns">AI is way too dangerous to be on the wrongs hand</a> and we need to trust them (nationals from a country known by its war crimes) to be the guardians of it.</p>
+<p>&quot;Trust me, bro&quot;.</p>
+	</main>
         <div class="footer">
       Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
     </div>
 
-    <img src="https://raw.githubusercontent.com/saedyousef/StandWithPalestine/main/badges/flat/bordered/StandWithPalestine.svg" />
   </body>
 </html>
