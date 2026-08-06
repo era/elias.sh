@@ -1,7 +1,9 @@
-<!-- index.html -->
 <html>
   <head>
-    <title>Elias' homepage</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 <style>
 
 :root {
@@ -107,7 +109,7 @@ nav ul {
 }
 
 main {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 2rem auto;
     padding: 0 2rem;
 }
@@ -211,6 +213,8 @@ a::after {
     transition: transform 0.4s ease;
 }
 
+
+
 /* Visited links */
 a:visited {
     color: var(--rust-visited);
@@ -228,6 +232,12 @@ nav a {
     padding: 0.5rem 1rem;
     border: 1px solid transparent;
     transition: all 0.3s ease;
+}
+
+nav a:hover {
+    border: 1px solid var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.15);
+    border-radius: 3px;
 }
 
 nav a::after {
@@ -315,6 +325,7 @@ blockquote footer::before {
     content: '— ';
 }
 
+
 img {
     filter: brightness(0.8) contrast(1.1) sepia(0.1);
     transition: filter 0.4s ease;
@@ -341,86 +352,28 @@ img {
 }
 
 </style>
+  <title>I vibe coded something, and I hate it </title>
+
   </head>
   <body class="hack main container">
-    <main>
-      <p><img src="https://www.elias.sh/glauber.png" style="float: left; margin-right: 25px;" />
-      Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
-      Nice to meet you. I create stuff for a living. And well... I am a Software Engineer.</p>
-
-      <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems.
-      I'm also a big fan of Platform Engineering and DX.</p>
-      <br />
-      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a> or follow me at <a href="https://bsky.app/profile/elias.sh">Bsky</a>.
-
-
-      <img src="https://www.elias.sh/leila.jpg" style="float: left;width: 100px; margin-right: 10px;" />
-      <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`.</p> 
-
-      <p>I was born in the Global South and I do believe technology must be owned by all the peoples of the world
-      and not just the North (normally meaning the USA and Europe). I'm a strong defender of Chinese Tech as a way
-      to include more people from different nations into computers.</p>
-      <h2>Work</h2>
-      <img src="https://www.elias.sh/che.jpg" style="float: right;width: 400px; margin-left: 10px;" />
-      <ul>
-        <li>(2024-) Cybersecurity company: (safe and unsafe) Rust for cybersecurity products</li>
-        <li>(2024-2024) Mercari: A lot of golang and Flink for Trust & Safety organization</li>
-        <li>(2021-2024) Huawei Cloud: Rust and Golang for cloud infrastructure</li>
-        <li>(2019-2021) Stripe: Ruby for payments</li>
-        <li>(2015-2019) <a href="/work/aws.html">AWS: Control Plane development for Redshift</a></li>
-        <li>...</li>
-      </ul>
-
-      <h1>Blog Posts</h1>
-      <ul>
-           
-            <li><a href="/posts/i-vibe-coded.html">I vibe coded something, and I hate it</a></li>
-           
-            <li><a href="/posts/nature-will-wash-it-away.html">Nature will wash it away</a></li>
-           
-            <li><a href="/posts/tech-without-trust.html">Tech without trust</a></li>
-           
-            <li><a href="/posts/my-life.html">Work</a></li>
-           
-            <li><a href="/posts/understanding_cybersecurity.html">Understanding Cybersecurity MITRE ATT&CK + CIA Triad</a></li>
-           
-            <li><a href="/posts/the_burnout_machine.html">The burnout machine</a></li>
-           
-            <li><a href="/posts/etw-rust.html">EDR, ETW and Rust</a></li>
-           
-            <li><a href="/posts/the_rust_revolution.html">The Rust Revolution</a></li>
-           
-            <li><a href="/posts/rust_is_more.html">Rust is much more than just a programming language</a></li>
-           
-            <li><a href="/posts/apple-edr-rust.html">EDR, Rust and Apple</a></li>
-           
-            <li><a href="/posts/kernel-mode-and-cybersecurity.html">Kernel Mode, Cybersecurity and Rust</a></li>
-           
-            <li><a href="/posts/rust-forge-2025.html">Rust Forge 2025</a></li>
-           
-            <li><a href="/posts/quic.html">Quic server in Rust</a></li>
-           
-            <li><a href="/posts/query_engine.html">Iceberg, Parquet and query engines</a></li>
-           
-            <li><a href="/posts/common_mistakes_with_async_rust.html">Common mistakes with Async Rust</a></li>
-           
-            <li><a href="/posts/datafederation_and_rust.html">Data Federation and Trustfall</a></li>
-           
-            <li><a href="/posts/component_model_wasm.html">Why do I like WebAssembly? And a Rust example!</a></li>
-           
-            <li><a href="/posts/visualizing_metrics.html">Visualizing Metrics</a></li>
-           
-            <li><a href="/posts/opentelemetry_timeseries_metrics_and_a_bit_of_rust.html">OpenTelemetry, time series, metrics and a bit of Rust</a></li>
-           
-            <li><a href="/posts/peg_and_rust.html">PEG and Rust</a></li>
-        
-      </ul>
-      <img src="https://elias.sh/comunista.jpg" />
-    </main>
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>I vibe coded something, and I hate it</h1>
+	<h6>2026-08-07</h6>
+	<p>After all the hype around LLMs and coding agents, I decided to learn a little bit more how it worked. As a software engineer I was curious on two aspects of it: (1) how its internals work, and (2) how far can we push it. So I thought: what better way to learn it, than trying to build it? And what better way to push to its limits than trying myself to &quot;vibe code&quot; it. I read about <a href="https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents">Stripes' minions</a> sometime ago and decided to mimic its behaviour for this experiment.</p>
+<p>For the experiment I used: <a href="https://z.ai/">GLM-5.2</a> to review all the code using <a href="https://github.com/alibaba/open-code-review">open code-review</a> from Alibaba. To code I mix it a bit of Claude and <a href="https://deepseek.com/en/index.html">DeepSeek V4 Flash</a>. For harness I used Claude Code and Pi. I wanted to keep as much as possible with Chinese providers, as I don't trust the USA ones.</p>
+<p>The idea was to create a &quot;one-shot&quot; coding agent, I didn't want the agent to coordinate all the actions. I wanted to use a workflow. Whatever could be deterministic would use a tool and would be a separated node. The probabilistic nodes (the agent) could use different tools to perform the task, but running tests, creating PRs, checking the format of the code, all of that would use deterministic tooling after the probabilistic node. That way I was sure that I would run all the checks I desired.</p>
+<p>For the first PRs, I decided I would take a look in all the code, and if I found something I was not aware of, I would find papers that teach me that concept. It worked great, I end up reading <a href="https://arxiv.org/abs/2210.03629">a couple</a> of <a href="https://arxiv.org/abs/2302.04761">good papers</a> and I felt like I finally grasped how LLMs can use tools and how the whole &quot;coding agents&quot; can work.</p>
+<p>In few days of letting one agent coding and another reviewing, I had something working. I called it <a href="https://github.com/cats-of-the-world/boitata">boitata</a>. The name comes from Brazilian native folklore, a fire snake that protects the forest. Of course, at that point, my workflow was generating so much code that I stopped reading the code. Every weekend I would spend sometime testing the software and checking it seemed to work as I expected.</p>
+<img src="https://github.com/cats-of-the-world/boitata/raw/master/docs/src/screenshots/blueprint-graph.png" />
+<p>Boitata became its own thing, when I added typescript and a UI to it, I knew I had lost the game. My last contact with web development was years ago, before Typescript was a mainstream thing. I'm comfortable with JavaScript from the early days of the internet until the first versions of node.js. I broke my own promise of understanding all the code and I was not motivated enough to learn Typescript.</p>
+<p>I asked it to create its own documentation. I need to try to make sense of all the code it was generating. I still felt like this experiment could lead to something nice, but the more I look at the result, the more I believe it would take a great amount of human labour to make it something I would like to use.</p>
+<p>The code seems good enough. It feels production grade. I would never spend that amount of time on a side-pet project refining comments around the code or even adding so much tests. Normally, on pet-projects I want to learn a specific subject and I focus only on it, everything else that
+I need to build in order to learn what I really want is just a draft.</p>
+	</main>
         <div class="footer">
       Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
     </div>
 
-    <img src="https://raw.githubusercontent.com/saedyousef/StandWithPalestine/main/badges/flat/bordered/StandWithPalestine.svg" />
   </body>
 </html>
