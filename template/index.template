@@ -358,8 +358,8 @@ img {
       <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`.</p> 
 
       <p>I was born in the Global South and I do believe technology must be owned by all the peoples of the world
-      and not just the North (normally meaning the USA and Europe). I'm a strong defender of Chinese Tech as a way
-      to include more people from different nations into computers.</p>
+      and not just the North (normally meaning the USA and Europe). I'm a strong defender of Chinese tech as a way
+      to bring more people from different nations into computing.</p>
       <h2>Work</h2>
       <img src="https://www.elias.sh/che.jpg" style="float: right;width: 400px; margin-left: 10px;" />
       <ul>
