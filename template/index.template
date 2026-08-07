@@ -1,13 +1,13 @@
+<!DOCTYPE html>
 <!-- index.html -->
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Elias' homepage</title>
 <style>
 
 :root {
-    --base-font-size: 18px;
-    --heading-multiplier: 1.5;
-    
     --main-font: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
     --alt-font: 'JetBrains Mono', 'Source Code Pro', monospace;
 
@@ -19,20 +19,20 @@
     --rust-visited: #CD5B45;        /* Tomato red */
     --rust-glow: rgba(222, 165, 132, 0.4);
     --terminal-link: #83C092;       /* Softer green that complements rust colors */
-    
+
     /* Updated color scheme */
     --main-bg: #1A1A1A;            /* Dark gray instead of pure black */
     --secondary-bg: #252525;        /* Slightly lighter dark gray */
     --text-primary: #E8E8E8;
     --text-secondary: #B0B0B0;
-    --glitch-color1: #DEA584;       /* Rust color for glitch */
-    --glitch-color2: #83C092;       /* Terminal green for glitch */
 }
 
 img {
-  max-width: 900px;
-  width: auto;
-  height: auto;
+    max-width: 900px;
+    width: auto;
+    height: auto;
+    filter: brightness(0.8) contrast(1.1) sepia(0.1);
+    transition: filter 0.4s ease;
 }
 
 body {
@@ -69,19 +69,6 @@ h1::after {
     margin-left: 5px;
 }
 
-.rust-crab {
-    display: inline-block;
-    margin-left: 10px;
-    font-size: 1.8rem;
-    animation: crab-walk 3s ease-in-out infinite;
-}
-
-@keyframes crab-walk {
-    0%, 100% { transform: translateX(0) rotate(0deg); }
-    25% { transform: translateX(5px) rotate(-5deg); }
-    75% { transform: translateX(-5px) rotate(5deg); }
-}
-
 @keyframes blink {
     from, to { opacity: 0; }
     50% { opacity: 1; }
@@ -112,7 +99,7 @@ main {
     padding: 0 2rem;
 }
 
-footer {
+.footer {
     text-align: center;
     padding: 2rem;
     font-size: 0.8rem;
@@ -121,62 +108,13 @@ footer {
     background-color: var(--secondary-bg);
 }
 
-/* Enhanced glitch effect with rust colors */
-.glitch {
-    position: relative;
-}
-
-
-/* Terminal-like elements with rust theme */
-.terminal {
-    background-color: var(--secondary-bg);
-    border: 1px solid var(--rust-primary);
-    padding: 1rem;
-    font-family: var(--main-font);
-    position: relative;
-    margin: 2rem 0;
-    border-radius: 4px;
-    box-shadow: 0 0 15px var(--rust-glow);
-}
-
-.terminal::before {
-    content: '$';
-    position: absolute;
-    left: 0.5rem;
-    top: 0.5rem;
-    color: var(--rust-accent);
-    font-weight: bold;
-}
-
-.terminal p {
-    margin: 0;
-    padding-left: 1.5rem;
-    color: var(--text-secondary);
-}
-
-/* Cargo.toml style code block */
-.code-block {
-    background-color: #2D2D2D;
-    border-left: 4px solid var(--rust-primary);
-    padding: 1rem;
-    margin: 1.5rem 0;
-    font-family: var(--main-font);
-    font-size: 0.9rem;
-    overflow-x: auto;
-}
-
-.code-key { color: #83C092; }      /* Green for keys */
-.code-string { color: #D19A66; }   /* Orange for strings */
-.code-comment { color: #5C6370; }  /* Gray for comments */
-.code-number { color: #D19A66; }   /* Orange for numbers */
-
 /* Responsive design */
 @media (max-width: 768px) {
     nav ul {
         flex-direction: column;
         gap: 0.5rem;
     }
-    
+
     h1 {
         font-size: 1.8rem;
     }
@@ -211,6 +149,11 @@ a::after {
     transition: transform 0.4s ease;
 }
 
+a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
 /* Visited links */
 a:visited {
     color: var(--rust-visited);
@@ -232,30 +175,6 @@ nav a {
 
 nav a::after {
     display: none;
-}
-
-/* Terminal-style links */
-.terminal a {
-    color: var(--terminal-link);
-}
-
-.terminal a:hover {
-    color: #A7D8B9;
-    text-shadow: 0 0 5px rgba(131, 192, 146, 0.5);
-}
-
-.terminal a::after {
-    background: linear-gradient(90deg, var(--terminal-link), transparent);
-}
-
-.center-image {
-    display: flex;
-    justify-content: center;
-    position: relative;
-}
-
-.center-image img {
-    width: 150px;
 }
 
 blockquote {
@@ -315,34 +234,9 @@ blockquote footer::before {
     content: '— ';
 }
 
-img {
-    filter: brightness(0.8) contrast(1.1) sepia(0.1);
-    transition: filter 0.4s ease;
-}
-
-
-/* Rust specific status indicators */
-.status-compiling {
-    color: var(--rust-primary);
-    animation: pulse 2s infinite;
-}
-
-.status-success {
-    color: var(--terminal-link);
-}
-
-.status-error {
-    color: var(--rust-secondary);
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
 </style>
   </head>
-  <body class="hack main container">
+  <body>
     <main>
       <p><img src="https://www.elias.sh/glauber.png" style="float: left; margin-right: 25px;" />
       Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
@@ -351,20 +245,19 @@ img {
       <p>I really love working with Rust. My favourite domains are: Databases and Distributed Systems.
       I'm also a big fan of Platform Engineering and DX.</p>
       <br />
-      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a> or follow me at <a href="https://bsky.app/profile/elias.sh">Bsky</a>.
+      <p>You can check some of the things I build on <a href="https://github.com/era">Github</a> or follow me at <a href="https://bsky.app/profile/elias.sh">Bsky</a>.</p>
 
-
-      <img src="https://www.elias.sh/leila.jpg" style="float: left;width: 100px; margin-right: 10px;" />
-      <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`.</p> 
+      <p>If you have a Rust project and would like some help, you can email me at `me@${this_domain}`.</p>
 
       <p>I was born in the Global South and I do believe technology must be owned by all the peoples of the world
       and not just the North (normally meaning the USA and Europe). I'm a strong defender of Chinese tech as a way
       to bring more people from different nations into computing.</p>
+
       <h2>Work</h2>
       <img src="https://www.elias.sh/che.jpg" style="float: right;width: 400px; margin-left: 10px;" />
       <ul>
         <li>(2024-) Cybersecurity company: (safe and unsafe) Rust for cybersecurity products</li>
-        <li>(2024-2024) Mercari: A lot of golang and Flink for Trust & Safety organization</li>
+        <li>(2024-2024) Mercari: A lot of golang and Flink for Trust &amp; Safety organization</li>
         <li>(2021-2024) Huawei Cloud: Rust and Golang for cloud infrastructure</li>
         <li>(2019-2021) Stripe: Ruby for payments</li>
         <li>(2015-2019) <a href="/work/aws.html">AWS: Control Plane development for Redshift</a></li>
@@ -373,7 +266,7 @@ img {
 
       <h1>Blog Posts</h1>
       <ul>
-        {% for post in sort_by_key(posts.items, 'date', 'reversed') %}   
+        {% for post in sort_by_key(posts.items, 'date', 'reversed') %}
             <li><a href="{{post.partial_uri}}">{{ post.title }}</a></li>
         {% end %}
       </ul>
