@@ -2,6 +2,7 @@
   <head>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 	<script>hljs.highlightAll();</script>
 <style>
@@ -32,7 +33,7 @@
 }
 
 img {
-  max-width: 900px;
+  max-width: 100%;
   width: auto;
   height: auto;
 }
@@ -114,7 +115,7 @@ main {
     padding: 0 2rem;
 }
 
-footer {
+.footer {
     text-align: center;
     padding: 2rem;
     font-size: 0.8rem;
@@ -178,9 +179,30 @@ footer {
         flex-direction: column;
         gap: 0.5rem;
     }
-    
+
     h1 {
         font-size: 1.8rem;
+    }
+
+    main {
+        padding: 0 1rem;
+    }
+
+    blockquote {
+        padding: 1rem 1.25rem;
+    }
+
+    .terminal {
+        padding: 0.75rem;
+    }
+
+    .code-block {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .footer {
+        padding: 1.5rem 1rem;
     }
 }
 

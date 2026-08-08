@@ -28,7 +28,7 @@
 }
 
 img {
-    max-width: 900px;
+    max-width: 100%;
     width: auto;
     height: auto;
     filter: brightness(0.8) contrast(1.1) sepia(0.1);
@@ -99,6 +99,19 @@ main {
     padding: 0 2rem;
 }
 
+.avatar-left {
+    float: left;
+    margin-right: 25px;
+    max-width: 250px;
+}
+
+.avatar-right {
+    float: right;
+    width: 400px;
+    max-width: 100%;
+    margin-left: 10px;
+}
+
 .footer {
     text-align: center;
     padding: 2rem;
@@ -117,6 +130,23 @@ main {
 
     h1 {
         font-size: 1.8rem;
+    }
+
+    main {
+        padding: 0 1rem;
+    }
+
+    .avatar-left,
+    .avatar-right {
+        float: none;
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        margin: 1rem auto;
+    }
+
+    blockquote {
+        padding: 1rem 1.25rem;
     }
 }
 
@@ -238,7 +268,7 @@ blockquote footer::before {
   </head>
   <body>
     <main>
-      <p><img src="https://www.elias.sh/glauber.png" style="float: left; margin-right: 25px;" />
+      <p><img src="https://www.elias.sh/glauber.png" class="avatar-left" />
       Hi, my name is Elias, some people on the internet may know me as <a href="https://github.com/era">Era</a>.
       Nice to meet you. I create stuff for a living. And well... I am a Software Engineer.</p>
 
@@ -254,7 +284,7 @@ blockquote footer::before {
       to bring more people from different nations into computing.</p>
 
       <h2>Work</h2>
-      <img src="https://www.elias.sh/che.jpg" style="float: right;width: 400px; margin-left: 10px;" />
+      <img src="https://www.elias.sh/che.jpg" class="avatar-right" />
       <ul>
         <li>(2024-) Cybersecurity company: (safe and unsafe) Rust for cybersecurity products</li>
         <li>(2024-2024) Mercari: A lot of golang and Flink for Trust &amp; Safety organization</li>
@@ -314,6 +344,5 @@ blockquote footer::before {
       Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
     </div>
 
-    <img src="https://raw.githubusercontent.com/saedyousef/StandWithPalestine/main/badges/flat/bordered/StandWithPalestine.svg" />
   </body>
 </html>
