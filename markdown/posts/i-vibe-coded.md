@@ -15,7 +15,7 @@ For the first PRs, I decided I would take a look at all the code, and if I found
 
 <img src="https://elias.sh/vibe/fera.webp" />
 
-After a few days of letting one agent code and another review, I had something working. I called it [boitata](https://github.com/cats-of-the-world/boitata). The name comes from Brazilian native folklore, a fire snake that protects the forest. Of course, at that point, my workflow was generating so much code that I stopped it. I decided to take a more "user approach". Every weekend I would spend some time testing the software and checking that it seemed to work as I expected.
+After a few days of letting one agent code and another review, I had something working. I called it [boitata](https://github.com/cats-of-the-world/boitata). The name comes from Brazilian native folklore, a fire snake that protects the forest. Of course, at that point, my workflow was generating so much code that I stopped reading the code. I decided to take a more "user approach". Every weekend I would spend some time testing the software and checking that it seemed to work as I expected.
 
 <img src="https://github.com/cats-of-the-world/boitata/raw/master/docs/src/screenshots/blueprint-graph.png" />
 
