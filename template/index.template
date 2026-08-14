@@ -300,6 +300,15 @@ blockquote footer::before {
             <li><a href="{{post.partial_uri}}">{{ post.title }}</a></li>
         {% end %}
       </ul>
+
+      {% if articles.size > 0 %}
+      <h1>Articles</h1>
+      <ul>
+        {% for article in sort_by_key(articles.items, 'date', 'reversed') %}
+            <li><a href="{{article.partial_uri}}">{{ article.title }}</a></li>
+        {% end %}
+      </ul>
+      {% end %}
       <img src="https://elias.sh/comunista.jpg" />
     </main>
     {{ render('template/_footer.template')}}
