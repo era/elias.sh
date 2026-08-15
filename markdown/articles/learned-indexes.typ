@@ -30,3 +30,7 @@ for non-monotonic models."
 
 This is the part that I find most interesting: "a model that predicts the position given a
 key inside a sorted array effectively approximates the cumulative distribution function (CDF)." Wikipedia defines CDF as "the cumulative distribution function of a real-valued random variable X, or just distribution function of X, evaluated at x, is the probability that X will take a value less than or equal to x". In other words, if the model predicts position 30 for key Y, we can jump to that position and check if Y is the key there. If it's not, we can check position 31; if the key there is greater than Y, then Y is nowhere to be found in our array.
+
+= Conclusion
+
+The way we formulate the question, guides our mind on possible answers. Rephrasing the problem may help us to come with better answers. In my opinion, this paper describes this well. If we keep asking ourselves the same question over decades, we will be pretty good and that theme, but not necessarily will we archive the best solution. Isn't Computer Science beautiful?
