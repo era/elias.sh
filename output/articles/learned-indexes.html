@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <title>Learned Indexes, new definition for an old problem</title>
+<style>
+
+:root {
+    --serif-font: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans-font: 'IBM Plex Sans', -apple-system, sans-serif;
+    --mono-font: 'IBM Plex Mono', 'Fira Code', Consolas, monospace;
+
+    --paper-bg: #f6f3ec;
+    --ink: #201c16;
+    --ink-muted: #6b6255;
+    --rule: #dcd4c2;
+    --accent: #2c4a7c;
+    --accent-soft: rgba(44, 74, 124, 0.08);
+    --code-bg: #efece2;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --paper-bg: #16140f;
+        --ink: #e9e4d8;
+        --ink-muted: #a89d89;
+        --rule: #3a3527;
+        --accent: #8fb2e8;
+        --accent-soft: rgba(143, 178, 232, 0.1);
+        --code-bg: #201c16;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--paper-bg);
+    color: var(--ink);
+    font-family: var(--sans-font);
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.topbar {
+    padding: 1.5rem 2rem;
+}
+
+.home-link {
+    font-family: var(--sans-font);
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+}
+
+.home-link:hover {
+    color: var(--accent);
+}
+
+.paper {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+}
+
+.paper-head {
+    text-align: center;
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--rule);
+}
+
+.kicker {
+    font-family: var(--sans-font);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 1rem;
+}
+
+.paper-head h1 {
+    font-family: var(--serif-font);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.2;
+    margin: 0 0 1rem;
+    color: var(--ink);
+}
+
+.byline {
+    font-family: var(--sans-font);
+    font-size: 0.85rem;
+    letter-spacing: 0.01em;
+    color: var(--ink-muted);
+    margin: 0;
+}
+
+.paper-body {
+    font-family: var(--serif-font);
+    font-size: 1.15rem;
+    line-height: 1.75;
+    color: var(--ink);
+    text-align: justify;
+    hyphens: auto;
+    counter-reset: section;
+}
+
+.paper-body p {
+    margin: 0 0 1.4em;
+}
+
+.paper-body h2 {
+    counter-increment: section;
+    counter-reset: subsection;
+    font-family: var(--sans-font);
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 2.5em 0 1em;
+    padding-left: 0.75em;
+    border-left: 3px solid var(--accent);
+    text-align: left;
+}
+
+.paper-body h2::before {
+    content: counter(section) ". ";
+    color: var(--accent);
+}
+
+.paper-body h3 {
+    counter-increment: subsection;
+    font-family: var(--sans-font);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 2em 0 0.75em;
+    text-align: left;
+}
+
+.paper-body h3::before {
+    content: counter(section) "." counter(subsection) " ";
+    color: var(--accent);
+}
+
+.paper-body h4, .paper-body h5, .paper-body h6 {
+    font-family: var(--sans-font);
+    font-weight: 600;
+    color: var(--ink);
+    margin: 1.75em 0 0.6em;
+    text-align: left;
+}
+
+.paper-body a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.paper-body a:hover {
+    background-color: var(--accent-soft);
+}
+
+.paper-body strong {
+    font-weight: 700;
+}
+
+.paper-body sup {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.paper-body sup a {
+    text-decoration: none;
+}
+
+.paper-body ul, .paper-body ol {
+    margin: 0 0 1.4em;
+    padding-left: 1.5em;
+    text-align: left;
+}
+
+.paper-body li {
+    margin-bottom: 0.4em;
+}
+
+.paper-body blockquote {
+    font-family: var(--serif-font);
+    font-style: italic;
+    color: var(--ink-muted);
+    margin: 2em 0;
+    padding: 0.2em 0 0.2em 1.5em;
+    border-left: 3px solid var(--rule);
+    text-align: left;
+}
+
+.paper-body pre {
+    background-color: var(--code-bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1em;
+    overflow-x: auto;
+    margin: 1.5em 0;
+    text-align: left;
+}
+
+.paper-body code {
+    font-family: var(--mono-font);
+    font-size: 0.85em;
+}
+
+.paper-body p code {
+    background-color: var(--code-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+}
+
+.paper-body hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 3em 0;
+}
+
+.paper-body .references {
+    margin-top: 1em;
+    padding-top: 1em;
+}
+
+.paper-body .references ol {
+    padding-left: 1.4em;
+}
+
+.paper-body .references li {
+    font-family: var(--sans-font);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    text-align: left;
+    margin-bottom: 0.6em;
+}
+
+.footer {
+    background-color: var(--paper-bg) !important;
+    color: var(--ink-muted) !important;
+    border-top: 1px solid var(--rule) !important;
+}
+
+.footer a {
+    color: var(--accent) !important;
+}
+
+@media (max-width: 700px) {
+    .paper-body {
+        text-align: left;
+        hyphens: none;
+    }
+}
+
+@media print {
+    .topbar, .footer {
+        display: none;
+    }
+    .paper-body {
+        text-align: left;
+    }
+}
+
+</style>
+  </head>
+  <body>
+    <div class="topbar">
+      <a href="https://elias.sh" class="home-link">< back to home</a>
+    </div>
+    <main class="paper">
+      <header class="paper-head">
+        <p class="kicker">Article</p>
+        <h1>Learned Indexes, new definition for an old problem</h1>
+        <p class="byline">By Era - Published August 15, 2026</p>
+      </header>
+      <article class="paper-body">
+        <h2>Introduction</h2><p>One of the things I love the most in Computer Science is the philosophy behind it. Of course, we are dealing with the real world, but if we abstract problems in the right way, we could find the solution in a very unexpected place. That was my reaction when I first read about “Learned Indexes”. <a href="https://arxiv.org/abs/1712.01208">The original paper is very approachable</a> so I do suggest you all read it, but its introduction goes something like: What if we stopped looking at indexes as these deterministic data-structures and looked at them as models. For example: a B-Tree-Index can be considered as “a model which takes a key as an input and predicts the position of a data record in a sorted set”. If we do such a thing, we can replace them with different models, including deep-learning models, for which they coined the term learned indexes. The crazy part is that this new layer of abstraction works very well: what we call “re-balancing” is just “re-training”, and so on.</p><h2>The Abstraction</h2><p>If we know the distribution of the data, we can use an array as our index and have lookups in O(1). Take the simplest example possible: if we have 100 keys from 0 to 99, we can just create an array where Key = Array Position, that way we know exactly where to go to fetch key 51. If we could learn the data distribution of our keys, we could build similar models. Even if we don’t have a precision of 100%, given that the keys are sorted, even when we are wrong, we should be close enough to just walk to the region of the array where we were told our key would be, and in very few checks we can find it. In terms of performance, there is a whole argument on the paper about how “every CPU already has powerful SIMD capabilities and […] that many laptops and mobile phones will soon have a Graphics Processing Unit (GPU) or Tensor Processing Unit (TPU)”.</p><p><img src="https://www.elias.sh/learned_indexes/lerned_keys.png"></p><h2>Range-Indexes</h2><p>The argument here goes as follows: for efficiency we normally don’t index every single key of the sorted records, but rather only the key of every nth record. “Thus, the B-Tree is a model, or in ML terminology, a regression tree: it maps a key to a position with a min- and max-error (a min-error of 0 and a max-error of the page-size), with a guarantee that the key can be found in that region if it exists”. Therefore we can replace a B-tree with another model, as long as we keep the same guarantees about min-error and max-error. The authors also argue (as I stated before) that the error guarantees don’t need to be held, as “the data has to be sorted anyway to support range requests, so any error is easily corrected by a local search around the prediction (e.g., using exponential search) and thus, even allows for non-monotonic models.”</p><h3>Range index models are CDF models</h3><p>This is the part that I find most interesting: “a model that predicts the position given a key inside a sorted array effectively approximates the cumulative distribution function (CDF).” Wikipedia defines CDF as “the cumulative distribution function of a real-valued random variable X, or just distribution function of X, evaluated at x, is the probability that X will take a value less than or equal to x”. In other words, if the model predicts position 30 for key Y, we can jump to that position and check if Y is the key there. If it’s not, we can check position 31; if the key there is greater than Y, then Y is nowhere to be found in our array.</p>
+      </article>
+    </main>
+        <div class="footer">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
