@@ -33,4 +33,4 @@ key inside a sorted array effectively approximates the cumulative distribution f
 
 = Conclusion
 
-The way we formulate the question, guides our mind on possible answers. Rephrasing the problem may help us to come with better answers. In my opinion, this paper describes this well. If we keep asking ourselves the same question over decades, we will be pretty good and that theme, but not necessarily will we archive the best solution. Isn't Computer Science beautiful?
+The way we formulate the question, guides our mind on possible answers. Rephrasing the problem may help us to come with better answers. In my opinion, this paper describes this well. If we keep asking ourselves the same question over decades, we will be pretty good at that theme, but not necessarily will we archive the best solution. Isn't Computer Science beautiful?
