@@ -1,0 +1,437 @@
+<html>
+  <head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+<style>
+
+:root {
+    --base-font-size: 18px;
+    --heading-multiplier: 1.5;
+    
+    --main-font: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    --alt-font: 'JetBrains Mono', 'Source Code Pro', monospace;
+
+    /* Rust-themed colors - inspired by Rust orange and dark themes */
+    --rust-primary: #DEA584;        /* Rust orange/brown */
+    --rust-secondary: #B7410E;      /* Darker rust */
+    --rust-accent: #FF7F50;         /* Coral/orange accent */
+    --rust-hover: #FFA07A;          /* Light salmon */
+    --rust-visited: #CD5B45;        /* Tomato red */
+    --rust-glow: rgba(222, 165, 132, 0.4);
+    --terminal-link: #83C092;       /* Softer green that complements rust colors */
+    
+    /* Updated color scheme */
+    --main-bg: #1A1A1A;            /* Dark gray instead of pure black */
+    --secondary-bg: #252525;        /* Slightly lighter dark gray */
+    --text-primary: #E8E8E8;
+    --text-secondary: #B0B0B0;
+    --glitch-color1: #DEA584;       /* Rust color for glitch */
+    --glitch-color2: #83C092;       /* Terminal green for glitch */
+}
+
+img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+body {
+    background-color: var(--main-bg);
+    color: var(--text-primary);
+    font-family: var(--main-font);
+    line-height: 1.7;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+h1, h2, h3 {
+    color: var(--text-primary);
+    font-weight: 600; /* Slightly bolder for better readability */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: var(--alt-font);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+    color: var(--rust-primary);
+}
+
+h1::after {
+    content: '_';
+    animation: blink 1s step-end infinite;
+    color: var(--rust-accent);
+    margin-left: 5px;
+}
+
+.rust-crab {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 1.8rem;
+    animation: crab-walk 3s ease-in-out infinite;
+}
+
+@keyframes crab-walk {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(5px) rotate(-5deg); }
+    75% { transform: translateX(-5px) rotate(5deg); }
+}
+
+@keyframes blink {
+    from, to { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+nav {
+    background-color: rgba(37, 37, 37, 0.95); /* Using secondary bg with transparency */
+    backdrop-filter: blur(5px);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--rust-primary);
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+}
+
+main {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--rust-primary);
+    background-color: var(--secondary-bg);
+}
+
+/* Enhanced glitch effect with rust colors */
+.glitch {
+    position: relative;
+}
+
+
+/* Terminal-like elements with rust theme */
+.terminal {
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--rust-primary);
+    padding: 1rem;
+    font-family: var(--main-font);
+    position: relative;
+    margin: 2rem 0;
+    border-radius: 4px;
+    box-shadow: 0 0 15px var(--rust-glow);
+}
+
+.terminal::before {
+    content: '$';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    color: var(--rust-accent);
+    font-weight: bold;
+}
+
+.terminal p {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+/* Cargo.toml style code block */
+.code-block {
+    background-color: #2D2D2D;
+    border-left: 4px solid var(--rust-primary);
+    padding: 1rem;
+    margin: 1.5rem 0;
+    font-family: var(--main-font);
+    font-size: 0.9rem;
+    overflow-x: auto;
+}
+
+.code-key { color: #83C092; }      /* Green for keys */
+.code-string { color: #D19A66; }   /* Orange for strings */
+.code-comment { color: #5C6370; }  /* Gray for comments */
+.code-number { color: #D19A66; }   /* Orange for numbers */
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    main {
+        padding: 0 1rem;
+    }
+
+    blockquote {
+        padding: 1rem 1.25rem;
+    }
+
+    .terminal {
+        padding: 0.75rem;
+    }
+
+    .code-block {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .footer {
+        padding: 1.5rem 1rem;
+    }
+}
+
+a {
+    color: var(--rust-accent);
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    padding: 0 2px;
+}
+
+a:hover {
+    color: var(--rust-hover);
+    text-shadow: 0 0 8px var(--rust-glow);
+    background-color: rgba(222, 165, 132, 0.1);
+}
+
+/* Underline animation */
+a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, var(--rust-accent), transparent);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.4s ease;
+}
+
+
+
+/* Visited links */
+a:visited {
+    color: var(--rust-visited);
+}
+
+/* Active/focused links */
+a:active, a:focus {
+    color: var(--text-primary);
+    outline: 1px dotted var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.2);
+}
+
+/* Special link styles for navigation */
+nav a {
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    border: 1px solid var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.15);
+    border-radius: 3px;
+}
+
+nav a::after {
+    display: none;
+}
+
+/* Terminal-style links */
+.terminal a {
+    color: var(--terminal-link);
+}
+
+.terminal a:hover {
+    color: #A7D8B9;
+    text-shadow: 0 0 5px rgba(131, 192, 146, 0.5);
+}
+
+.terminal a::after {
+    background: linear-gradient(90deg, var(--terminal-link), transparent);
+}
+
+.center-image {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.center-image img {
+    width: 150px;
+}
+
+blockquote {
+    font-family: var(--alt-font);
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--rust-primary);
+    background: rgba(37, 37, 37, 0.5);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    position: relative;
+    line-height: 1.8;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 15px rgba(222, 165, 132, 0.1);
+    overflow: hidden;
+}
+
+blockquote::before {
+    content: '//';
+    font-family: var(--main-font);
+    font-size: 1.5rem;
+    color: var(--rust-glow);
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    line-height: 1;
+    opacity: 0.5;
+}
+
+blockquote::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 30%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rust-primary), transparent);
+}
+
+blockquote p {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+blockquote footer {
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 1rem;
+    color: var(--rust-accent);
+    font-style: normal;
+    border: none;
+    background: none;
+}
+
+blockquote footer::before {
+    content: '— ';
+}
+
+
+img {
+    filter: brightness(0.8) contrast(1.1) sepia(0.1);
+    transition: filter 0.4s ease;
+}
+
+
+/* Rust specific status indicators */
+.status-compiling {
+    color: var(--rust-primary);
+    animation: pulse 2s infinite;
+}
+
+.status-success {
+    color: var(--terminal-link);
+}
+
+.status-error {
+    color: var(--rust-secondary);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+</style>
+  <title>Code is law (not really) </title>
+
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Code is law (not really)</h1>
+	<h6>2026-08-22</h6>
+	<p>Startups and big corps produce software in a very different way. One side will use Agile methodology, with people in its center; the other will use waterfall, process are the center. Agile most of the times is almost like vibe coding something. You have a loosely defined feature (called user story), you plan how to deliver this during one sprint and you are done. Waterfall is extremely boring, you spend months defining all the aspects of your software; then you develop, then you test; then you ship something that is useless because the world has moved on.</p>
+<p>A Startup just don't have the time for doing it, so they just go by feelings and adapt super fast. The only source of truth is the code, you want to know how a feature that was developed last year is working? Go straight to the code, it's your only hope. And I have to say that it works pretty well. When humans write code they have the intention in mind, they tend to produce code that is closer to the conversation they had and their understanding of the requirements. Good code comments will even highlight this: &quot;oh, because we were asked X, I'm implementing this like bla and bla&quot;. If there is a bug, you normally can tell a bit easier if the bug is due to a bad requirement or a bad implementation. Don't get me wrong, it's not something that someone starting in the industry can do, but over the years you acquire this super power.</p>
+<p>Meanwhile, in a big corp you have UML. Oh, god, I hate UML. I know how to read code, I can quickly understand how something was develop and move around the code. UML software is slow, is visual, I cannot easily <code>grep</code> I can't do almost nothing with that. I hate it.</p>
+<p>It's 2026. My work role changes and the world is also another. People write requirements with LLMs, code those requirements with LLMs and hopefully validate it by themselves.</p>
+<p>Software is hard because the small details. When I was at AWS my favourite type of interview question was a to give a very abstract problem and check if the person would ask clarifying questions and would come up with possible edge cases for us to discuss. Implementing what I have asked initially would be easy, but would explode in production or you would need to play by the ear every time you either saw a bug or found an edge case. Not very far away from someone vibecoding.</p>
+<p>Let's talk again about Startups. They want to go fast. With LLMs and enough money you can probably build in few days what previously would take years. So the act of producing a software is not the hardest part. Also: because you are producing so many things so fast, you don't have time to process the feature in background. I mean, which software engineer never had a Eureka moment at the shower after working for days on the same feature? Now, features are like reels or TikTok, you spend 30 seconds on it, and you move to the next. No time to reflect on it.</p>
+<p>No time to reflect on it.</p>
+<p>No time to reflect on it.</p>
+<p>Isn't that important? Wait a minute, isn't waterfall a way to stop and reflect about the problem for months? And Agile a way to maybe reflect less, but deliver faster? Is it safe to skip the reflection part?</p>
+<p>During the pandemic I got addicted to the theme &quot;tools for thoughts&quot;. I was mostly interesting in building software that would help us to better manage our thoughts or visualize information, a <a href="https://www.youtube.com/watch?v=DFWxvQn4cf8">memex</a>. This type of software seems even more important now that we are spending less time on the small details of our office jobs and looking more and more at the bigger picture.</p>
+<p>Fast forwarding a few years on a business trip to China, I learnt about Formal Methods from <a href="https://www.linkedin.com/in/ananthshrinivas/">Ananth</a>. I got a new addiction: how to formally prove software was working. In a way, the two themes overlap: isn't TLA+ just a tool for formalizing thought?</p>
+<p><a href="https://martin.kleppmann.com/2025/12/08/ai-formal-verification.html">Martin Kleppmann</a> has a prediction: AI will make formal verification to become mainstream. I think that too, but I also believe we are far away from it as today. Although, I think we can slowly pave the way.</p>
+<p>What if merge the speed of Agile with a bit more formality? Instead of talking about user stories, for more technical problems (e.g. how an EDR agent should handle file access) we produce specs?</p>
+<p>Ok, so we are going to write specs, how are we going to prove that we are following those specs? Oh, well, that is a harder problem, but what if we take a smaller step here: what if we don't prove we are correctly following the spec, but at very least we point at the code where we had the INTENTION of following a certain item of the spec?</p>
+<p>There is a tool called <a href="https://tracey.bearcove.eu/">tracey</a>, which I like to think as a &quot;tool for thought&quot;. If you write your specs following its syntax, where you annotate requirements with <code>r[rule.id]</code>:</p>
+<pre><code>## Connection Lifecycle
+
+r[conn]
+
+r[conn.open]
+The client MUST send a handshake frame
+before any other communication.
+
+r[conn.close]
+Either side MAY initiate a graceful close.
+</code></pre>
+<pre><code></code></pre>
+<p>And later on you also annotate on your code where you had the INTENTION of implementing that rule:</p>
+<pre><code class="language-rust">// [impl conn.open]
+fn open_connection(&amp;mut self) -&gt; Result&lt;()&gt; {
+    self.send_handshake()?;
+    self.state = State::Open;
+    Ok(())
+}
+
+#[test]
+fn test_handshake() {
+    // [verify conn.open]
+    let mut conn = Connection::new();
+    assert!(conn.open_connection().is_ok());
+}
+</code></pre>
+<pre><code></code></pre>
+<p>Tracey allows you to use a web dashboard or a CLI to ask questions like: &quot;we defined this behaviour 2 weeks ago as <code>r[rule.id]</code>, are we following it?&quot; or even &quot;the observed behaviour during test does not seem correct, let me find where in the code we were trying to implement this part of the spec and confirm if we implemented correctly&quot;.</p>
+<p>So the tool give us traceability. The spec gives a more formal definition of how something should work, it also give us a media where we can discuss behaviour, edge cases and important details without implementation details of the programming language we use. It's a place where other folks that are not software engineers or don't have time to read big pull requests to give their inputs.</p>
+<p>In other words, it gives us more formality without forcing us to make waterfall mainstream again.</p>
+	</main>
+        <div class="footer">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
