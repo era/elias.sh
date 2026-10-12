@@ -1,0 +1,395 @@
+<html>
+  <head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
+<style>
+
+:root {
+    --base-font-size: 18px;
+    --heading-multiplier: 1.5;
+    
+    --main-font: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    --alt-font: 'JetBrains Mono', 'Source Code Pro', monospace;
+
+    /* Rust-themed colors - inspired by Rust orange and dark themes */
+    --rust-primary: #DEA584;        /* Rust orange/brown */
+    --rust-secondary: #B7410E;      /* Darker rust */
+    --rust-accent: #FF7F50;         /* Coral/orange accent */
+    --rust-hover: #FFA07A;          /* Light salmon */
+    --rust-visited: #CD5B45;        /* Tomato red */
+    --rust-glow: rgba(222, 165, 132, 0.4);
+    --terminal-link: #83C092;       /* Softer green that complements rust colors */
+    
+    /* Updated color scheme */
+    --main-bg: #1A1A1A;            /* Dark gray instead of pure black */
+    --secondary-bg: #252525;        /* Slightly lighter dark gray */
+    --text-primary: #E8E8E8;
+    --text-secondary: #B0B0B0;
+    --glitch-color1: #DEA584;       /* Rust color for glitch */
+    --glitch-color2: #83C092;       /* Terminal green for glitch */
+}
+
+img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+body {
+    background-color: var(--main-bg);
+    color: var(--text-primary);
+    font-family: var(--main-font);
+    line-height: 1.7;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+h1, h2, h3 {
+    color: var(--text-primary);
+    font-weight: 600; /* Slightly bolder for better readability */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: var(--alt-font);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+    color: var(--rust-primary);
+}
+
+h1::after {
+    content: '_';
+    animation: blink 1s step-end infinite;
+    color: var(--rust-accent);
+    margin-left: 5px;
+}
+
+.rust-crab {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 1.8rem;
+    animation: crab-walk 3s ease-in-out infinite;
+}
+
+@keyframes crab-walk {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(5px) rotate(-5deg); }
+    75% { transform: translateX(-5px) rotate(5deg); }
+}
+
+@keyframes blink {
+    from, to { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+nav {
+    background-color: rgba(37, 37, 37, 0.95); /* Using secondary bg with transparency */
+    backdrop-filter: blur(5px);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--rust-primary);
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+}
+
+main {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--rust-primary);
+    background-color: var(--secondary-bg);
+}
+
+/* Enhanced glitch effect with rust colors */
+.glitch {
+    position: relative;
+}
+
+
+/* Terminal-like elements with rust theme */
+.terminal {
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--rust-primary);
+    padding: 1rem;
+    font-family: var(--main-font);
+    position: relative;
+    margin: 2rem 0;
+    border-radius: 4px;
+    box-shadow: 0 0 15px var(--rust-glow);
+}
+
+.terminal::before {
+    content: '$';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    color: var(--rust-accent);
+    font-weight: bold;
+}
+
+.terminal p {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+/* Cargo.toml style code block */
+.code-block {
+    background-color: #2D2D2D;
+    border-left: 4px solid var(--rust-primary);
+    padding: 1rem;
+    margin: 1.5rem 0;
+    font-family: var(--main-font);
+    font-size: 0.9rem;
+    overflow-x: auto;
+}
+
+.code-key { color: #83C092; }      /* Green for keys */
+.code-string { color: #D19A66; }   /* Orange for strings */
+.code-comment { color: #5C6370; }  /* Gray for comments */
+.code-number { color: #D19A66; }   /* Orange for numbers */
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    main {
+        padding: 0 1rem;
+    }
+
+    blockquote {
+        padding: 1rem 1.25rem;
+    }
+
+    .terminal {
+        padding: 0.75rem;
+    }
+
+    .code-block {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .footer {
+        padding: 1.5rem 1rem;
+    }
+}
+
+a {
+    color: var(--rust-accent);
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    padding: 0 2px;
+}
+
+a:hover {
+    color: var(--rust-hover);
+    text-shadow: 0 0 8px var(--rust-glow);
+    background-color: rgba(222, 165, 132, 0.1);
+}
+
+/* Underline animation */
+a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, var(--rust-accent), transparent);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.4s ease;
+}
+
+
+
+/* Visited links */
+a:visited {
+    color: var(--rust-visited);
+}
+
+/* Active/focused links */
+a:active, a:focus {
+    color: var(--text-primary);
+    outline: 1px dotted var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.2);
+}
+
+/* Special link styles for navigation */
+nav a {
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    border: 1px solid var(--rust-accent);
+    background-color: rgba(222, 165, 132, 0.15);
+    border-radius: 3px;
+}
+
+nav a::after {
+    display: none;
+}
+
+/* Terminal-style links */
+.terminal a {
+    color: var(--terminal-link);
+}
+
+.terminal a:hover {
+    color: #A7D8B9;
+    text-shadow: 0 0 5px rgba(131, 192, 146, 0.5);
+}
+
+.terminal a::after {
+    background: linear-gradient(90deg, var(--terminal-link), transparent);
+}
+
+.center-image {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.center-image img {
+    width: 150px;
+}
+
+blockquote {
+    font-family: var(--alt-font);
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--rust-primary);
+    background: rgba(37, 37, 37, 0.5);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    position: relative;
+    line-height: 1.8;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 15px rgba(222, 165, 132, 0.1);
+    overflow: hidden;
+}
+
+blockquote::before {
+    content: '//';
+    font-family: var(--main-font);
+    font-size: 1.5rem;
+    color: var(--rust-glow);
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    line-height: 1;
+    opacity: 0.5;
+}
+
+blockquote::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 30%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rust-primary), transparent);
+}
+
+blockquote p {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+blockquote footer {
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 1rem;
+    color: var(--rust-accent);
+    font-style: normal;
+    border: none;
+    background: none;
+}
+
+blockquote footer::before {
+    content: '— ';
+}
+
+
+img {
+    filter: brightness(0.8) contrast(1.1) sepia(0.1);
+    transition: filter 0.4s ease;
+}
+
+
+/* Rust specific status indicators */
+.status-compiling {
+    color: var(--rust-primary);
+    animation: pulse 2s infinite;
+}
+
+.status-success {
+    color: var(--terminal-link);
+}
+
+.status-error {
+    color: var(--rust-secondary);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+</style>
+  <title>Quick thoughts on automation (Workflows) </title>
+
+  </head>
+  <body class="hack main container">
+	<a href="https://elias.sh">< back to home</a>
+	<main>
+	<h1>Quick thoughts on automation (Workflows)</h1>
+	<h6>2026-10-12</h6>
+	<p>During my 4 years working at AWS (Redshift team), one of my main projects was to take care of the workflows we had for ControlPlane. Our control plane was responsible for creating instances of Redshift for users after an API call, upgrade the machines and fix issues that could occur on network or on the compute instances (e.g. broken disks, data center down). We used an internal framework built on top of <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/welcome.html">SWF</a>. SWF allowed us to run our workflow in a distributed way: we split the workflow in different steps, each step could be performed on a different machine (so we could spread the load). Each step could have different outcomes that would define what was the next step. In the end, the workflow was a <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> and SWF just needed to navigate it.</p>
+<p>There are very interesting topics around this, but I would like to quickly explain the mindset behind writing those workflows. Every single step in the end had three possible states: (1) it succeeded; (2) it failed and we should rollback changes; (3) it failed in a terminal way, we need manual actions.</p>
+<p>Because of the scale, we tried our best to always make the step go to either (1) or (2) states. If a step was going to fail in a terminal way (3) 1% of the time, that would mean a hell weak for whoever was oncall, given that 1% basically meant several times a day. That was the trick to go from ~300 sev2 per day (meaning the team was paged 300 times any given day) to less than 20 sev2.</p>
+<p>When writing the steps, it is very easy to try to side with &quot;safety&quot; and &quot;fail in a terminal way&quot; if we are unsure of the state of the system. That way, no bug was hidden in production and we had &quot;visibility&quot; of the problems. That has a couple of problems, we don´t need sev2 or someone paged to know there is a problem, we should have metrics and dashboards to tell us what is going on on our fleet. We have thousands of machines, we shouldn´t care if one or another is failing, we should have the data to know which are the real problems we need to fix without stopping the world. Another harder issue is that it's easier to assume someone will ssh to a machine, understand what is going on and fix the issue, but that is not how real life works. Maybe who worked on the feature is not online, so the oncall engineer needs to understand the new code, the state of the machine and debug from first-principles. It can take hours. A better way of handling it is for the engineer writing the workflow to think on all possible outcomes and store previous states. Rolling back becomes easily automated.</p>
+	</main>
+        <div class="footer">
+      Built with <a href="https://github.com/era/tinylang">TinyLang</a> + <a href="https://github.com/era/squid">Squid</a>.
+    </div>
+
+  </body>
+</html>
