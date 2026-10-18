@@ -1,5 +1,6 @@
 ---
 title: I vibe coded something, and I hate it
+description: "An experiment in one-shot vibe coding with LLM agents: what worked, what broke, and why the resulting code felt like inherited legacy."
 date: 2026-08-07
 ---
 

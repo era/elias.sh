@@ -1,5 +1,6 @@
 ---
 title: Why do I like WebAssembly? And a Rust example!
+description: "An introduction to WebAssembly, the Component Model and WIT, with a Rust host that loads and runs sandboxed Wasm plugins."
 date: 2023-07-09
 ---
 

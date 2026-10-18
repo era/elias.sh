@@ -1,5 +1,6 @@
 ---
 title: Understanding Cybersecurity MITRE ATT&CK + CIA Triad
+description: "An introduction to cybersecurity terminology: the MITRE ATT&CK framework, what good telemetry looks like, and the CIA triad."
 date: 2026-05-01
 ---
 

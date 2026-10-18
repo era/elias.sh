@@ -1,5 +1,6 @@
 ---
 title: Kernel Mode, Cybersecurity and Rust
+description: "A tour of user mode, kernel mode and EDR agents, and why most Windows security products still need a C++ kernel driver."
 date: 2025-09-06
 ---
 

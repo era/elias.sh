@@ -1,5 +1,6 @@
 ---
 title: Common mistakes with Async Rust 
+description: "Four common Async Rust pitfalls: blocking the runtime, blocking Drop implementations, oversized futures and mutex mistakes."
 date: 2025-01-26
 ---
 

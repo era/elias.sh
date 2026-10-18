@@ -1,5 +1,6 @@
 ---
 title: Rust Forge 2025
+description: "Notes from Rust Forge 2025 in Wellington, including my first English conference talk about testing and Hyrum's Law."
 date: 2025-09-02
 ---
 

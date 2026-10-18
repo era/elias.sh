@@ -375,6 +375,12 @@ img {
 
 </style>
   <title>{{ content.title }} </title>
+  <meta property="og:title" content="{{ content.title }}">
+  <meta property="og:description" content="{{ content.description }}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{ content.url }}">
+  <meta property="og:image" content="{% if content.image != '' %}{{ content.image }}{% else %}https://elias.sh/comunista.jpg{% end %}">
+  <meta property="og:site_name" content="{{ website_name }}">
 
   </head>
   <body class="hack main container">

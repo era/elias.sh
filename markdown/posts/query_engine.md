@@ -1,5 +1,6 @@
 ---
 title: Iceberg, Parquet and query engines 
+description: "Building an observability query engine on top of Iceberg, Parquet and Arrow, from ingestion to predicate pushdown."
 date: 2025-04-25
 ---
 

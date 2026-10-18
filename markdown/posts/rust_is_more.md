@@ -1,5 +1,6 @@
 ---
 title: Rust is much more than just a programming language 
+description: "Rust as more than a programming language: open source, digital sovereignty and a path toward a multipolar technological world."
 date: 2026-01-04
 ---
 

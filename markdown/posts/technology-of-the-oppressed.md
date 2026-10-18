@@ -1,5 +1,6 @@
 ---
 title: Technology of the oppressed
+description: "How communities in the Global South build and own technology outside Big Tech, from Brazilian favelas to Tech for Palestine."
 date: 2026-08-10
 ---
 

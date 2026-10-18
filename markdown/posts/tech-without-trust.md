@@ -1,5 +1,6 @@
 ---
 title: Tech without trust
+description: "When technology asks for trust instead of transparency, from the World Cup chip to AI companies positioning themselves as guardians."
 date: 2026-07-06
 ---
 

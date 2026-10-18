@@ -1,5 +1,6 @@
 ---
 title: The Rust Revolution
+description: "A look at Brazilian tech history and why Rust's focus on foundational software offers a way to learn what enterprise development hid."
 date: 2026-01-11
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: Quic server in Rust
+description: "A small QUIC chat server in Rust with quinn, exploring bidirectional streams and client-to-client message routing."
 date: 2025-08-27
 ---
 

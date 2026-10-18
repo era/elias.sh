@@ -1,5 +1,6 @@
 ---
 title: Data Federation and Trustfall
+description: "How data federation and Trustfall let you query data across sources and APIs without copying everything into a warehouse."
 date: 2023-08-29
 ---
 

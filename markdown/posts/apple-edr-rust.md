@@ -1,5 +1,6 @@
 ---
 title: EDR, Rust and Apple
+description: "How Apple's Endpoint Security framework, combined with Rust's endpoint_sec crate, makes building a user-mode EDR agent on macOS practical."
 date: 2025-11-07
 ---
 

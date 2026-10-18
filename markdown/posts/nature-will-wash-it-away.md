@@ -1,5 +1,6 @@
 ---
 title: Nature will wash it away
+description: "A short reflection on anxiety, war, climate change, the cost of living and finding perspective in nature."
 date: 2026-08-03
 ---
 

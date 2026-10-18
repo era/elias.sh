@@ -1,5 +1,6 @@
 ---
 title: Work
+description: "A personal reflection on work, family and survival, from a grandfather who died on a construction site to adapting through decades of change."
 date: 2026-05-30
 ---
 

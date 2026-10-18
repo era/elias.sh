@@ -1,5 +1,6 @@
 ---
 title: Quick thoughts on automation (Workflows)
+description: "Lessons from running large-scale AWS Redshift workflows: design every step to succeed or roll back, not to page a human."
 date: 2026-10-12
 ---
 

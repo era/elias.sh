@@ -1,5 +1,6 @@
 ---
 title: EDR, ETW and Rust
+description: "Using Event Tracing for Windows and the ferrisetw crate to consume real-time ETW events for EDR telemetry."
 date: 2026-02-21
 ---
 

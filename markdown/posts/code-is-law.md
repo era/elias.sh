@@ -1,5 +1,6 @@
 ---
 title: Code is law (not really)
+description: "Why code alone is a poor specification, and how specs plus traceability tools like tracey can bring formality back without returning to waterfall."
 date: 2026-08-22
 ---
 

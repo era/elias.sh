@@ -1,5 +1,6 @@
 ---
 title: OpenTelemetry, time series, metrics and a bit of Rust
+description: "Metrics, time series, structured events and distributed tracing explained, followed by a Rust example that emits OpenTelemetry metrics through an OTLP collector."
 date: 2023-05-20
 ---
 

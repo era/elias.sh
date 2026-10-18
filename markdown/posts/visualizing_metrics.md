@@ -1,5 +1,6 @@
 ---
 title: Visualizing Metrics
+description: "Practical notes on building useful metrics dashboards: avoid spaghetti charts and pie charts, label everything and use meaningful tags."
 date: 2023-06-27 
 ---
 

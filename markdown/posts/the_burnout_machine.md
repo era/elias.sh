@@ -1,5 +1,6 @@
 ---
 title: The burnout machine 
+description: "The human cost of LLM-driven software development: constant context switching, broken quality gates and endless bug fixing."
 date: 2026-04-24
 ---
 

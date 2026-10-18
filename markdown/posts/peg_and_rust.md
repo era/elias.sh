@@ -1,5 +1,6 @@
 ---
 title: PEG and Rust
+description: "How PEG parsing works and how it powers TinyLang, the Rust template language behind this site, built with pest."
 date: 2023-05-16
 ---
 
