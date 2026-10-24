@@ -392,7 +392,6 @@ img {
 <p>PCI compliance means adhering to the Payment Card Industry Data Security Standard (PCI DSS), which sets the minimum security requirements for organizations that handle card data. It is not legally mandated, but failing to comply can lead to fines and increased transaction costs. Compliance also makes building software much more expensive: every service that touches a card number inherits audits, network segmentation, encryption rules and restrictions on what can be logged.</p>
 <p>Stripe's idea was to move that boundary. Instead of giving the whole software stack access to the card data, only the &quot;front&quot; stores it: the part that receives the card number and sends it to the processing partner. That part is called BAPI, and everything else in the stack gets a UUID instead: a token.</p>
 <p>When a service needs to do something with a card, it builds the message with the token, and BAPI swaps the token for the real number right before the message goes to a third party. Tokens are opaque and only meaningful to BAPI, so a token leaking through a log line or a database dump exposes nothing. And because BAPI is small, it is cheap to harden at both the infrastructure and code level: a small surface is easier to audit, easier to keep correct, and easier to make sure we never log what we should not.</p>
-<p>Security came from the abstraction boundary.</p>
 <img src="https://www.elias.sh/stripe.png" />
 	</main>
         <div class="footer">

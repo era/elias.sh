@@ -12,6 +12,4 @@ Stripe's idea was to move that boundary. Instead of giving the whole software st
 
 When a service needs to do something with a card, it builds the message with the token, and BAPI swaps the token for the real number right before the message goes to a third party. Tokens are opaque and only meaningful to BAPI, so a token leaking through a log line or a database dump exposes nothing. And because BAPI is small, it is cheap to harden at both the infrastructure and code level: a small surface is easier to audit, easier to keep correct, and easier to make sure we never log what we should not.
 
-Security came from the abstraction boundary.
-
 <img src="https://www.elias.sh/stripe.png" />
